@@ -4,6 +4,11 @@ export const DECODE_ROUTES = {
   LIVE: '/course/:courseId/live',
   DATES: '/course/:courseId/dates',
   DISCUSSION: '/course/:courseId/discussion/:path/*',
+
+  LEADERBOARD: [
+    '/course/:courseId/leaderboard',
+  ],
+
   PROGRESS: [
     '/course/:courseId/progress/:targetUserId/',
     '/course/:courseId/progress',

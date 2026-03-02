@@ -14,8 +14,8 @@ import {
   getLiveTabIframe,
   getCoursewareSearchEnabled,
   searchCourseContentFromAPI,
+  getLeaderboardTabData,
 } from './api';
-
 import {
   addModel, updateModel,
 } from '../../generic/model-store';
@@ -33,7 +33,6 @@ import mapSearchResponse from '../courseware-search/map-search-response';
 const eventTypes = {
   POST_EVENT: 'post_event',
 };
-
 export function fetchTab(courseId, tab, getTabData, targetUserId) {
   return async (dispatch) => {
     dispatch(fetchTabRequest({ courseId }));
@@ -103,6 +102,10 @@ export function fetchLiveTab(courseId) {
 
 export function fetchDiscussionTab(courseId) {
   return fetchTab(courseId, 'discussion');
+}
+
+export function fetchLeaderboardTab(courseId) {
+  return fetchTab(courseId, 'leaderboard', getLeaderboardTabData);
 }
 
 export function dismissWelcomeMessage(courseId) {
