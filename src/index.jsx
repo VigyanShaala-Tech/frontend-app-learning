@@ -7,8 +7,10 @@ import { AppProvider, ErrorPage, PageWrap } from '@edx/frontend-platform/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import { Helmet } from 'react-helmet';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { fetchDiscussionTab, fetchLiveTab } from './course-home/data/thunks';
 import DiscussionTab from './course-home/discussion-tab/DiscussionTab';
 
@@ -39,6 +41,39 @@ import DecodePageRoute from './decode-page-route';
 import { DECODE_ROUTES, ROUTES } from './constants';
 import PreferencesUnsubscribe from './preferences-unsubscribe';
 import PageNotFound from './generic/PageNotFound';
+import RestrictionPage from './restriction-page/RestrictionPage';
+
+const RestrictionWrapper = () => {
+  const [hasProfileCompleted, setHasProfileCompleted] = useState(true);
+  const [canAccessPage, setCanAccessPage] = useState(true);
+
+  useEffect(() => {
+    const { LMS_BASE_URL } = getConfig();
+
+    const loadProfileCompletion = async () => {
+      try {
+        const client = getAuthenticatedHttpClient();
+        const { data } = await client.get(`${LMS_BASE_URL}/profile/progress/?role=student`);
+        if (data?.percentage === 100) {
+          setHasProfileCompleted(true);
+        } else {
+          setHasProfileCompleted(false);
+        }
+        setCanAccessPage(data.hidden);
+
+      } catch (err) {
+        console.error('Failed to load profile progress:', err);
+        setHasProfileCompleted(false);
+      }
+    };
+
+    loadProfileCompletion();
+  }, []);
+
+  if (!hasProfileCompleted && !canAccessPage) {
+    return <RestrictionPage />;
+  }
+};
 
 subscribe(APP_READY, () => {
   const root = createRoot(document.getElementById('root'));
@@ -46,6 +81,7 @@ subscribe(APP_READY, () => {
   root.render(
     <StrictMode>
       <AppProvider store={store}>
+        <RestrictionWrapper />
         <Helmet>
           <link rel="shortcut icon" href={getConfig().FAVICON_URL} type="image/x-icon" />
         </Helmet>
