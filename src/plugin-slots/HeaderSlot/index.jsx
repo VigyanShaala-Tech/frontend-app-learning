@@ -7,24 +7,29 @@ const HeaderSlot = ({
   courseOrg, courseNumber, courseTitle, showUserDropdown,
 }) => (
   <PluginSlot
-    id="org.openedx.frontend.layout.header_learning.v1"
-    idAliases={['header_slot']}
-    slotOptions={{
-      mergeProps: true,
-    }}
-    pluginProps={{
-      courseOrg,
-      courseNumber,
-      courseTitle,
-      showUserDropdown,
-    }}
+    id = "profile_page_header_plugin_slot"
+    pluginProps = {{}}
   >
-    <Header
-      courseOrg={courseOrg}
-      courseNumber={courseNumber}
-      courseTitle={courseTitle}
-      showUserDropdown={showUserDropdown}
-    />
+    <PluginSlot
+      id="org.openedx.frontend.layout.header_learning.v1"
+      idAliases={['header_slot']}
+      slotOptions={{
+        mergeProps: true,
+      }}
+      pluginProps={{
+        courseOrg,
+        courseNumber,
+        courseTitle,
+        showUserDropdown,
+      }}
+    >
+      <Header
+        courseOrg={courseOrg}
+        courseNumber={courseNumber}
+        courseTitle={courseTitle}
+        showUserDropdown={showUserDropdown}
+      />
+    </PluginSlot>
   </PluginSlot>
 );
 
