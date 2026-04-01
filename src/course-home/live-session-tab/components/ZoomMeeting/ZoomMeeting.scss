@@ -1,51 +1,33 @@
-.zoom-meeting-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #0a0a0a;           /* Better dark background for video */
+.zoom-fullscreen {
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 9999;
   overflow: hidden;
-}
-
-.zoom-header {
-  padding: 1rem 1.5rem;
-  background: #1f1f1f;
-  color: white;
-  border-bottom: 1px solid #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
-
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
+  .gap{
+    gap: 1rem;
   }
 }
 
 .zoom-meeting-container {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  background: #000;
-
-  & > div {
-    width: 100% !important;
-    height: 100% !important;
-  }
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.joining-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  z-index: 50;
+.zoom-meeting-container > div,
+.zoom-meeting-container iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+/* Floating Leave Button - Visible only during Waiting Room */
+.floating-leave-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10000;
+  padding: 12px 24px;
+  font-weight: 600;
+  border-radius: 50px;
+  font-size: 1rem;
 }
