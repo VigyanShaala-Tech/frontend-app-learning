@@ -7,6 +7,7 @@ export const DECODE_ROUTES = {
   LEADERBOARD: [
     '/course/:courseId/leaderboard',
   ],
+  LIVE_SESSION: '/course/:courseId/live-session',
   PROGRESS: [
     '/course/:courseId/progress/:targetUserId/',
     '/course/:courseId/progress',

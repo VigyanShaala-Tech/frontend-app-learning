@@ -47,6 +47,19 @@ const LoadedTabPage = ({
     ];
   }
 
+  const hasLiveSession = safeTabs.some(tab => tab.slug === 'live_session');
+
+  if (!hasLiveSession) {
+    safeTabs = [
+      ...safeTabs,
+      {
+        slug: 'livesession',
+        title: 'Live-Session',
+        url: `/learning/course/${encodeURIComponent(courseId)}/live-session`,
+      },
+    ];
+  }
+
   const activeTab = safeTabs.find(tab => tab.slug === activeTabSlug);
 
   // alerts

@@ -1,0 +1,51 @@
+.zoom-meeting-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;           /* Better dark background for video */
+  overflow: hidden;
+}
+
+.zoom-header {
+  padding: 1rem 1.5rem;
+  background: #1f1f1f;
+  color: white;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+.zoom-meeting-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+
+  & > div {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.joining-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 50;
+}

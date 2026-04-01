@@ -15,6 +15,7 @@ import {
   getCoursewareSearchEnabled,
   searchCourseContentFromAPI,
   getLeaderboardTabData,
+  getLiveSessionData,
 } from './api';
 
 import {
@@ -108,6 +109,10 @@ export function fetchDiscussionTab(courseId) {
 
 export function fetchLeaderboardTab(courseId) {
   return fetchTab(courseId, 'leaderboard', getLeaderboardTabData);
+}
+
+export function fetchLiveSessionTab(courseId) {
+  return fetchTab(courseId, 'live_session', getLiveSessionData);
 }
 
 export function dismissWelcomeMessage(courseId) {
