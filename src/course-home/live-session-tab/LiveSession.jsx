@@ -247,7 +247,7 @@ const LiveSession = () => {
   if (isScheduleMode) {
     return (
       <ScheduleLiveSessionForm
-        label = {reduxdata.singular_label}
+        label={reduxdata?.singular_label?.trim() || formatMessage(messages['scheduleLiveSessionfallback.title'])}
         courseId={courseId}
         editingSession={editingSession}
         onBack={handleBackToList}
@@ -281,7 +281,7 @@ const LiveSession = () => {
     <div className="live-sessions-page py-5">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="mb-0 liveSession-title">{reduxdata.plural_label}</h1>
+          <h1 className="mb-0 liveSession-title">{reduxdata?.plural_label || formatMessage(messages['liveSession.title'])}</h1>
           {reduxdata.can_schedule_meeting && 
           <Button variant="primary" onClick={handleScheduleClick}>
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
