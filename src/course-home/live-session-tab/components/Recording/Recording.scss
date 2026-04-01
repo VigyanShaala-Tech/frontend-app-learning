@@ -1,0 +1,76 @@
+.recording-page {
+
+  .back-button {
+    margin-bottom: 1rem;
+    padding-left: 0;
+  }
+
+  .recording-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+  }
+
+  .recording-download {
+    min-width: 150px;
+  }
+
+  .video-card {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+
+    .video-info {
+      margin-top: 1rem;
+
+      .video-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #212529;
+      }
+
+      .video-description {
+        font-size: 1rem;
+        color: #495057;
+        margin: 0.5rem 0 1rem;
+      }
+
+      .video-meta {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .back-button {
+      margin-bottom: 0.5rem !important;
+    }
+    .recording-title {
+      font-size: 1.75rem;
+    }
+    .recording-download {
+      margin-left: auto;
+    }
+    .video-card {
+      padding: 1rem;
+
+      .video-info {
+        .video-title {
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .video-meta {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+}

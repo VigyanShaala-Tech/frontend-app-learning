@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 
 import { Helmet } from 'react-helmet';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { fetchDiscussionTab, fetchLiveTab } from './course-home/data/thunks';
+import { fetchDiscussionTab, fetchLiveTab, fetchLiveSessionTab } from './course-home/data/thunks';
 import DiscussionTab from './course-home/discussion-tab/DiscussionTab';
 
 import messages from './i18n';
@@ -42,6 +42,9 @@ import { DECODE_ROUTES, ROUTES } from './constants';
 import PreferencesUnsubscribe from './preferences-unsubscribe';
 import PageNotFound from './generic/PageNotFound';
 import RestrictionPage from './restriction-page/RestrictionPage';
+import LiveSession from './course-home/live-session-tab/LiveSession';
+import  Header  from '@edx/frontend-component-header';
+import { FooterSlot } from '@edx/frontend-component-footer';
 
 const RestrictionWrapper = () => {
   const [hasProfileCompleted, setHasProfileCompleted] = useState(true);
@@ -120,6 +123,26 @@ subscribe(APP_READY, () => {
                         <TabContainer tab="lti_live" fetch={fetchLiveTab} slice="courseHome">
                           <LiveTab />
                         </TabContainer>
+                      </DecodePageRoute>
+                    )}
+                  />
+                  <Route
+                    path={DECODE_ROUTES.LIVE_SESSION}
+                    element={(
+                      <DecodePageRoute>
+                        <TabContainer tab="live_session" fetch={fetchLiveSessionTab} slice="courseHome">
+                          <LiveSession />
+                        </TabContainer>
+                      </DecodePageRoute>
+                    )}
+                  />
+                  <Route
+                    path={`${DECODE_ROUTES.LIVE_SESSION}/join/:sessionId`}
+                    element={(
+                      <DecodePageRoute>
+                        <Header />
+                          <LiveSession />
+                        <FooterSlot />
                       </DecodePageRoute>
                     )}
                   />
