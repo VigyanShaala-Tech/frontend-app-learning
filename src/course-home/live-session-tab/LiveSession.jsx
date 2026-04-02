@@ -20,7 +20,7 @@ import LiveSessionCard from './components/LiveSessionCard/LiveSessionCard';
 import ScheduleLiveSessionForm from './components/ScheduleLiveSessionForm/ScheduleLiveSessionForm';
 import ViewAttendance from './components/ViewAttendance/ViewAttendance';
 import Recording from './components/Recording/Recording';
-import ZoomMeeting from './components/ZoomMeeting/ZoomMeeting';
+// import ZoomMeeting from './components/ZoomMeeting/ZoomMeeting';
 import './LiveSession.scss';
 
 const LiveSession = () => {
@@ -43,7 +43,7 @@ const LiveSession = () => {
   const [editingSession, setEditingSession] = useState(null);
   const [isAttendanceMode, setIsAttendanceMode] = useState(false);
   const [isRecordingMode, setRecordingMode] = useState(false);
-  const [isJoinMode, setJoinMode] = useState(false);
+  // const [isJoinMode, setJoinMode] = useState(false);
 
   // Delete Popup States
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -134,7 +134,7 @@ const LiveSession = () => {
   useEffect(() => {
     if (sessionId) {
       setSelectedSessionId(sessionId);
-      setJoinMode(true);
+      // setJoinMode(true);
     }
   }, [sessionId]);
 
@@ -257,13 +257,13 @@ const LiveSession = () => {
     );
   }
 
-  if (isJoinMode && selectedSessionId) {
-    return (
-      <ZoomMeeting 
-        sessionId={selectedSessionId}
-      />
-    );
-  }
+  // if (isJoinMode && selectedSessionId) {
+  //   return (
+  //     <ZoomMeeting 
+  //       sessionId={selectedSessionId}
+  //     />
+  //   );
+  // }
 
   if (isAttendanceMode) {
     return (

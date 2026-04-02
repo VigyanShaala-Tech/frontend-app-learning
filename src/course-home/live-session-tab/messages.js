@@ -171,9 +171,16 @@ const messages = defineMessages({
     id: 'scheduleLiveSession.validation.maxDuration',
     defaultMessage: 'Duration cannot exceed {maxHours} hour(s)',
   },
+
+
+  // Zoom Meeting Messages
   'zoomMeeting.preparing': {
     id: 'zoomMeeting.preparing',
     defaultMessage: 'Preparing live session...',
+  },
+  'zoomMeeting.connecting': {
+    id: 'zoomMeeting.connecting',
+    defaultMessage: 'Connecting you to the live session...',
   },
   'zoomMeeting.leave': {
     id: 'zoomMeeting.leave',
@@ -224,6 +231,10 @@ const messages = defineMessages({
   'zoomMeeting.error.joinFailed': {
     id: 'zoomMeeting.error.joinFailed',
     defaultMessage: 'Failed to join Zoom meeting.',
+  },
+  'zoomMeeting.error.sdkInitFailed': {
+    id: 'zoomMeeting.error.sdkInitFailed',
+    defaultMessage: 'Failed to initialize Zoom SDK',
   },
 });
 
