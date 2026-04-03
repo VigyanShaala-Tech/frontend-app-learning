@@ -30,7 +30,6 @@ const LiveSession = () => {
   const reduxdata = useSelector(
     state => state.models?.live_session?.[courseId]
   );
-  console.log(reduxdata)
 
   const [activeTab, setActiveTab] = useState('today');
   const [sessions, setSessions] = useState([]);

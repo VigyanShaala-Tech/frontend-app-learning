@@ -8,8 +8,12 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import messages from '../../messages';
 import './ZoomMeeting.scss';
 
+// Global Zoom SDK Setup (runs once)
+ZoomMtg.setZoomJSLib('https://source.zoom.us/3.13.2/lib', '/av');
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
+ZoomMtg.i18n.load('en-US');
+ZoomMtg.i18n.reload('en-US');
 
 function ZoomMeeting() {
   const { courseId, sessionId } = useParams();
@@ -21,7 +25,7 @@ function ZoomMeeting() {
 
   const hasJoined = useRef(false);
 
-  // Fetch meeting data (signature, meeting info, etc.) from your backend
+  // Fetch meeting data
   useEffect(() => {
     const fetchJoinData = async () => {
       if (!sessionId) return;
@@ -43,10 +47,7 @@ function ZoomMeeting() {
         setMeetingData(data);
       } catch (err) {
         console.error('Failed to fetch join data:', err);
-        setError(
-          err.response?.data?.message ||
-          formatMessage(messages['zoomMeeting.error.joinFailed'])
-        );
+        setError(formatMessage(messages['zoomMeeting.error.joinFailed']));
       } finally {
         setLoading(false);
       }
@@ -55,7 +56,7 @@ function ZoomMeeting() {
     fetchJoinData();
   }, [sessionId, formatMessage]);
 
-  // Start Zoom Meeting - Following official Zoom SDK pattern
+  // Initialize and Join Zoom Meeting
   useEffect(() => {
     if (!meetingData || hasJoined.current) return;
 
@@ -63,31 +64,28 @@ function ZoomMeeting() {
 
     const { meeting, auth, user, leaveUrl } = meetingData;
 
-    // Show Zoom container
     const zoomRoot = document.getElementById("zmmtg-root");
-    if (zoomRoot) {
-      zoomRoot.style.display = "block";
-    }
+    if (zoomRoot) zoomRoot.style.display = "block";
 
     ZoomMtg.init({
-      leaveUrl: leaveUrl || `${getConfig().BASE_URL}/course/${courseId}/live-session`,
-      patchJsMedia: true,
+      leaveUrl: leaveUrl || `${getConfig().BASE_URL}/course/${courseId}`,
       leaveOnPageUnload: true,
-      success: (success) => {
-        console.log("Zoom SDK Initialized successfully", success);
+      patchJsMedia: true,
 
+      success: () => {
         ZoomMtg.join({
           sdkKey: auth.sdkKey,
           signature: auth.signature,
           meetingNumber: meeting.id,
           passWord: meeting.password || "",
-          userName: user.email || "Participant",
-          userEmail: user.email || "",
-          role: user.isHost ? 1 : 0,
+          userName: user.email,        // Using email as display name
+          userEmail: user.email,
+          role: auth.role,             // 0 = Participant, 1 = Host
           tk: "",
           zak: "",
-          success: (success) => {
-            console.log("Successfully joined the meeting", success);
+
+          success: () => {
+            console.log("Successfully joined the  meeting");
           },
           error: (error) => {
             console.error("Join failed:", error);
@@ -134,7 +132,7 @@ function ZoomMeeting() {
   return (
     <div className="zoom-app h-100">
       <main className="zoom-main h-100">
-        <div id="zmmtg-root" className="h-100" />
+        <div id="zmmtg-root" className="h-100 w-100" />
       </main>
     </div>
   );
