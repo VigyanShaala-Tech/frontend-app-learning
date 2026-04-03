@@ -1,9 +1,16 @@
+.zoom-app {
+  height: 100vh;
+  overflow: visible;
+}
+
 .zoom-main {
-  padding-bottom: 0.5rem;
-  padding-top: 0.5rem;
+  height: 100%;
+  width: 100%;
 }
 
 #zmmtg-root {
   position: relative !important;
   z-index: 1000;
+  height: 100% !important;
+  width: 100% !important;
 }
