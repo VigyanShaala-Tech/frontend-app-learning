@@ -1,21 +1,26 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { Spinner, Alert, Button } from '@openedx/paragon';
+import React, { useEffect, useState } from 'react';
+import { ZoomMtg } from "@zoom/meetingsdk";
+import "./ZoomMeeting.scss";
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { ZoomMtg } from '@zoom/meetingsdk';
-import messages from '../../messages';
+import { useParams } from 'react-router-dom';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { Spinner, Alert } from '@openedx/paragon';
+import messages from '../../messages'; // import your i18n messages
 
-const ZoomMeeting = ({ onBack }) => {
+// Preload Zoom SDK
+ZoomMtg.preLoadWasm();
+ZoomMtg.prepareWebSDK();
+
+function ZoomMeeting() {
   const { courseId, sessionId } = useParams();
   const { formatMessage } = useIntl();
-  const zoomRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [meetingData, setMeetingData] = useState(null);
 
-  const loadMeetingData = useCallback(async () => {
+  // Load meeting data from API
+  const loadMeetingData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -25,10 +30,10 @@ const ZoomMeeting = ({ onBack }) => {
       );
 
       const data = response.data;
+      console.log("Zoom API Response:", data);
 
       if (data.hasAccess) {
         setMeetingData(data);
-        initZoomMeeting(data);
       } else {
         setError(formatMessage(messages['zoomMeeting.error.noAccess']));
       }
@@ -38,103 +43,86 @@ const ZoomMeeting = ({ onBack }) => {
     } finally {
       setLoading(false);
     }
-  }, [sessionId, formatMessage]);
+  };
 
-  const initZoomMeeting = useCallback((data) => {
-    const { meeting, auth, user, leaveUrl } = data;
+  // Call API on page load
+  useEffect(() => {
+    loadMeetingData();
+  }, [sessionId]);
 
-    ZoomMtg.setZoomJSLib('https://source.zoom.us/5.1.4/lib', '/av');
-    ZoomMtg.prepareWebSDK();
+  // Start Zoom only after meeting data is ready
+  useEffect(() => {
+    if (meetingData && !loading) {
+      startMeeting();
+    }
+  }, [meetingData, loading]);
+
+  // Start Zoom Meeting
+  function startMeeting() {
+    if (!meetingData) return;
+
+    const zoomRoot = document.getElementById("zmmtg-root");
+    const container = document.getElementById("zoom-container");
+
+    if (zoomRoot && container && !container.contains(zoomRoot)) {
+      container.appendChild(zoomRoot);
+    }
+
+    if (zoomRoot) zoomRoot.style.display = "block";
+
+    const { meeting, auth, user, leaveUrl } = meetingData;
 
     ZoomMtg.init({
       leaveUrl: leaveUrl || `${getConfig().BASE_URL}/course/${courseId}/live-session`,
-      isSupportAV: true,
-      zoomContainer: zoomRef.current,
-      success: () => {
+      patchJsMedia: true,
+      leaveOnPageUnload: true,
+      success: (success) => {
+        console.log(success);
         ZoomMtg.join({
-          sdkKey: auth.sdkKey,
+          signature: auth.signature,
           meetingNumber: meeting.id,
           passWord: meeting.password,
-          signature: auth.signature,
-          userName: user.email || formatMessage(messages['zoomMeeting.participant']),
-          role: auth.role,
+          userName: user.email,
           userEmail: user.email,
-          lang: 'en-US',
-          china: false,
-          success: () => { console.log('Joined Zoom meeting successfully'); },
-          error: (joinError) => {
-            console.error('Zoom join error:', joinError);
-            setError(formatMessage(messages['zoomMeeting.error.joinFailed']));
+          // role: auth.role,
+          tk: "",
+          zak: "",
+          success: (success) => {
+            console.log(success);
+          },
+          error: (error) => {
+            console.log(error);
           },
         });
       },
-      error: (initError) => {
-        console.error('Zoom init error:', initError);
-        setError(formatMessage(messages['zoomMeeting.error.sdkInitFailed']));
+      error: (error) => {
+        console.log(error);
       },
     });
-  }, [formatMessage]);
-
-  useEffect(() => { loadMeetingData(); }, [loadMeetingData]);
-
-  const handleLeaveMeeting = () => {
-    if (window.ZoomMtg) ZoomMtg.leaveMeeting();
-    onBack?.();
-  };
-
-  const handleRetry = () => {
-    setError(null);
-    loadMeetingData();
-  };
-
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center min-vh-50 py-5">
-        <Spinner animation="border" variant="primary" className="mr-3" />
-        <div>
-          <div>{formatMessage(messages['zoomMeeting.connecting'])}</div>
-          {meetingData?.meeting?.topic && <small>{meetingData.meeting.topic}</small>}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container py-5">
-        <Alert variant="danger" className="mb-4">{error}</Alert>
-        <div className="d-flex gap-2">
-          <Button variant="primary" onClick={handleRetry}>
-            {formatMessage(messages['zoomMeeting.button.retry'])}
-          </Button>
-          <Button variant="outline-primary" onClick={handleLeaveMeeting}>
-            {formatMessage(messages['zoomMeeting.button.goBack'])}
-          </Button>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className="zoom-meeting-wrapper py-3">
-      {meetingData && (
-        <div className="container mb-3">
-          <div className="d-flex justify-content-between align-items-center">
-            <h2 className="mb-0">{meetingData.meeting.topic || formatMessage(messages['zoomMeeting.defaultTitle'])}</h2>
-            <Button variant="outline-primary" onClick={handleLeaveMeeting}>
-              {formatMessage(messages['zoomMeeting.leave'])}
-            </Button>
+    <div className="zoom-app">
+      <main className="zoom-main">
+
+        {loading && (
+          <div className="d-flex justify-content-center py-5">
+            <Spinner animation="border" variant="primary" />
+            <span className="ml-2">{formatMessage(messages['zoomMeeting.preparing'])}</span>
           </div>
-        </div>
-      )}
-      <div
-        ref={zoomRef}
-        id="meetingSDKElement"
-        className="zoom-container mx-auto"
-        style={{ width: '100%', position: 'relative', zIndex: 2000 }}
-      />
+        )}
+
+        {error && !loading && (
+          <Alert variant="danger" className="text-center">
+            {error}
+          </Alert>
+        )}
+
+        <div id="zoom-container"></div>
+
+      </main>
     </div>
   );
-};
+}
 
 export default ZoomMeeting;

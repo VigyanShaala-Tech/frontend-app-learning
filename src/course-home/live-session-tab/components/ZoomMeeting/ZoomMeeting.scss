@@ -1,17 +1,9 @@
-.zoom-container {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-  z-index: 2000;
+.zoom-main {
+  padding-bottom: 2rem;
+  padding-top: 0.5rem;
 }
 
-.meeting-sdk-container,
-.zm-modal,
-body div[role="dialog"] {
-  z-index: 2100 !important;
-}
-
-#root {
-  position: relative;
+#zmmtg-root {
+  position: relative !important;
   z-index: 1000;
 }
