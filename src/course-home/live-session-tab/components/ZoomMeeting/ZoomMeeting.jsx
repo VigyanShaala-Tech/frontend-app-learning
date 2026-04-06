@@ -1,180 +1,122 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import React, { useEffect, useState } from 'react';
+import { ZoomMtg } from "@zoom/meetingsdk";
+import "./ZoomMeeting.scss";
 import { getConfig } from '@edx/frontend-platform';
-import { Button, Spinner, Alert } from '@openedx/paragon';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { useParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { Spinner, Alert } from '@openedx/paragon';
+import messages from '../../messages'; // import your i18n messages
 
-import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
-import messages from '../../messages';
-import './ZoomMeeting.scss';
+// Preload Zoom SDK
+ZoomMtg.preLoadWasm();
+ZoomMtg.prepareWebSDK();
 
-const ZoomMeeting = ({ sessionId }) => {
-  const { courseId } = useParams();
-  const navigate = useNavigate();
+function ZoomMeeting() {
+  const { courseId, sessionId } = useParams();
   const { formatMessage } = useIntl();
-
-  const [meetingData, setMeetingData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isReady, setIsReady] = useState(false);
+  const [meetingData, setMeetingData] = useState(null);
 
-  const meetingSDKElement = useRef(null);
-  const clientRef = useRef(null);
-
-  // Initialize Zoom client once
-  useEffect(() => {
-    clientRef.current = ZoomMtgEmbedded.createClient();
-    return () => {
-      if (clientRef.current) {
-        try {
-          clientRef.current.leaveMeeting();
-        } catch (e) {
-          console.warn('Cleanup error:', e);
-        }
-      }
-    };
-  }, []);
-
-  // Fetch join data
-  const fetchJoinData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // Load meeting data from API
+  const loadMeetingData = async () => {
     try {
+      setLoading(true);
+      setError(null);
+
       const response = await getAuthenticatedHttpClient().get(
         `${getConfig().LMS_BASE_URL}/api/v1/live-classes/join/${sessionId}/`
       );
-      setMeetingData(response.data);
-      console.log(response.data);
+
+      const data = response.data;
+      console.log("Zoom API Response:", data);
+
+      if (data.hasAccess) {
+        setMeetingData(data);
+      } else {
+        setError(formatMessage(messages['zoomMeeting.error.noAccess']));
+      }
     } catch (err) {
-      console.error('Failed to fetch join data:', err);
-      setError(
-        formatMessage(messages['liveSession.error.joinFailed'])
-      );
+      console.error('Failed to load meeting data:', err);
+      setError(formatMessage(messages['liveSession.error.joinFailed']));
     } finally {
       setLoading(false);
     }
-  }, [sessionId, formatMessage]);
+  };
 
+  // Call API on page load
   useEffect(() => {
-    fetchJoinData();
-  }, [fetchJoinData]);
+    loadMeetingData();
+  }, [sessionId]);
 
-  // Join meeting
-  const joinMeeting = useCallback(async () => {
-    if (!meetingData || !meetingSDKElement.current || !clientRef.current) return;
+  // Start Zoom only after meeting data is ready
+  useEffect(() => {
+    if (meetingData && !loading) {
+      startMeeting();
+    }
+  }, [meetingData, loading]);
 
-    const isLocalhost = window.location.hostname === 'localhost';
-    const isSecure = window.location.protocol === 'https:';
+  // Start Zoom Meeting
+  function startMeeting() {
+    if (!meetingData) return;
 
-    if (!isLocalhost && !isSecure) {
-      setError(
-        formatMessage(messages['zoomMeeting.error.httpsRequired'])
-      );
-      return;
+    const zoomRoot = document.getElementById("zmmtg-root");
+    const container = document.getElementById("zoom-container");
+
+    if (zoomRoot && container && !container.contains(zoomRoot)) {
+      container.appendChild(zoomRoot);
     }
 
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-    } catch (e) {
-      setError(
-        formatMessage(messages['zoomMeeting.error.mediaPermission'])
-      );
-      return;
-    }
-
-    if (isReady) return;
-
-    if (!meetingData.hasAccess) {
-      setError(
-        formatMessage(messages['zoomMeeting.error.noAccess'])
-      );
-      return;
-    }
+    if (zoomRoot) zoomRoot.style.display = "block";
 
     const { meeting, auth, user, leaveUrl } = meetingData;
 
-    try {
-      meetingSDKElement.current.style.display = 'block';
-
-      await clientRef.current.init({
-        debug: true,
-        zoomAppRoot: meetingSDKElement.current,
-        language: 'en-US',
-      });
-
-      await clientRef.current.join({
-        sdkKey: auth.sdkKey,
-        signature: auth.signature,
-        meetingNumber: String(meeting.id),
-        password: meeting.password || '',
-        userName:
-          user.email ||
-          formatMessage(messages['zoomMeeting.participant']),
-        userEmail: user.email,
-        role: auth.role || 0,
-        ...(auth.role === 1 && auth.zak ? { zak: auth.zak } : {}),
-        leaveUrl:
-          leaveUrl ||
-          `${getConfig().BASE_URL}/courses/${courseId}/live-session`,
-      });
-
-      setIsReady(true);
-    } catch (err) {
-      console.error('Zoom join error:', err);
-      setError(
-        err?.message ||
-          JSON.stringify(err) ||
-          formatMessage(messages['zoomMeeting.error.joinFailed'])
-      );
-    }
-  }, [meetingData, courseId, isReady, formatMessage]);
-
-  // Trigger join after fetching data
-  useEffect(() => {
-    if (meetingData && meetingSDKElement.current) {
-      const timer = setTimeout(() => {
-        joinMeeting();
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [meetingData, joinMeeting]);
-
-  // Leave meeting
-  const handleLeave = () => {
-    if (clientRef.current) {
-      try {
-        clientRef.current.leaveMeeting();
-      } catch (e) {}
-    }
-    navigate(`/courses/${courseId}/live-session`);
-  };
-
-  // Loading UI
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-        <Spinner animation="border" variant="primary" />
-        <span className="ml-3">
-          {formatMessage(messages['zoomMeeting.preparing'])}
-        </span>
-      </div>
-    );
+    ZoomMtg.init({
+      leaveUrl: leaveUrl || `${getConfig().BASE_URL}/course/${courseId}/live-session`,
+      patchJsMedia: true,
+      leaveOnPageUnload: true,
+      success: (success) => {
+        console.log(success);
+        ZoomMtg.join({
+          signature: auth.signature,
+          meetingNumber: meeting.id,
+          passWord: meeting.password,
+          userName: user.email,
+          userEmail: user.email,
+          // role: auth.role,
+          tk: "",
+          zak: "",
+          success: (success) => {
+            console.log(success);
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
-  // Error UI
-  if (error) {
-    return (
-      <div className="container py-5 text-center">
-        <Alert variant="danger" className="mb-4">
-          {error}
-        </Alert>
-        <Button variant="primary" onClick={() => navigate(-1)}>
-          {formatMessage(messages['zoomMeeting.button.goBack'])}
-        </Button>
-      </div>
-    );
-  }
+  return (
+    <div className="zoom-app">
+      <main className="zoom-main">
+
+        {loading && (
+          <div className="d-flex justify-content-center py-5">
+            <Spinner animation="border" variant="primary" />
+            <span className="ml-2">{formatMessage(messages['zoomMeeting.preparing'])}</span>
+          </div>
+        )}
+
+        {error && !loading && (
+          <Alert variant="danger" className="text-center">
+            {error}
+          </Alert>
+        )}
 
   // Main UI
   return (
@@ -191,6 +133,6 @@ const ZoomMeeting = ({ sessionId }) => {
       <div ref={meetingSDKElement} className="zoom-meeting-container" />
     </div>
   );
-};
+}
 
 export default ZoomMeeting;

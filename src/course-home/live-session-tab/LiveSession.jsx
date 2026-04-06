@@ -20,7 +20,7 @@ import LiveSessionCard from './components/LiveSessionCard/LiveSessionCard';
 import ScheduleLiveSessionForm from './components/ScheduleLiveSessionForm/ScheduleLiveSessionForm';
 import ViewAttendance from './components/ViewAttendance/ViewAttendance';
 import Recording from './components/Recording/Recording';
-import ZoomMeeting from './components/ZoomMeeting/ZoomMeeting';
+// import ZoomMeeting from './components/ZoomMeeting/ZoomMeeting';
 import './LiveSession.scss';
 
 const LiveSession = () => {
@@ -30,7 +30,6 @@ const LiveSession = () => {
   const reduxdata = useSelector(
     state => state.models?.live_session?.[courseId]
   );
-  console.log(reduxdata)
 
   const [activeTab, setActiveTab] = useState('today');
   const [sessions, setSessions] = useState([]);
@@ -43,7 +42,7 @@ const LiveSession = () => {
   const [editingSession, setEditingSession] = useState(null);
   const [isAttendanceMode, setIsAttendanceMode] = useState(false);
   const [isRecordingMode, setRecordingMode] = useState(false);
-  const [isJoinMode, setJoinMode] = useState(false);
+  // const [isJoinMode, setJoinMode] = useState(false);
 
   // Delete Popup States
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -134,7 +133,7 @@ const LiveSession = () => {
   useEffect(() => {
     if (sessionId) {
       setSelectedSessionId(sessionId);
-      setJoinMode(true);
+      // setJoinMode(true);
     }
   }, [sessionId]);
 
@@ -247,7 +246,7 @@ const LiveSession = () => {
   if (isScheduleMode) {
     return (
       <ScheduleLiveSessionForm
-        label = {reduxdata.singular_label}
+        label={reduxdata?.singular_label?.trim() || formatMessage(messages['scheduleLiveSessionfallback.title'])}
         courseId={courseId}
         editingSession={editingSession}
         onBack={handleBackToList}
@@ -257,13 +256,13 @@ const LiveSession = () => {
     );
   }
 
-  if (isJoinMode && selectedSessionId) {
-    return (
-      <ZoomMeeting 
-        sessionId={selectedSessionId}
-      />
-    );
-  }
+  // if (isJoinMode && selectedSessionId) {
+  //   return (
+  //     <ZoomMeeting 
+  //       sessionId={selectedSessionId}
+  //     />
+  //   );
+  // }
 
   if (isAttendanceMode) {
     return (
@@ -281,7 +280,7 @@ const LiveSession = () => {
     <div className="live-sessions-page py-5">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="mb-0 liveSession-title">{reduxdata.plural_label}</h1>
+          <h1 className="mb-0 liveSession-title">{reduxdata?.plural_label || formatMessage(messages['liveSession.title'])}</h1>
           {reduxdata.can_schedule_meeting && 
           <Button variant="primary" onClick={handleScheduleClick}>
             <FontAwesomeIcon icon={faPlus} className="mr-2" />

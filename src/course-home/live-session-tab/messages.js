@@ -26,6 +26,7 @@ const messages = defineMessages({
 
   // ScheduleLiveSessionForm
   'scheduleLiveSession.title': { id: 'scheduleLiveSession.title', defaultMessage: 'Schedule ' },
+  'scheduleLiveSessionfallback.title': { id: 'scheduleLiveSessionfallback.title', defaultMessage: 'Schedule Meeting' },
   'scheduleLiveSession.editTitle': { id: 'scheduleLiveSession.editTitle', defaultMessage: 'Edit ' },
   'scheduleLiveSession.topic': { id: 'scheduleLiveSession.topic', defaultMessage: 'Topic / Title' },
   'scheduleLiveSession.description': { id: 'scheduleLiveSession.description', defaultMessage: 'Description' },
@@ -170,9 +171,16 @@ const messages = defineMessages({
     id: 'scheduleLiveSession.validation.maxDuration',
     defaultMessage: 'Duration cannot exceed {maxHours} hour(s)',
   },
+
+
+  // Zoom Meeting Messages
   'zoomMeeting.preparing': {
     id: 'zoomMeeting.preparing',
     defaultMessage: 'Preparing live session...',
+  },
+  'zoomMeeting.connecting': {
+    id: 'zoomMeeting.connecting',
+    defaultMessage: 'Connecting you to the live session...',
   },
   'zoomMeeting.leave': {
     id: 'zoomMeeting.leave',
@@ -182,6 +190,32 @@ const messages = defineMessages({
     id: 'zoomMeeting.defaultTitle',
     defaultMessage: 'Live Session',
   },
+  'zoomMeeting.participant': {
+    id: 'zoomMeeting.participant',
+    defaultMessage: 'Participant',
+  },
+
+  // Waiting Room Messages
+  'zoomMeeting.waitingForHost': {
+    id: 'zoomMeeting.waitingForHost',
+    defaultMessage: 'Waiting for the host to start the meeting...',
+  },
+  'zoomMeeting.waitingMessage': {
+    id: 'zoomMeeting.waitingMessage',
+    defaultMessage: 'You will be automatically joined as soon as the host starts the meeting.',
+  },
+
+  // Buttons
+  'zoomMeeting.button.retry': {
+    id: 'zoomMeeting.button.retry',
+    defaultMessage: 'Retry',
+  },
+  'zoomMeeting.button.goBack': {
+    id: 'zoomMeeting.button.goBack',
+    defaultMessage: 'Go Back',
+  },
+
+  // Error Messages
   'zoomMeeting.error.mediaPermission': {
     id: 'zoomMeeting.error.mediaPermission',
     defaultMessage: 'Camera and microphone access is required to join the meeting.',
@@ -198,9 +232,9 @@ const messages = defineMessages({
     id: 'zoomMeeting.error.joinFailed',
     defaultMessage: 'Failed to join Zoom meeting.',
   },
-  'zoomMeeting.button.goBack': {
-    id: 'zoomMeeting.button.goBack',
-    defaultMessage: 'Go Back',
+  'zoomMeeting.error.sdkInitFailed': {
+    id: 'zoomMeeting.error.sdkInitFailed',
+    defaultMessage: 'Failed to initialize Zoom SDK',
   },
 });
 
