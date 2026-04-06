@@ -179,7 +179,7 @@ const ZoomMeeting = ({ sessionId }) => {
   // Main UI
   return (
     <div className="zoom-meeting-page">
-      <div className="zoom-header">
+      {/* <div className="zoom-header">
         <h2>
           {meetingData?.meeting?.topic ||
             formatMessage(messages['zoomMeeting.defaultTitle'])}
@@ -187,7 +187,7 @@ const ZoomMeeting = ({ sessionId }) => {
         <Button variant="outline-primary" onClick={handleLeave}>
           {formatMessage(messages['zoomMeeting.leave'])}
         </Button>
-      </div>
+      </div> */}
       <div ref={meetingSDKElement} className="zoom-meeting-container" />
     </div>
   );
