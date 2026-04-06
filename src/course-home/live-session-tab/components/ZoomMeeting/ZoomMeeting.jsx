@@ -89,11 +89,32 @@ const ZoomMeeting = ({ sessionId }) => {
 
     try {
       meetingSDKElement.current.style.display = 'block';
+      const rightDockedPanel = {
+        disableDraggable: true,
+        anchorReference: 'anchorPosition',
+        anchorPosition: { top: 0, right: 0 },
+      };
 
       await clientRef.current.init({
         debug: true,
         zoomAppRoot: meetingSDKElement.current,
         language: 'en-US',
+        customize: {
+          participants: { popper: rightDockedPanel },
+          chat: {
+            popper: rightDockedPanel,
+            notificationCls: { right: 24, bottom: 88 },
+          },
+          setting: { popper: rightDockedPanel },
+          invite: { popper: rightDockedPanel },
+          callMe: { popper: rightDockedPanel },
+          meeting: { popper: rightDockedPanel },
+          activeApps: { popper: rightDockedPanel },
+          video: {
+            popper: { disableDraggable: true },
+            isResizable: false,
+          },
+        },
       });
 
       await clientRef.current.join({
