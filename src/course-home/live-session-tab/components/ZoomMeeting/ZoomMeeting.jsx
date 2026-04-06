@@ -23,6 +23,30 @@ const ZoomMeeting = ({ sessionId }) => {
   const meetingSDKElement = useRef(null);
   const clientRef = useRef(null);
   const retryIntervalRef = useRef(null);
+  const portalObserverRef = useRef(null);
+
+  const isZoomPortalNode = useCallback((node) => {
+    if (!(node instanceof HTMLElement)) return false;
+    const attrs = `${node.id || ''} ${node.className || ''}`.toLowerCase();
+    if (/(zmmtg|zmwebsdk|zmu-|zoom|meeting-client|reactmodalportal)/.test(attrs)) return true;
+    const zoomDescendant = node.querySelector(
+      '[id*="zmmtg"], [class*="zmwebsdk"], [class*="zmu-"], [class*="meeting-client"], [class*="zoom"]'
+    );
+    return Boolean(zoomDescendant);
+  }, []);
+
+  const enforceZoomDomWithinRoot = useCallback(() => {
+    if (!meetingSDKElement.current || !document?.body) return;
+
+    const rootNode = document.getElementById('root');
+    const bodyChildren = Array.from(document.body.children);
+
+    bodyChildren.forEach((child) => {
+      if (child === rootNode) return;
+      if (!isZoomPortalNode(child)) return;
+      meetingSDKElement.current.appendChild(child);
+    });
+  }, [isZoomPortalNode]);
 
   // Initialize Zoom Client
   useEffect(() => {
@@ -30,6 +54,7 @@ const ZoomMeeting = ({ sessionId }) => {
 
     return () => {
       if (retryIntervalRef.current) clearInterval(retryIntervalRef.current);
+      if (portalObserverRef.current) portalObserverRef.current.disconnect();
       if (clientRef.current) {
         try {
           clientRef.current.leaveMeeting();
@@ -89,10 +114,12 @@ const ZoomMeeting = ({ sessionId }) => {
 
     try {
       meetingSDKElement.current.style.display = 'block';
+      enforceZoomDomWithinRoot();
       const rightDockedPanel = {
         disableDraggable: true,
-        anchorReference: 'anchorPosition',
-        anchorPosition: { top: 0, right: 0 },
+        anchorReference: 'anchorEl',
+        anchorElement: meetingSDKElement.current,
+        placement: 'right-start',
       };
 
       await clientRef.current.init({
@@ -134,6 +161,21 @@ const ZoomMeeting = ({ sessionId }) => {
       setIsJoined(true);
       setIsWaiting(false);
       setError(null);
+      enforceZoomDomWithinRoot();
+
+      if (!portalObserverRef.current) {
+        portalObserverRef.current = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((addedNode) => {
+              if (isZoomPortalNode(addedNode)) {
+                meetingSDKElement.current?.appendChild(addedNode);
+              }
+            });
+          });
+        });
+
+        portalObserverRef.current.observe(document.body, { childList: true });
+      }
     } catch (err) {
       console.error('Zoom join error:', err);
 
