@@ -118,9 +118,19 @@ function ZoomMeeting() {
           </Alert>
         )}
 
-        <div id="zoom-container"></div>
-
-      </main>
+  // Main UI
+  return (
+    <div className="zoom-meeting-page">
+      {/* <div className="zoom-header">
+        <h2>
+          {meetingData?.meeting?.topic ||
+            formatMessage(messages['zoomMeeting.defaultTitle'])}
+        </h2>
+        <Button variant="outline-primary" onClick={handleLeave}>
+          {formatMessage(messages['zoomMeeting.leave'])}
+        </Button>
+      </div> */}
+      <div ref={meetingSDKElement} className="zoom-meeting-container" />
     </div>
   );
 }

@@ -1,9 +1,41 @@
-.zoom-main {
-  padding-bottom: 2rem;
-  padding-top: 0.5rem;
+.zoom-meeting-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-#zmmtg-root {
-  position: relative !important;
-  z-index: 1000;
+.zoom-header {
+  padding: 1rem 1.5rem;
+  background: #1f1f1f;
+  color: white;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+.zoom-meeting-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+
+  & > div {
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
+
+.zoom-MuiPopper-root.css-0{
+  position: absolute !important;
+  transform: unset !important;
+  top: 95px !important;
+  display: flex !important;
 }
