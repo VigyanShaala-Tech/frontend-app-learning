@@ -9,8 +9,8 @@ import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
 import messages from '../../messages';
 import './ZoomMeeting.scss';
 
-const ZoomMeeting = ({ sessionId }) => {
-  const { courseId } = useParams();
+const ZoomMeeting = () => {
+  const { courseId, sessionId } = useParams();
   const navigate = useNavigate();
   const { formatMessage } = useIntl();
 
