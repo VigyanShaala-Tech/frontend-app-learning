@@ -43,6 +43,7 @@ import PreferencesUnsubscribe from './preferences-unsubscribe';
 import PageNotFound from './generic/PageNotFound';
 import RestrictionPage from './restriction-page/RestrictionPage';
 import LiveSession from './course-home/live-session-tab/LiveSession';
+import ZoomMeeting from './course-home/live-session-tab/components/ZoomMeeting/ZoomMeeting';
 import  Header  from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
 
@@ -141,7 +142,7 @@ subscribe(APP_READY, () => {
                     element={(
                       <DecodePageRoute>
                         <Header />
-                          <LiveSession />
+                          <ZoomMeeting />
                         <FooterSlot />
                       </DecodePageRoute>
                     )}
