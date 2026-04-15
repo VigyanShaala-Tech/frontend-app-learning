@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { Toast } from '@openedx/paragon';
 import { FooterSlot } from '@edx/frontend-component-footer';
@@ -17,8 +17,15 @@ import LoadedTabPage from './LoadedTabPage';
 import { setCallToActionToast } from '../course-home/data/slice';
 import LaunchCourseHomeTourButton from '../product-tours/newUserCourseHomeTour/LaunchCourseHomeTourButton';
 
+const useIsMobileView = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  return params.get("mobile") === "true";
+};
+
 const TabPage = (props) => {
   const intl = useIntl();
+  const isMobile = useIsMobileView();
   const {
     activeTabSlug,
     courseId,
@@ -38,6 +45,40 @@ const TabPage = (props) => {
     start,
     title,
   } = useModel('courseHomeMeta', courseId);
+
+  useEffect(() => {
+    if (!isMobile) {
+      const tabsNav = document.getElementById('courseTabsNavigation');
+      if (tabsNav) tabsNav.style.display = '';
+      return;
+    }
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    const hideTabs = () => {
+      const tabsNav = document.getElementById('courseTabsNavigation');
+      if (tabsNav) {
+        tabsNav.style.display = 'none';
+        return true;
+      }
+      return false;
+    };
+
+    const interval = setInterval(() => {
+      attempts++;
+      const found = hideTabs();
+
+      if (found || attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 100);
+    
+    return () => {
+      clearInterval(interval);
+      const tabsNav = document.getElementById('courseTabsNavigation');
+      if (tabsNav) tabsNav.style.display = '';
+    };
+  }, [isMobile]);
 
   if (courseStatus === 'denied') {
     const redirectUrl = getAccessDeniedRedirectUrl(courseId, activeTabSlug, courseAccess, start);
@@ -81,7 +122,7 @@ const TabPage = (props) => {
           {intl.formatMessage(messages.failure)}
         </p>
       )}
-      <FooterSlot />
+      {!isMobile && <FooterSlot />}
     </>
   );
 };
