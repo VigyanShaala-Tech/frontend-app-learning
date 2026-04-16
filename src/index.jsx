@@ -46,6 +46,31 @@ import LiveSession from './course-home/live-session-tab/LiveSession';
 import ZoomMeeting from './course-home/live-session-tab/components/ZoomMeeting/ZoomMeeting';
 import  Header  from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
+import { useLocation } from 'react-router-dom';
+
+const WebFooter = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const isMobile = params.get("mobile") === "true";
+
+  if (isMobile) {
+    return null;
+  }
+
+  return <FooterSlot />;
+};
+
+const WebHeader = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const isMobile = params.get("mobile") === "true";
+
+  if (isMobile) {
+    return null;
+  }
+
+  return <Header />;
+};
 
 const RestrictionWrapper = () => {
   const [hasProfileCompleted, setHasProfileCompleted] = useState(true);
@@ -141,9 +166,9 @@ subscribe(APP_READY, () => {
                     path={`${DECODE_ROUTES.LIVE_SESSION}/join/:sessionId`}
                     element={(
                       <DecodePageRoute>
-                        <Header />
+                        <WebHeader />
                           <ZoomMeeting />
-                        <FooterSlot />
+                        <WebFooter />
                       </DecodePageRoute>
                     )}
                   />

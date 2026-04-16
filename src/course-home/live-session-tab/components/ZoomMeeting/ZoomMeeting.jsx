@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import { Button, Spinner, Alert } from '@openedx/paragon';
@@ -10,9 +10,12 @@ import messages from '../../messages';
 import './ZoomMeeting.scss';
 
 const ZoomMeeting = () => {
-  const { courseId, sessionId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { formatMessage } = useIntl();
+
+  const [courseId, setCourseId] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
 
   const [meetingData, setMeetingData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +24,25 @@ const ZoomMeeting = () => {
 
   const meetingSDKElement = useRef(null);
   const clientRef = useRef(null);
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    const match = path.match(
+      /\/(?:learning\/)?course\/(.+?)\/live-session\/join\/(.+)$/
+    );
+
+    if (match) {
+      const extractedCourseId = decodeURIComponent(match[1]);
+      const extractedSessionId = match[2];
+
+      setCourseId(extractedCourseId);
+      setSessionId(extractedSessionId);
+    } else {
+      setError(formatMessage(messages['liveSession.error.invalidUrl']));
+      setLoading(false);
+    }
+  }, [location.pathname, formatMessage]);
 
   // Initialize Zoom client once
   useEffect(() => {
@@ -38,6 +60,8 @@ const ZoomMeeting = () => {
 
   // Fetch join data
   const fetchJoinData = useCallback(async () => {
+    if (!sessionId) return;
+
     setLoading(true);
     setError(null);
     try {
@@ -45,7 +69,6 @@ const ZoomMeeting = () => {
         `${getConfig().LMS_BASE_URL}/api/v1/live-classes/join/${sessionId}/`
       );
       setMeetingData(response.data);
-      console.log(response.data);
     } catch (err) {
       console.error('Failed to fetch join data:', err);
       setError(
@@ -57,8 +80,10 @@ const ZoomMeeting = () => {
   }, [sessionId, formatMessage]);
 
   useEffect(() => {
-    fetchJoinData();
-  }, [fetchJoinData]);
+    if (sessionId) {
+      fetchJoinData();
+    }
+  }, [fetchJoinData, sessionId]);
 
   // Join meeting
   const joinMeeting = useCallback(async () => {
@@ -147,7 +172,7 @@ const ZoomMeeting = () => {
         clientRef.current.leaveMeeting();
       } catch (e) {}
     }
-    navigate(`/courses/${courseId}/live-session`);
+      navigate(`/courses/${courseId}/live-session`);
   };
 
   // Loading UI
