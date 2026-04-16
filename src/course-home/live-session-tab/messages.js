@@ -236,6 +236,10 @@ const messages = defineMessages({
     id: 'zoomMeeting.error.sdkInitFailed',
     defaultMessage: 'Failed to initialize Zoom SDK',
   },
+  'liveSession.error.invalidUrl': {
+    id: 'liveSession.error.invalidUrl',
+    defaultMessage: 'Invalid meeting URL. Could not extract course or session information.',
+  },
 });
 
 export default messages;

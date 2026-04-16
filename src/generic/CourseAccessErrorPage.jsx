@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { FooterSlot } from '@edx/frontend-component-footer';
@@ -11,9 +11,15 @@ import { fetchDiscussionTab } from '../course-home/data/thunks';
 import PageLoading from './PageLoading';
 import messages from '../tab-page/messages';
 
+const useIsMobileView = () => {
+  const location = useLocation();
+  return new URLSearchParams(location.search).get("mobile") === "true";
+};
+
 const CourseAccessErrorPage = () => {
   const intl = useIntl();
   const { courseId } = useParams();
+  const isMobile = useIsMobileView();
 
   const dispatch = useDispatch();
   const activeEnterpriseAlert = useActiveEnterpriseAlert(courseId);
@@ -33,7 +39,7 @@ const CourseAccessErrorPage = () => {
         <PageLoading
           srMessage={intl.formatMessage(messages.loading)}
         />
-        <FooterSlot />
+        {!isMobile && <FooterSlot />}
       </>
     );
   }
@@ -52,7 +58,7 @@ const CourseAccessErrorPage = () => {
           }}
         />
       </main>
-      <FooterSlot />
+      {!isMobile && <FooterSlot />}
     </>
   );
 };
