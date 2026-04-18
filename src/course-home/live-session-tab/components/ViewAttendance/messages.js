@@ -8,6 +8,14 @@ const messages = defineMessages({
   'viewAttendance.notJoined': { id: 'viewAttendance.notJoined', defaultMessage: 'Not Joined' },
   'viewAttendance.internalExternal': { id: 'viewAttendance.internalExternal', defaultMessage: 'Internal / External' },
   'viewAttendance.download': { id: 'viewAttendance.download', defaultMessage: 'Download' },
+  'viewAttendance.downloading': {
+    id: 'viewAttendance.downloading',
+    defaultMessage: 'Downloading...',
+  },
+  'viewAttendance.error.downloadFailed': {
+    id: 'viewAttendance.error.downloadFailed',
+    defaultMessage: 'Could not download attendance. Please try again.',
+  },
   'viewAttendance.column.name': { id: 'viewAttendance.column.name', defaultMessage: 'Name' },
   'viewAttendance.column.email': { id: 'viewAttendance.column.email', defaultMessage: 'Email' },
   'viewAttendance.column.type': { id: 'viewAttendance.column.type', defaultMessage: 'Type' },
