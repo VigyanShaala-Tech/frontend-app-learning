@@ -194,7 +194,7 @@ const ZoomMeeting = () => {
         <Alert variant="danger" className="mb-4">
           {error}
         </Alert>
-        <Button variant="primary" onClick={() => navigate(-1)}>
+        <Button variant="primary" className="text-white" onClick={() => navigate(-1)}>
           {formatMessage(messages['zoomMeeting.button.goBack'])}
         </Button>
       </div>

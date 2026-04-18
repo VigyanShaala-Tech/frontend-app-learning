@@ -399,7 +399,7 @@ const ScheduleLiveSessionForm = ({
         {success && (
           <div className="d-flex flex-column justify-content-center align-items-center py-5">
             <h3 className="font-weight-bold text-center mb-4">{successMessage}</h3>
-            <Button variant="primary" onClick={onBack}>
+            <Button variant="primary" className="text-white" onClick={onBack}>
               {formatMessage(messages['scheduleLiveSession.popup.ok'])}
             </Button>
           </div>
@@ -804,7 +804,7 @@ const ScheduleLiveSessionForm = ({
                 <Button variant="outline-primary" onClick={onBack} className="mr-3">
                   {formatMessage(messages['scheduleLiveSession.cancel'])}
                 </Button>
-                <Button variant="primary" type="submit" disabled={loading}>
+                <Button variant="primary" className="text-white" type="submit" disabled={loading}>
                   {loading && <Spinner animation="border" size="sm" className="mr-2" />}
                   {loading
                     ? (isEdit
