@@ -68,7 +68,7 @@ const LiveSessionCard = ({
           <div className="live-session-card__actions">
             {(tabType === 'today' || tabType === 'upcoming') && (
               <div className="action-group">
-                <Button variant="primary" onClick={() => onJoin?.(session)}>
+                <Button variant="primary" className="text-white" onClick={() => onJoin?.(session)}>
                   <FontAwesomeIcon icon={faVideo} className="mr-2" />
                   {formatMessage(messages['liveSession.button.join'])}
                 </Button>
@@ -84,7 +84,7 @@ const LiveSessionCard = ({
 
             {tabType === 'past' && (
               <div className="action-group">
-                <Button variant="outline-primary" onClick={onViewRecording}>
+                <Button variant="outline-primary" onClick={() => onViewRecording?.(session)}>
                   <FontAwesomeIcon icon={faPlay} className="mr-2" />
                   {formatMessage(messages['liveSession.button.viewRecording'])}
                 </Button>

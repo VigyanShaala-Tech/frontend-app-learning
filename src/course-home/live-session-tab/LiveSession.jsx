@@ -42,6 +42,7 @@ const LiveSession = () => {
   const [editingSession, setEditingSession] = useState(null);
   const [isAttendanceMode, setIsAttendanceMode] = useState(false);
   const [isRecordingMode, setRecordingMode] = useState(false);
+  const [selectedMeetingForRecording, setSelectedMeetingForRecording] = useState(null);
   // const [isJoinMode, setJoinMode] = useState(false);
 
   // Delete Popup States
@@ -225,7 +226,10 @@ const LiveSession = () => {
     navigate(`${basePath}/join/${session.id}`);
   };
 
-  const handleViewRecording = () => setRecordingMode(true);
+  const handleViewRecording = (session) => {
+    setSelectedMeetingForRecording(session?.id ?? null);
+    setRecordingMode(true);
+  };
 
   const handleViewAttendance = (session) => {
     setSelectedMeetingForAttendance(session.id);
@@ -274,7 +278,17 @@ const LiveSession = () => {
     );
   }
 
-  if (isRecordingMode) return <Recording onBack={() => setRecordingMode(false)} />;
+  if (isRecordingMode) {
+    return (
+      <Recording
+        meetingId={selectedMeetingForRecording}
+        onBack={() => {
+          setRecordingMode(false);
+          setSelectedMeetingForRecording(null);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="live-sessions-page py-5">
@@ -282,7 +296,7 @@ const LiveSession = () => {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0 liveSession-title">{reduxdata?.plural_label || formatMessage(messages['liveSession.title'])}</h1>
           {reduxdata.can_schedule_meeting && 
-          <Button variant="primary" onClick={handleScheduleClick}>
+          <Button variant="primary" className="text-white" onClick={handleScheduleClick}>
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
             {formatMessage(messages['liveSession.scheduleButton'])}
           </Button>
@@ -365,8 +379,9 @@ const LiveSession = () => {
               >
                 {formatMessage(messages['scheduleLiveSession.popup.editCurrent'])}
               </Button>
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
+                className="text-white"
                 onClick={() => confirmEdit(true)}
               >
                 {formatMessage(messages['scheduleLiveSession.popup.editAll'])}
@@ -416,7 +431,7 @@ const LiveSession = () => {
                   </Button>
                 </>
               ) : (
-                <Button variant="primary" onClick={closeDeletePopup}>
+                <Button variant="primary" className="text-white" onClick={closeDeletePopup}>
                   {formatMessage(messages['scheduleLiveSession.popup.ok'])}
                 </Button>
               )}
