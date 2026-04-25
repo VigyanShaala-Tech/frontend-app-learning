@@ -7,7 +7,7 @@ hooks.Filters.ENV_PATCHES.add_item(
         """
         // This file contains configuration for plugins and environment variables.
 const { PLUGIN_OPERATIONS, DIRECT_PLUGIN } = await import('@openedx/frontend-plugin-framework');
-const { Header } = await import('@edx/frontend-component-header');
+const { default: Header } = await import('@edx/frontend-component-header');
 {% raw %}
 config = {
   ...config,
