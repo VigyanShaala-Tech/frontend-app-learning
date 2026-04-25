@@ -17,7 +17,7 @@ const HeaderSlot = ({
 
   return (
     <PluginSlot
-    id = "profile_page_header_plugin_slot"
+    id = "learning_mfe_header_plugin_slot"
     pluginProps = {{}}
     >
       <PluginSlot
