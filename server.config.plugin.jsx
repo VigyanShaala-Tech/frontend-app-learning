@@ -14,12 +14,12 @@ config = {
   ...process.env,
 }
 config.pluginSlots = {
-  profile_page_header_plugin_slot: {
+  learning_mfe_header_plugin_slot: {
     plugins: [
       {
         op: PLUGIN_OPERATIONS.Insert,
         widget: {
-          id: 'profile_page_header_plugin_slot',
+          id: 'learning_mfe_header_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
           RenderWidget: (props) => <Header />,
