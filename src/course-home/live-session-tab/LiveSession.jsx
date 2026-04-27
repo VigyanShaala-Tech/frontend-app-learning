@@ -49,6 +49,7 @@ const LiveSession = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedSessionForAction, setSelectedSessionForAction] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingSessionId, setDeletingSessionId] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState('');
   const [selectedSessionId, setSelectedSessionId] = useState(null);
@@ -160,18 +161,63 @@ const LiveSession = () => {
     if (session.is_recurring_meeting) {
       setSelectedSessionForAction(session);
       setShowEditPopup(true);
-    } else {
-      setEditingSession(session);
-      setIsScheduleMode(true);
+      return;
     }
+
+    setShowEditPopup(false);
+    setSelectedSessionForAction(null);
+    setEditingSession({
+      ...session,
+      editAllRecurring: false,
+    });
+    setIsScheduleMode(true);
   };
 
-  const handleDelete = (session) => {
+  const handleDelete = async (session) => {
+    if (session.is_recurring_meeting) {
+      setSelectedSessionForAction(session);
+      setShowDeletePopup(true);
+      setDeleteSuccess(false);
+      setDeleteMessage('');
+      setIsDeleting(false);
+      setDeletingSessionId(null);
+      return;
+    }
+
     setSelectedSessionForAction(session);
-    setShowDeletePopup(true);
-    setDeleteSuccess(false);
-    setDeleteMessage('');
-    setIsDeleting(false);
+    await confirmDelete(true, session, false);
+  };
+
+  const confirmDelete = async (deleteAll, sessionForDelete = selectedSessionForAction, showPopupMessage = true) => {
+    setIsDeleting(true);
+    setDeletingSessionId(sessionForDelete?.id ?? null);
+    try {
+      const payload = { meeting_id: sessionForDelete.id };
+      if (!deleteAll && sessionForDelete?.occurrence_internal_id) {
+        payload.occurrence_id = sessionForDelete.occurrence_internal_id;
+        payload.modify_occurrence = true;
+      }
+      await getAuthenticatedHttpClient().post(
+        `${getConfig().LMS_BASE_URL}/api/v1/live-classes/delete/`,
+        payload
+      );
+
+      if (showPopupMessage) {
+        setDeleteSuccess(true);
+        setDeleteMessage(formatMessage(messages['liveSession.success.deleteSuccess']));
+      }
+      loadSessions(currentPage); // Refresh current page after delete
+    } catch (err) {
+      if (showPopupMessage) {
+        setDeleteSuccess(true);
+        setDeleteMessage(err.response?.data?.message || formatMessage(messages['liveSession.error.deleteFailed']));
+      } else {
+        setError(err.response?.data?.message || formatMessage(messages['liveSession.error.deleteFailed']));
+      }
+    } finally {
+      setIsDeleting(false);
+      setDeletingSessionId(null);
+    }
   };
 
   const confirmEdit = (editAll) => {
@@ -187,31 +233,9 @@ const LiveSession = () => {
     setShowEditPopup(false);
   };
 
-  const confirmDelete = async (deleteAll) => {
-    setIsDeleting(true);
+  const handlePopupDelete = async (deleteAll) => {
     setDeleteSuccess(false);
-
-    try {
-      const payload = { meeting_id: selectedSessionForAction.id };
-      if (!deleteAll && selectedSessionForAction?.occurrence_internal_id) {
-        payload.occurrence_id = selectedSessionForAction.occurrence_internal_id;
-        payload.modify_occurrence = true;
-      }
-
-      await getAuthenticatedHttpClient().post(
-        `${getConfig().LMS_BASE_URL}/api/v1/live-classes/delete/`,
-        payload
-      );
-
-      setDeleteSuccess(true);
-      setDeleteMessage(formatMessage(messages['liveSession.success.deleteSuccess']));
-      loadSessions(currentPage);   // Refresh current page after delete
-    } catch (err) {
-      setDeleteSuccess(true);
-      setDeleteMessage(err.response?.data?.message || formatMessage(messages['liveSession.error.deleteFailed']));
-    } finally {
-      setIsDeleting(false);
-    }
+    await confirmDelete(deleteAll);
   };
 
   const closeDeletePopup = () => {
@@ -219,6 +243,7 @@ const LiveSession = () => {
     setDeleteSuccess(false);
     setDeleteMessage('');
     setIsDeleting(false);
+    setDeletingSessionId(null);
   };
 
   const handleJoin = (session) => {
@@ -344,6 +369,8 @@ const LiveSession = () => {
                 onJoin={handleJoin}
                 onEdit={activeTab !== 'past' ? handleEdit : undefined}
                 onDelete={handleDelete}
+                isDeleting={isDeleting}
+                deletingSessionId={deletingSessionId}
                 onViewRecording={handleViewRecording}
                 handleViewAttendance={handleViewAttendance}
               />
@@ -411,25 +438,26 @@ const LiveSession = () => {
 
             <div className="custom-popup-actions d-flex justify-content-end gap-2 p-3 border-top">
               {!deleteSuccess ? (
-                <>
-                  <Button 
-                    variant="outline-primary" 
-                    onClick={() => confirmDelete(false)}
-                    disabled={isDeleting}
-                  >
-                    {formatMessage(messages['scheduleLiveSession.popup.deleteCurrent'])}
+                isDeleting ? (
+                  <Button variant="danger" disabled>
+                    {formatMessage(messages['scheduleLiveSession.popup.deleting'])}
                   </Button>
-                  <Button 
-                    variant="danger" 
-                    onClick={() => confirmDelete(true)} 
-                    disabled={isDeleting}
-                  >
-                    {isDeleting 
-                      ? formatMessage(messages['scheduleLiveSession.popup.deleting']) 
-                      : formatMessage(messages['scheduleLiveSession.popup.deleteAll'])
-                    }
-                  </Button>
-                </>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline-primary" 
+                      onClick={() => handlePopupDelete(false)}
+                    >
+                      {formatMessage(messages['scheduleLiveSession.popup.deleteCurrent'])}
+                    </Button>
+                    <Button 
+                      variant="danger" 
+                      onClick={() => handlePopupDelete(true)} 
+                    >
+                      {formatMessage(messages['scheduleLiveSession.popup.deleteAll'])}
+                    </Button>
+                  </>
+                )
               ) : (
                 <Button variant="primary" className="text-white" onClick={closeDeletePopup}>
                   {formatMessage(messages['scheduleLiveSession.popup.ok'])}
@@ -437,9 +465,11 @@ const LiveSession = () => {
               )}
             </div>
 
-            <button className="custom-popup-close" onClick={closeDeletePopup} disabled={isDeleting}>
-              &times;
-            </button>
+            {!isDeleting && (
+              <button className="custom-popup-close" onClick={closeDeletePopup}>
+                &times;
+              </button>
+            )}
           </div>
         </div>
       )}
