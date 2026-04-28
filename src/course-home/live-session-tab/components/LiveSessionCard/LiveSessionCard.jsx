@@ -23,12 +23,15 @@ const LiveSessionCard = ({
   onJoin,
   onEdit,
   onDelete,
+  isDeleting,
+  deletingSessionId,
   onViewRecording,
   handleViewAttendance,
 }) => {
   const { formatMessage } = useIntl();
   const isOngoing = session.isOngoing && tabType === 'today';
   const canEditDelete = session.is_owner === true;
+  const isDeletingThisSession = isDeleting && deletingSessionId === session.id;
 
   return (
     <div className={`live-session-card border mb-4 ${isOngoing ? 'ongoing' : ''}`}>
@@ -96,9 +99,11 @@ const LiveSessionCard = ({
             )}
 
             {canEditDelete && (
-              <Button variant="outline-danger" onClick={() => onDelete(session)}>
+              <Button variant="outline-danger" onClick={() => onDelete(session)} disabled={isDeletingThisSession}>
                 <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                {formatMessage(messages['liveSession.button.delete'])}
+                {isDeletingThisSession
+                  ? formatMessage(messages['scheduleLiveSession.popup.deleting'])
+                  : formatMessage(messages['liveSession.button.delete'])}
               </Button>
             )}
           </div>
