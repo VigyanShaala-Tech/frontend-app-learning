@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useParams, Navigate, useLocation } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { FooterSlot } from '@edx/frontend-component-footer';
 import { LOADED, LOADING } from '@src/constants';
 import HeaderSlot from '../plugin-slots/HeaderSlot';
@@ -10,16 +11,9 @@ import { AlertList } from './user-messages';
 import { fetchDiscussionTab } from '../course-home/data/thunks';
 import PageLoading from './PageLoading';
 import messages from '../tab-page/messages';
-
-const useIsMobileView = () => {
-  const location = useLocation();
-  return new URLSearchParams(location.search).get("mobile") === "true";
-};
-
 const CourseAccessErrorPage = () => {
   const intl = useIntl();
   const { courseId } = useParams();
-  const isMobile = useIsMobileView();
 
   const dispatch = useDispatch();
   const activeEnterpriseAlert = useActiveEnterpriseAlert(courseId);
@@ -58,7 +52,9 @@ const CourseAccessErrorPage = () => {
           }}
         />
       </main>
-      {!isMobile && <FooterSlot />}
+      <PluginSlot id="learning_mfe_footer_plugin_slot">
+        <FooterSlot />
+      </PluginSlot>
     </>
   );
 };

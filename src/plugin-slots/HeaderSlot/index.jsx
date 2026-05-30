@@ -1,24 +1,19 @@
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 import { PluginSlot } from '@openedx/frontend-plugin-framework';
 
 import { LearningHeader as Header } from '@edx/frontend-component-header';
 
 const HeaderSlot = ({
   courseOrg, courseNumber, courseTitle, showUserDropdown,
-}) => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const isMobile = params.get("mobile") === "true";
-
-  if (isMobile) {
-    return null;
-  }
-
-  return (
+}) => (
     <PluginSlot
-    id = "learning_mfe_header_plugin_slot"
-    pluginProps = {{}}
+      id="learning_mfe_header_plugin_slot"
+      pluginProps={{
+        courseOrg,
+        courseNumber,
+        courseTitle,
+        showUserDropdown,
+      }}
     >
       <PluginSlot
         id="org.openedx.frontend.layout.header_learning.v1"
@@ -41,8 +36,7 @@ const HeaderSlot = ({
         />
       </PluginSlot>
     </PluginSlot>
-  );
-};
+);
 
 HeaderSlot.propTypes = {
   courseOrg: PropTypes.string,
