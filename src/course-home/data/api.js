@@ -236,21 +236,6 @@ export async function getLiveTabIframe(courseId) {
 }
 
 
-export async function getLiveSessionData(courseId) {
-  const url = `${getConfig().LMS_BASE_URL}/api/v1/live-classes/${courseId}/info/`;
-  try {
-    const { data } = await getAuthenticatedHttpClient().get(url);
-    return data;
-  } catch (error) {
-    const { httpErrorStatus } = error && error.customAttributes;
-    if (httpErrorStatus === 404) {
-      return {};
-    }
-    throw error;
-  }
-}
-
-
 export function getTimeOffsetMillis(headerDate, requestTime, responseTime) {
   // Time offset computation should move down into the HttpClient wrapper to maintain a global time correction reference
   // Requires 'Access-Control-Expose-Headers: Date' on the server response per https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#access-control-expose-headers
@@ -394,21 +379,4 @@ export async function searchCourseContentFromAPI(courseId, searchKeyword, option
   const response = await getAuthenticatedHttpClient().post(url.href, formData);
 
   return camelCaseObject(response);
-}
-
-export async function getLeaderboardTabData(courseId) {
-  const url = `${getConfig().LMS_BASE_URL}/leaderboard/${courseId}/`;
-
-  try {
-    const { data } = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(data);
-  } catch (error) {
-    const httpErrorStatus = error?.response?.status;
-
-    if (httpErrorStatus === 401 || httpErrorStatus === 403) {
-      return {};
-    }
-
-    throw error;
-  }
 }

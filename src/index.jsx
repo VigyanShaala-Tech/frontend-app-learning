@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 
 import { Helmet } from 'react-helmet';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { fetchDiscussionTab, fetchLiveTab, fetchLiveSessionTab } from './course-home/data/thunks';
+import { fetchDiscussionTab, fetchLiveTab } from './course-home/data/thunks';
 import DiscussionTab from './course-home/discussion-tab/DiscussionTab';
 
 import messages from './i18n';
@@ -27,9 +27,6 @@ import GoalUnsubscribe from './course-home/goal-unsubscribe';
 import ProgressTab from './course-home/progress-tab/ProgressTab';
 import { TabContainer } from './tab-page';
 
-import LeaderboardTab from './course-home/leaderboard-tab/LeaderboardTab';
-import { fetchLeaderboardTab } from './course-home/data/thunks';
-
 import { fetchDatesTab, fetchOutlineTab, fetchProgressTab } from './course-home/data';
 import { fetchCourse } from './courseware/data';
 import { store } from './store';
@@ -42,36 +39,6 @@ import { DECODE_ROUTES, ROUTES } from './constants';
 import PreferencesUnsubscribe from './preferences-unsubscribe';
 import PageNotFound from './generic/PageNotFound';
 import RestrictionPage from './restriction-page/RestrictionPage';
-import LiveSession from './course-home/live-session-tab/LiveSession';
-import ZoomMeeting from './course-home/live-session-tab/components/ZoomMeeting/ZoomMeeting';
-import  Header  from '@edx/frontend-component-header';
-import { FooterSlot } from '@edx/frontend-component-footer';
-import { useLocation } from 'react-router-dom';
-
-const WebFooter = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const isMobile = params.get("mobile") === "true";
-
-  if (isMobile) {
-    return null;
-  }
-
-  return <FooterSlot />;
-};
-
-const WebHeader = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const isMobile = params.get("mobile") === "true";
-
-  if (isMobile) {
-    return null;
-  }
-
-  return <Header />;
-};
-
 const RestrictionWrapper = () => {
   const [hasProfileCompleted, setHasProfileCompleted] = useState(true);
   const [canAccessPage, setCanAccessPage] = useState(true);
@@ -152,26 +119,7 @@ subscribe(APP_READY, () => {
                       </DecodePageRoute>
                     )}
                   />
-                  <Route
-                    path={DECODE_ROUTES.LIVE_SESSION}
-                    element={(
-                      <DecodePageRoute>
-                        <TabContainer tab="live_session" fetch={fetchLiveSessionTab} slice="courseHome">
-                          <LiveSession />
-                        </TabContainer>
-                      </DecodePageRoute>
-                    )}
-                  />
-                  <Route
-                    path={`${DECODE_ROUTES.LIVE_SESSION}/join/:sessionId`}
-                    element={(
-                      <DecodePageRoute>
-                        <WebHeader />
-                          <ZoomMeeting />
-                        <WebFooter />
-                      </DecodePageRoute>
-                    )}
-                  />
+                  {getConfig().customTabRoutes?.()}
                   <Route
                     path={DECODE_ROUTES.DATES}
                     element={(
@@ -192,23 +140,6 @@ subscribe(APP_READY, () => {
                       </DecodePageRoute>
                     )}
                   />
-                  {DECODE_ROUTES.LEADERBOARD.map((route) => (
-                    <Route
-                      key={route}
-                      path={route}
-                      element={(
-                        <DecodePageRoute>
-                          <TabContainer
-                            tab="leaderboard"
-                            fetch={fetchLeaderboardTab}
-                            slice="courseHome"
-                          >
-                            <LeaderboardTab />
-                          </TabContainer>
-                        </DecodePageRoute>
-                      )}
-                    />
-                  ))}
                   {DECODE_ROUTES.PROGRESS.map((route) => (
                     <Route
                       key={route}

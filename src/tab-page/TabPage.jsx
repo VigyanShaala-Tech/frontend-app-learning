@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import { Toast } from '@openedx/paragon';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { FooterSlot } from '@edx/frontend-component-footer';
 import HeaderSlot from '../plugin-slots/HeaderSlot';
 import PageLoading from '../generic/PageLoading';
@@ -17,15 +18,8 @@ import LoadedTabPage from './LoadedTabPage';
 import { setCallToActionToast } from '../course-home/data/slice';
 import LaunchCourseHomeTourButton from '../product-tours/newUserCourseHomeTour/LaunchCourseHomeTourButton';
 
-const useIsMobileView = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  return params.get("mobile") === "true";
-};
-
 const TabPage = (props) => {
   const intl = useIntl();
-  const isMobile = useIsMobileView();
   const {
     activeTabSlug,
     courseId,
@@ -45,40 +39,6 @@ const TabPage = (props) => {
     start,
     title,
   } = useModel('courseHomeMeta', courseId);
-
-  useEffect(() => {
-    if (!isMobile) {
-      const tabsNav = document.getElementById('courseTabsNavigation');
-      if (tabsNav) tabsNav.style.display = '';
-      return;
-    }
-    let attempts = 0;
-    const maxAttempts = 20;
-
-    const hideTabs = () => {
-      const tabsNav = document.getElementById('courseTabsNavigation');
-      if (tabsNav) {
-        tabsNav.style.display = 'none';
-        return true;
-      }
-      return false;
-    };
-
-    const interval = setInterval(() => {
-      attempts++;
-      const found = hideTabs();
-
-      if (found || attempts >= maxAttempts) {
-        clearInterval(interval);
-      }
-    }, 100);
-    
-    return () => {
-      clearInterval(interval);
-      const tabsNav = document.getElementById('courseTabsNavigation');
-      if (tabsNav) tabsNav.style.display = '';
-    };
-  }, [isMobile]);
 
   if (courseStatus === 'denied') {
     const redirectUrl = getAccessDeniedRedirectUrl(courseId, activeTabSlug, courseAccess, start);
@@ -113,7 +73,12 @@ const TabPage = (props) => {
       )}
 
       {['loaded', 'denied'].includes(courseStatus) && (
-        <LoadedTabPage {...props} />
+        <PluginSlot
+          id="learning_mfe_loaded_tab_page_plugin_slot"
+          pluginProps={props}
+        >
+          <LoadedTabPage {...props} />
+        </PluginSlot>
       )}
 
       {/* courseStatus 'failed' and any other unexpected course status. */}
@@ -122,7 +87,9 @@ const TabPage = (props) => {
           {intl.formatMessage(messages.failure)}
         </p>
       )}
-      {!isMobile && <FooterSlot />}
+      <PluginSlot id="learning_mfe_footer_plugin_slot">
+        <FooterSlot />
+      </PluginSlot>
     </>
   );
 };

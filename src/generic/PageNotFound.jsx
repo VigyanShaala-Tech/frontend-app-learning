@@ -3,13 +3,8 @@ import { Hyperlink } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { logError } from '@edx/frontend-platform/logging';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { FooterSlot } from '@edx/frontend-component-footer';
-import { useLocation } from 'react-router-dom';
-
-const useIsMobileView = () => {
-  const location = useLocation();
-  return new URLSearchParams(location.search).get("mobile") === "true";
-};
 
 import HeaderSlot from '../plugin-slots/HeaderSlot';
 import messages from './messages';
@@ -17,8 +12,6 @@ import messages from './messages';
 const PageNotFound = () => {
   const { formatMessage } = useIntl();
   const location = window.location.href;
-  const isMobile = useIsMobileView();
-
   logError('Page failed to load, probably an invalid URL.', location);
   sendTrackEvent('edx.ui.lms.page_not_found', { location });
 
@@ -48,7 +41,9 @@ const PageNotFound = () => {
           )}
         </p>
       </main>
-      {!isMobile && <FooterSlot />}
+      <PluginSlot id="learning_mfe_footer_plugin_slot">
+        <FooterSlot />
+      </PluginSlot>
     </>
   );
 };
