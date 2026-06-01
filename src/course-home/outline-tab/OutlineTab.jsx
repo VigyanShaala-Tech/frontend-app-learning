@@ -5,6 +5,7 @@ import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@openedx/paragon';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { CourseOutlineTabNotificationsSlot } from '../../plugin-slots/CourseOutlineTabNotificationsSlot';
 import { AlertList } from '../../generic/user-messages';
 
@@ -170,21 +171,23 @@ const OutlineTab = () => {
           )}
         </div>
         {rootCourseId && (
-          <div className="col col-12 col-md-4">
-            <ProctoringInfoPanel />
-            { /** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
-             disabled to avoid components bouncing around too much as screen is rendered */ }
-            {(!enableProctoredExams || proctoringPanelStatus === 'loaded') && weeklyLearningGoalEnabled && (
-              <WeeklyLearningGoalCard
-                daysPerWeek={selectedGoal && 'daysPerWeek' in selectedGoal ? selectedGoal.daysPerWeek : null}
-                subscribedToReminders={selectedGoal && 'subscribedToReminders' in selectedGoal ? selectedGoal.subscribedToReminders : false}
-              />
-            )}
-            <CourseTools />
-            <CourseOutlineTabNotificationsSlot courseId={courseId} />
-            <CourseDates />
-            <CourseHandouts />
-          </div>
+          <PluginSlot id="learning_mfe_outline_tab_sidebar_plugin_slot">
+            <div className="col col-12 col-md-4">
+              <ProctoringInfoPanel />
+              { /** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
+               disabled to avoid components bouncing around too much as screen is rendered */ }
+              {(!enableProctoredExams || proctoringPanelStatus === 'loaded') && weeklyLearningGoalEnabled && (
+                <WeeklyLearningGoalCard
+                  daysPerWeek={selectedGoal && 'daysPerWeek' in selectedGoal ? selectedGoal.daysPerWeek : null}
+                  subscribedToReminders={selectedGoal && 'subscribedToReminders' in selectedGoal ? selectedGoal.subscribedToReminders : false}
+                />
+              )}
+              <CourseTools />
+              <CourseOutlineTabNotificationsSlot courseId={courseId} />
+              <CourseDates />
+              <CourseHandouts />
+            </div>
+          </PluginSlot>
         )}
       </div>
     </>

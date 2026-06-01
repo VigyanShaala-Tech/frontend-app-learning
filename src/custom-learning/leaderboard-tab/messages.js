@@ -1,52 +1,80 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  'leaderboard.title': {
-    id: 'leaderboard.title',
+  title: {
+    id: 'learn.custom.leaderboard.title',
     defaultMessage: 'Leaderboard',
+    description: 'Leaderboard page title',
   },
-  'leaderboard.loading': {
-    id: 'leaderboard.loading',
-    defaultMessage: 'Loading leaderboard...',
+  currentPositionLabel: {
+    id: 'learn.custom.leaderboard.currentPosition',
+    defaultMessage: 'Your current position',
+    description: 'Label above current user rank card',
   },
-  'leaderboard.description': {
-    id: 'leaderboard.description',
-    defaultMessage:
-      'Ranking is based on total points. If multiple learners have the same points, ranking is determined by who completed earlier. The Top 10 includes the first 10 learners based on this criteria.',
+  rankPrefix: {
+    id: 'learn.custom.leaderboard.rankPrefix',
+    defaultMessage: 'Rank #{rank}',
+    description: 'Current user rank label',
   },
-  'leaderboard.noData': {
-    id: 'leaderboard.noData',
-    defaultMessage: 'No leaderboard data available.',
+  pointsValue: {
+    id: 'learn.custom.leaderboard.pointsValue',
+    defaultMessage: '{points} points',
+    description: 'Formatted points value on current user rank card',
   },
-  'leaderboard.rank': {
-    id: 'leaderboard.rank',
+  columnRank: {
+    id: 'learn.custom.leaderboard.column.rank',
     defaultMessage: 'Rank',
+    description: 'Leaderboard table rank column',
   },
-  'leaderboard.student': {
-    id: 'leaderboard.student',
-    defaultMessage: 'Student',
+  columnUser: {
+    id: 'learn.custom.leaderboard.column.user',
+    defaultMessage: 'User',
+    description: 'Leaderboard table user column',
   },
-  'leaderboard.points': {
-    id: 'leaderboard.points',
+  columnCollege: {
+    id: 'learn.custom.leaderboard.column.college',
+    defaultMessage: 'College',
+    description: 'Leaderboard table college column',
+  },
+  columnPoints: {
+    id: 'learn.custom.leaderboard.column.points',
     defaultMessage: 'Points',
+    description: 'Leaderboard table points column',
   },
-  'leaderboard.you': {
-    id: 'leaderboard.you',
-    defaultMessage: '(You)',
+  noResults: {
+    id: 'learn.custom.leaderboard.noResults',
+    defaultMessage: 'No students match the selected filters.',
+    description: 'Empty state when filters return no rows',
   },
-  'leaderboard.yourPosition': {
-    id: 'leaderboard.yourPosition',
-    defaultMessage: 'Your Position',
+  showingRange: {
+    id: 'learn.custom.leaderboard.showingRange',
+    defaultMessage: 'Showing {start}-{end} of {total}',
+    description: 'Pagination summary text',
   },
-  'leaderboard.top10Message': {
-    id: 'leaderboard.top10Message',
-    defaultMessage:
-      'You are currently in the Top 10. Keep maintaining your performance.',
+  paginationLabel: {
+    id: 'learn.custom.leaderboard.paginationLabel',
+    defaultMessage: 'Leaderboard pagination',
+    description: 'Aria label for leaderboard pagination',
   },
-  'leaderboard.improveMessage': {
-    id: 'leaderboard.improveMessage',
-    defaultMessage:
-      'Keep improving your score to climb the leaderboard.',
+  collegeFilterPlaceholder: {
+    id: 'learn.custom.leaderboard.collegeFilter',
+    defaultMessage: 'Filter by college',
+    description: 'College filter dropdown placeholder',
+  },
+  studentRangeFilterPlaceholder: {
+    id: 'learn.custom.leaderboard.studentRangeFilter',
+    defaultMessage: 'Show range',
+    description: 'Student range filter dropdown placeholder',
+  },
+  loadError: {
+    id: 'learn.custom.leaderboard.loadError',
+    defaultMessage: 'Unable to load leaderboard data. Please try again later.',
+    description: 'Error message when leaderboard API fails',
+  },
+  filtersLoadError: {
+    id: 'learn.custom.leaderboard.filtersLoadError',
+    defaultMessage: 'Unable to load filter options. Please try again later.',
+    description: 'Error message when leaderboard filter options API fails',
   },
 });
 

@@ -1,0 +1,105 @@
+.custom-tab-pagination {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  width: 100%;
+
+  &__summary {
+    color: #6B7280;
+    font-size: 0.8125rem;
+    margin-bottom: 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    nav.pagination-primary,
+    nav[class*='pagination'] {
+      margin: 0 auto;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .page-link.btn {
+      font-size: 0.8125rem;
+      min-height: 2rem;
+      padding: 0.25rem 0.625rem;
+    }
+
+    .page-link.btn-icon-md {
+      height: 2rem;
+      width: 2rem;
+    }
+
+    .page-link.ellipsis {
+      font-size: 0.8125rem;
+      min-height: 2rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    &--with-summary {
+      align-items: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      > .custom-tab-pagination__summary {
+        flex: 0 0 auto;
+        font-size: 0.875rem;
+        text-align: left;
+        width: auto;
+      }
+
+      > .custom-tab-pagination__nav {
+        flex: 1 1 auto;
+        min-width: 0;
+
+        .page-link.btn {
+          font-size: 0.875rem;
+          min-height: 2.5rem;
+          padding: 0.375rem 0.75rem;
+        }
+
+        .page-link.btn-icon-md {
+          height: 2.5rem;
+          width: 2.5rem;
+        }
+
+        .page-link.ellipsis {
+          font-size: 0.875rem;
+          min-height: 2.5rem;
+        }
+      }
+    }
+
+    &:not(.custom-tab-pagination--with-summary) > .custom-tab-pagination__nav {
+      .page-link.btn {
+        font-size: 0.875rem;
+        min-height: 2.5rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .page-link.btn-icon-md {
+        height: 2.5rem;
+        width: 2.5rem;
+      }
+
+      .page-link.ellipsis {
+        font-size: 0.875rem;
+        min-height: 2.5rem;
+      }
+    }
+  }
+}

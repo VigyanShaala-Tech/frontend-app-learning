@@ -1,0 +1,139 @@
+.custom-hangout-tab {
+  padding-bottom: 2rem;
+
+  &__title {
+    color: #111827;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+
+    @media (min-width: 992px) {
+      font-size: 1.875rem;
+    }
+  }
+
+  &__card {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+  }
+
+  &__rich-content {
+    color: #4B5563;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #111827;
+      font-weight: 600;
+      line-height: 1.375rem;
+      margin: 0 0 0.5rem;
+    }
+
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.125rem; margin-top: 1rem; }
+    h3 { font-size: 1rem; margin-top: 0.75rem; }
+    h4 { font-size: 0.9375rem; }
+    h5 { font-size: 0.875rem; }
+    h6 { font-size: 0.8125rem; }
+
+    p {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0 0 0.75rem;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 0.75rem;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.375rem;
+
+      p {
+        margin: 0.25rem 0 0;
+      }
+    }
+
+    div {
+      margin: 0 0 0.75rem;
+    }
+
+    blockquote {
+      border-left: 3px solid rgba(var(--primary-rgb, 0, 104, 141), 0.35);
+      color: #4B5563;
+      margin: 0.75rem 0;
+      padding: 0.25rem 0 0.25rem 0.75rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      margin: 0 0 0.75rem;
+      max-width: 100%;
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #E5E7EB;
+      padding: 0.5rem 0.625rem;
+      text-align: left;
+    }
+
+    th {
+      background: #F9FAFB;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #E5E7EB;
+      margin: 1rem 0;
+    }
+
+    a {
+      color: var(--primary, #00688D);
+      text-decoration: underline;
+    }
+
+    strong,
+    b {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    em,
+    i {
+      font-style: italic;
+    }
+
+    img {
+      border-radius: 0.375rem;
+      display: block;
+      height: auto;
+      margin: 0.5rem 0;
+      max-width: 100%;
+    }
+  }
+}

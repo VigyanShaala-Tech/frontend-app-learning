@@ -47,12 +47,22 @@ const LoadedTabPage = ({
 
   return (
     <>
-      <ProductTours
-        activeTab={activeTabSlug}
-        courseId={courseId}
-        isStreakCelebrationOpen={isStreakCelebrationOpen}
-        org={org}
-      />
+      <PluginSlot
+        id="learning_mfe_prevent_course_tour_plugin_slot"
+        pluginProps={{
+          activeTab: activeTabSlug,
+          courseId,
+          isStreakCelebrationOpen,
+          org,
+        }}
+      >
+        <ProductTours
+          activeTab={activeTabSlug}
+          courseId={courseId}
+          isStreakCelebrationOpen={isStreakCelebrationOpen}
+          org={org}
+        />
+      </PluginSlot>
       <Helmet>
         <title>{`${activeTab ? `${activeTab.title} | ` : ''}${title} | ${getConfig().SITE_NAME}`}</title>
       </Helmet>

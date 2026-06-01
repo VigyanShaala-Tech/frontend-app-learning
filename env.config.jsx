@@ -6,6 +6,9 @@ import {
   CustomMobileHeader,
   CustomMobileFooter,
   CustomLiveSessionJoinChrome,
+  CustomProgressTab,
+  CustomGlobalStyles,
+  CustomCourseOutlineSidebar,
   getCustomTabRoutes,
 } from './src/custom-learning';
 
@@ -81,6 +84,102 @@ const getPluginSlots = () => ({
           RenderWidget: ({ children }) => (
             <CustomLiveSessionJoinChrome>{children}</CustomLiveSessionJoinChrome>
           ),
+        },
+      },
+    ],
+  },
+  learning_mfe_progress_tab_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_progress_tab_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => (
+            <CustomProgressTab />
+          ),
+        },
+      },
+    ],
+  },
+  learning_mfe_global_styles_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_global_styles_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => (
+            <CustomGlobalStyles />
+          ),
+        },
+      },
+    ],
+  },
+  learning_mfe_prevent_course_tour_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_prevent_course_tour_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => null,
+        },
+      },
+    ],
+  },
+  learning_mfe_outline_tab_sidebar_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_outline_tab_sidebar_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => null,
+        },
+      },
+    ],
+  },
+  learning_mfe_course_notifications_sidebar_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_course_notifications_sidebar_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => null,
+        },
+      },
+    ],
+  },
+  learning_mfe_course_notifications_trigger_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_course_notifications_trigger_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => null,
+        },
+      },
+    ],
+  },
+  learning_mfe_course_outline_sidebar_plugin_slot: {
+    keepDefault: false,
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_course_outline_sidebar_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => <CustomCourseOutlineSidebar />,
         },
       },
     ],

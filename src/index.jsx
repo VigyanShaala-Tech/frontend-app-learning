@@ -10,6 +10,7 @@ import { Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import { Helmet } from 'react-helmet';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { fetchDiscussionTab, fetchLiveTab } from './course-home/data/thunks';
 import DiscussionTab from './course-home/discussion-tab/DiscussionTab';
@@ -85,6 +86,7 @@ subscribe(APP_READY, () => {
           <NoticesProvider>
             <UserMessagesProvider>
               <div className="app-container">
+                <PluginSlot id="learning_mfe_global_styles_plugin_slot" />
                 <Routes>
                   <Route path="*" element={<PageWrap><PageNotFound /></PageWrap>} />
                   <Route path={ROUTES.UNSUBSCRIBE} element={<PageWrap><GoalUnsubscribe /></PageWrap>} />

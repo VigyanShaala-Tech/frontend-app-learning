@@ -1,0 +1,15 @@
+/**
+ * VigyanShaala global overrides for the learning MFE.
+ * Loaded via learning_mfe_global_styles_plugin_slot.
+ */
+
+#root {
+  // Outline tab: sidebar hidden via plugin — expand main column to full width.
+  .course-outline-tab {
+    > .col.col-12.col-md-8 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}

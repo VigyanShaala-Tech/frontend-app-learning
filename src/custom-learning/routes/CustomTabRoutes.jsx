@@ -3,45 +3,69 @@ import { Route } from 'react-router-dom';
 
 import DecodePageRoute from '../../decode-page-route';
 import { TabContainer } from '../../tab-page';
-import { fetchOutlineTab } from '../../course-home/data';
 import { CUSTOM_TAB_PATHS } from '../constants/customTabRoutes';
 import { CUSTOM_TAB_SLUGS } from '../utils/customTabUtils';
-import { fetchLeaderboardTab, fetchLiveSessionTab } from '../data';
+import {
+  fetchBookmarkTab,
+  fetchHangoutTab,
+  fetchLeaderboardTab,
+  fetchLiveSessionTab,
+  fetchUpdatesTab,
+} from '../data';
+import BookmarkTab from '../bookmark-tab/BookmarkTab';
+import HangoutTab from '../hangout-tab/HangoutTab';
 import LeaderboardTab from '../leaderboard-tab/LeaderboardTab';
+import UpdatesTab from '../updates-tab/UpdatesTab';
 import LiveSession from '../live-session-tab/LiveSession';
-import CustomUpcomingTabPageBySlug from './CustomUpcomingTabPageBySlug';
 import CustomLiveSessionJoinPage from './CustomLiveSessionJoinPage';
-
-const upcomingTabRoutes = [
-  {
-    path: CUSTOM_TAB_PATHS.hangout,
-    tab: CUSTOM_TAB_SLUGS.hangout,
-  },
-  {
-    path: CUSTOM_TAB_PATHS.updates,
-    tab: CUSTOM_TAB_SLUGS.updates,
-  },
-  {
-    path: CUSTOM_TAB_PATHS.bookmark,
-    tab: CUSTOM_TAB_SLUGS.bookmark,
-  },
-];
 
 const getCustomTabRoutes = () => (
   <>
-    {upcomingTabRoutes.map(({ path, tab }) => (
-      <Route
-        key={tab}
-        path={path}
-        element={(
-          <DecodePageRoute>
-            <TabContainer tab={tab} fetch={fetchOutlineTab} slice="courseHome">
-              <CustomUpcomingTabPageBySlug tabSlug={tab} />
-            </TabContainer>
-          </DecodePageRoute>
-        )}
-      />
-    ))}
+    <Route
+      key={CUSTOM_TAB_SLUGS.hangout}
+      path={CUSTOM_TAB_PATHS.hangout}
+      element={(
+        <DecodePageRoute>
+          <TabContainer
+            tab={CUSTOM_TAB_SLUGS.hangout}
+            fetch={fetchHangoutTab}
+            slice="courseHome"
+          >
+            <HangoutTab />
+          </TabContainer>
+        </DecodePageRoute>
+      )}
+    />
+    <Route
+      key={CUSTOM_TAB_SLUGS.updates}
+      path={CUSTOM_TAB_PATHS.updates}
+      element={(
+        <DecodePageRoute>
+          <TabContainer
+            tab={CUSTOM_TAB_SLUGS.updates}
+            fetch={fetchUpdatesTab}
+            slice="courseHome"
+          >
+            <UpdatesTab />
+          </TabContainer>
+        </DecodePageRoute>
+      )}
+    />
+    <Route
+      key={CUSTOM_TAB_SLUGS.bookmark}
+      path={CUSTOM_TAB_PATHS.bookmark}
+      element={(
+        <DecodePageRoute>
+          <TabContainer
+            tab={CUSTOM_TAB_SLUGS.bookmark}
+            fetch={fetchBookmarkTab}
+            slice="courseHome"
+          >
+            <BookmarkTab />
+          </TabContainer>
+        </DecodePageRoute>
+      )}
+    />
     <Route
       key={CUSTOM_TAB_SLUGS.leaderboard}
       path={CUSTOM_TAB_PATHS.leaderboard}

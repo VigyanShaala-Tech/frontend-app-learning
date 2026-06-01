@@ -1,0 +1,55 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "date": "2026-03-24",
+      "message": "<h1>New module released: Data Analysis Techniques</h1><h2>What is included</h2><p>Module 4 is now live. Dive into <strong>statistical analysis</strong> and <em>data analysis software</em>.</p><p>Start with the overview video, then complete the guided lab.</p>"
+    },
+    {
+      "id": 2,
+      "date": "2026-03-20",
+      "message": "<h2>Live session scheduled this Friday</h2><p>Join the live Q&amp;A with mentor <a href=\"#\">Dr. Anjali Sharma</a> at <mark>6:00 PM IST</mark>.</p><ul><li>Topic: regression models</li><li>Duration: 60 minutes</li><li>Bring your notebook questions</li></ul>"
+    },
+    {
+      "id": 3,
+      "date": "2026-03-15",
+      "message": "<h3>Course materials updated</h3><p>Updated handouts and templates are available in the Course Tools sidebar.</p><ol><li>Download the revised syllabus PDF</li><li>Review the project brief</li><li>Check the grading rubric</li></ol><p><img src=\"https://placehold.co/640x180/e5e7eb/374151?text=Course+Handout+Preview\" alt=\"Course handout preview\" /></p>"
+    },
+    {
+      "id": 4,
+      "date": "2026-03-10",
+      "message": "<h1>Weekly progress summary</h1><h4>Cohort highlights</h4><p>Your cohort completed <strong>85%</strong> of assigned units this week.</p><ul><li>12 learners finished Module 3</li><li>4 live sessions attended</li><li>2 new discussion threads</li></ul><blockquote><p>&ldquo;Consistency beats intensity&rdquo; &mdash; keep submitting small milestones daily.</p></blockquote>"
+    },
+    {
+      "id": 5,
+      "date": "2026-03-05",
+      "message": "<h3>Assignment deadline reminder</h3><p>Submit Problem Set 2 before <del>Saturday</del> <ins>Sunday, 11:59 PM IST</ins>.</p><table><caption>Submission checklist</caption><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody><tr><td>Notebook export</td><td>Required</td></tr><tr><td>Reflection paragraph</td><td>Optional</td></tr></tbody></table>"
+    },
+    {
+      "id": 6,
+      "date": "2026-02-28",
+      "message": "<h2>New video walkthrough</h2><p>Watch the step-by-step guide for setting up your lab environment.</p><pre><code>pip install pandas numpy matplotlib\njupyter lab</code></pre><p>Run the commands above in your virtual environment before opening the notebook.</p>"
+    },
+    {
+      "id": 7,
+      "date": "2026-02-22",
+      "message": "<h4>Mentor office hours</h4><p>Drop in on Wednesday between 4:00&ndash;5:30 PM IST for one-on-one help.</p><dl><dt>Location</dt><dd>Hangout tab &rarr; Live room link</dd><dt>Format</dt><dd>Open Q&amp;A, first-come basis</dd></dl><hr /><p>Please post your question in the forum if you cannot attend.</p>"
+    },
+    {
+      "id": 8,
+      "date": "2026-02-18",
+      "message": "<h3>Platform maintenance</h3><p>Scheduled maintenance on <span style=\"font-weight:600\">20 February</span> from 1:00&ndash;3:00 AM IST.</p><p>The course will be <strong>read-only</strong> during this window. H<sub>2</sub>O lab demo data will remain cached locally.</p><figure><img src=\"https://placehold.co/520x140/f3f4f6/6b7280?text=Maintenance+Notice\" alt=\"Maintenance notice banner\" /><figcaption>Status page updates will be posted every 30 minutes.</figcaption></figure>"
+    },
+    {
+      "id": 9,
+      "date": "2026-02-12",
+      "message": "<h2>Welcome to Module 3</h2><h5>Getting started</h5><p>Explore experiments, variables, and hypothesis testing in the newly unlocked content.</p><ul><li>Read the introductory chapter</li><li>Complete the practice quiz</li><li>Join the cohort discussion</li></ul><h6>Reference</h6><p>Formula sheet: E = mc<sup>2</sup> (example notation only).</p><p>More resources: <a href=\"#\">Module 3 guide</a> &bull; <a href=\"#\">FAQ</a></p>"
+    }
+  ],
+  "pagination": {
+    "count": 9,
+    "num_pages": 3,
+    "next": 2,
+    "previous": null
+  }
+}

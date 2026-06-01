@@ -1,0 +1,38 @@
+import React from 'react';
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { Button } from '@openedx/paragon';
+import { useSelector } from 'react-redux';
+
+import { useModel } from '../../../generic/model-store';
+import defaultProgressMessages from '../../../course-home/progress-tab/messages';
+
+const CustomProgressHeader = () => {
+  const intl = useIntl();
+  const {
+    courseId,
+    targetUserId,
+  } = useSelector(state => state.courseHome);
+
+  const { administrator, userId } = getAuthenticatedUser();
+  const { studioUrl, username } = useModel('progress', courseId);
+
+  const viewingOtherStudentsProgressPage = (targetUserId && targetUserId !== userId);
+
+  const pageTitle = viewingOtherStudentsProgressPage
+    ? intl.formatMessage(defaultProgressMessages.progressHeaderForTargetUser, { username })
+    : intl.formatMessage(defaultProgressMessages.progressHeader);
+
+  return (
+    <div className="custom-progress-header row w-100 m-0 mt-3 mb-4 justify-content-between">
+      <h1>{pageTitle}</h1>
+      {administrator && studioUrl && (
+        <Button variant="outline-primary" size="sm" className="align-self-center" href={studioUrl}>
+          {intl.formatMessage(defaultProgressMessages.studioLink)}
+        </Button>
+      )}
+    </div>
+  );
+};
+
+export default CustomProgressHeader;

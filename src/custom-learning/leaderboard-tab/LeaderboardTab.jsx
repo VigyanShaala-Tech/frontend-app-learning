@@ -1,115 +1,109 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Alert, Spinner } from '@openedx/paragon';
-import { DataTable } from '@openedx/paragon';
 
+import PageLoading from '@src/generic/PageLoading';
 import messages from './messages';
-import './LeaderBoardTab.scss';
+import CustomTabPagination from '../components/custom-tab-pagination';
+import useLeaderboardData from './hooks/useLeaderboardData';
+import CurrentPositionCard from './components/CurrentPositionCard';
+import LeaderboardFilters from './components/LeaderboardFilters';
+import LeaderboardTable from './components/LeaderboardTable';
+import './LeaderboardTab.scss';
 
 const LeaderboardTab = () => {
   const { formatMessage } = useIntl();
-  const { courseId } = useParams();
+  const [college, setCollege] = useState('all');
+  const [topN, setTopN] = useState('all');
+  const [page, setPage] = useState(1);
 
-  const data = useSelector(
-    state => state.models?.leaderboard?.[courseId]
-  );
+  const {
+    collegeOptions,
+    studentRangeOptions,
+    currentUser,
+    results,
+    pagination,
+    pageSize,
+    currentPage,
+    filtersLoading,
+    filtersError,
+    loading,
+    error,
+  } = useLeaderboardData({ college, topN, page });
 
-  if (!data) {
-    return (
-      <div className="leaderboard-loading">
-        <Spinner animation="border" variant="primary" />
-        <p>{formatMessage(messages['leaderboard.loading'])}</p>
-      </div>
-    );
-  }
+  const handleCollegeChange = (value) => {
+    setCollege(value);
+    setPage(1);
+  };
 
-  const top10 = data.leaderboard?.top10 ?? [];
-  const currentUser = data.currentUser ?? {};
-  const isInTop10 = currentUser.isInTop10;
+  const handleTopNChange = (value) => {
+    setTopN(value);
+    setPage(1);
+  };
+
+  const handlePageChange = (nextPage) => {
+    setPage(nextPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const start = pagination.count === 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+  const end = Math.min(currentPage * pageSize, pagination.count);
 
   return (
-    <div className="leaderboard-container">
-      <h2 className="leaderboard-title">
-        {formatMessage(messages['leaderboard.title'])}
-      </h2>
+    <div className="custom-leaderboard-tab container-xl py-4">
+      <h1 className="custom-leaderboard-tab__title">
+        {formatMessage(messages.title)}
+      </h1>
 
-      {/* Explanation */}
-      <Alert variant="light" className="leaderboard-info">
-        {formatMessage(messages['leaderboard.description'])}
-      </Alert>
-
-      {/* Table */}
-      {top10.length === 0 ? (
-        <p className="leaderboard-empty">
-          {formatMessage(messages['leaderboard.noData'])}
-        </p>
-      ) : (
-        <div className="leaderboard-table-wrapper">
-            <DataTable
-                columns={[
-                    {
-                    Header: formatMessage(messages['leaderboard.rank']),
-                    accessor: 'rank',
-                    },
-                    {
-                    Header: formatMessage(messages['leaderboard.student']),
-                    accessor: 'displayName',
-                    Cell: ({ row }) => (
-                        <>
-                        {row.original.displayName}
-                        {row.original.isCurrentUser &&
-                            ` ${formatMessage(messages['leaderboard.you'])}`}
-                        </>
-                    ),
-                    },
-                    {
-                    Header: formatMessage(messages['leaderboard.points']),
-                    accessor: 'points',
-                    },
-                ]}
-                data={top10}
-                className="leaderboard-table"
-                getRowProps={(row) => ({
-                    className: row.original.isCurrentUser ? 'current-user-row' : '',
-                })}
-            />
-        </div>
+      {currentUser.rank != null && currentUser.points != null && (
+        <CurrentPositionCard
+          rank={currentUser.rank}
+          points={currentUser.points}
+        />
       )}
 
-      {/* User Position */}
-      <div className="leaderboard-position">
-        <h3>
-          {formatMessage(messages['leaderboard.yourPosition'])}
-        </h3>
+      {filtersError && (
+        <p className="custom-leaderboard-tab__error text-danger">{filtersError}</p>
+      )}
 
-        <div className="position-card">
-          <div>
-            <strong>
-              {formatMessage(messages['leaderboard.rank'])}:
-            </strong>{' '}
-            {currentUser.rank ?? 'N/A'}
-          </div>
-          <div>
-            <strong>
-              {formatMessage(messages['leaderboard.points'])}:
-            </strong>{' '}
-            {currentUser.points ?? 0}
-          </div>
-        </div>
+      {!filtersLoading && !filtersError && (
+        <LeaderboardFilters
+          collegeOptions={collegeOptions}
+          studentRangeOptions={studentRangeOptions}
+          college={college}
+          topN={topN}
+          onCollegeChange={handleCollegeChange}
+          onTopNChange={handleTopNChange}
+        />
+      )}
 
-        {/* Status Message */}
-        {isInTop10 ? (
-          <Alert variant="success" className="leaderboard-status">
-            {formatMessage(messages['leaderboard.top10Message'])}
-          </Alert>
-        ) : (
-          <Alert variant="warning" className="leaderboard-status">
-            {formatMessage(messages['leaderboard.improveMessage'])}
-          </Alert>
-        )}
-      </div>
+      {loading && (
+        <PageLoading srMessage={formatMessage(messages.title)} />
+      )}
+
+      {!loading && error && (
+        <p className="custom-leaderboard-tab__error text-danger">{error}</p>
+      )}
+
+      {!loading && !error && (
+        <LeaderboardTable
+          rows={results}
+          currentUserRank={currentUser.rank}
+        />
+      )}
+
+      {!loading && !error && pagination.num_pages > 0 && (
+        <CustomTabPagination
+          paginationLabel={formatMessage(messages.paginationLabel)}
+          pageCount={pagination.num_pages}
+          currentPage={currentPage}
+          onPageSelect={handlePageChange}
+          summary={formatMessage(messages.showingRange, {
+            start,
+            end,
+            total: pagination.count,
+          })}
+        />
+      )}
     </div>
   );
 };
