@@ -16,6 +16,7 @@ const {
   CustomProgressTab,
   CustomGlobalStyles,
   CustomCourseOutlineSidebar,
+  CustomLiveSessionBanner,
   getCustomTabRoutes,
 } = await import('./src/custom-learning');
 {% raw %}
@@ -47,6 +48,19 @@ config.pluginSlots = {
           type: DIRECT_PLUGIN,
           priority: 1,
           RenderWidget: (props) => <CustomCourseTabsNavigation {...props} />,
+        },
+      },
+    ],
+  },
+  learning_mfe_course_live_session_banner_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_course_live_session_banner_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: (props) => <CustomLiveSessionBanner {...props} />,
         },
       },
     ],

@@ -125,6 +125,12 @@ export async function getCourseHandoutsData(courseId) {
   return data?.result ?? null;
 }
 
+export async function getOngoingLiveSessionBannerData(courseId) {
+  const url = `${getLmsBaseUrl()}/api/v1/get/ongoing-session/${encodeCourseId(courseId)}/`;
+  const data = await getJson(url);
+  return data?.result ?? null;
+}
+
 // Legacy exports kept for live-session thunk compatibility.
 export const getHangoutTabData = getCourseHandoutsData;
 export const getUpdatesTabData = (courseId) => getCourseUpdatesData(courseId, { page: 1, pageSize: CUSTOM_TAB_PAGE_SIZE });

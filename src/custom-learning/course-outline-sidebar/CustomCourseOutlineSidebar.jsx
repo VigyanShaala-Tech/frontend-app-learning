@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { IconButton } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { MenuOpen as MenuOpenIcon } from '@openedx/paragon/icons';
@@ -58,20 +58,7 @@ const CustomCourseOutlineSidebar = () => {
       </div>
     );
 
-  const isSidebarVisible = !isActiveEntranceExam && currentSidebar === ID;
-
-  useEffect(() => {
-    if (!shouldDisplayFullScreen || !isSidebarVisible) {
-      return undefined;
-    }
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [shouldDisplayFullScreen, isSidebarVisible]);
-
-  if (!isSidebarVisible) {
+  if (isActiveEntranceExam || currentSidebar !== ID) {
     return null;
   }
 
