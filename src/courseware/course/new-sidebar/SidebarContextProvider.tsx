@@ -26,14 +26,16 @@ const SidebarProvider: React.FC<Props> = ({
   const { verifiedMode } = useModel('courseHomeMeta', courseId);
   const topic = useModel('discussionTopics', unitId);
   const windowWidth = useWindowSize().width ?? window.innerWidth;
-  const shouldDisplayFullScreen = windowWidth < breakpoints.large.minWidth;
-  const shouldDisplaySidebarOpen = windowWidth > breakpoints.medium.minWidth;
+  const shouldDisplayFullScreen = windowWidth < (breakpoints.large.minWidth ?? Number.MAX_SAFE_INTEGER);
+  const shouldDisplaySidebarOpen = windowWidth > (breakpoints.medium.minWidth ?? 0);
   const query = new URLSearchParams(window.location.search);
-  const isInitiallySidebarOpen = shouldDisplaySidebarOpen || query.get('sidebar') === 'true';
+  // Open side panel only when explicitly requested via URL (?sidebar=true).
+  const isInitiallySidebarOpen = query.get('sidebar') === 'true';
   const sidebarKey = `sidebar.${courseId}`;
 
-  let initialSidebar = shouldDisplayFullScreen && sidebarKey in localStorage ? getLocalStorage(sidebarKey)
-    : SIDEBARS.DISCUSSIONS_NOTIFICATIONS.ID;
+  let initialSidebar = shouldDisplayFullScreen && sidebarKey in localStorage
+    ? getLocalStorage(sidebarKey)
+    : null;
 
   if (!shouldDisplayFullScreen && isInitiallySidebarOpen) {
     initialSidebar = SIDEBARS.DISCUSSIONS_NOTIFICATIONS.ID;
@@ -54,12 +56,12 @@ const SidebarProvider: React.FC<Props> = ({
   }, [courseId]);
 
   useEffect(() => {
-    window.sessionStorage.setItem('hideCourseOutlineSidebar', 'true');
-    window.sessionStorage.setItem(`notificationTrayStatus.${courseId}`, 'open');
+    // Allow course outline to open on page load (see useCourseOutlineSidebar).
+    window.sessionStorage.removeItem('hideCourseOutlineSidebar');
     setHideDiscussionbar(!isDiscussionbarAvailable);
     setHideNotificationbar(!isNotificationbarAvailable);
     if (initialSidebar && currentSidebar !== initialSidebar) {
-      setCurrentSidebar(SIDEBARS.DISCUSSIONS_NOTIFICATIONS.ID);
+      setCurrentSidebar(initialSidebar);
     }
   }, [unitId, topic]);
 
@@ -70,8 +72,10 @@ const SidebarProvider: React.FC<Props> = ({
   }, [hideDiscussionbar, hideNotificationbar]);
 
   useEffect(() => {
-    setCurrentSidebar(initialSidebar);
-  }, [shouldDisplaySidebarOpen, initialSidebar]);
+    if (isInitiallySidebarOpen) {
+      setCurrentSidebar(initialSidebar);
+    }
+  }, [shouldDisplaySidebarOpen, initialSidebar, isInitiallySidebarOpen]);
 
   const handleWidgetToggle = useCallback((widgetId, sidebarId) => {
     setHideDiscussionbar(prevWidgetId => (widgetId === WIDGETS.DISCUSSIONS ? true : prevWidgetId));
@@ -104,6 +108,7 @@ const SidebarProvider: React.FC<Props> = ({
   }, [handleWidgetToggle, handleSidebarToggle, clearSidebarKeyIfWidgetsUnavailable]);
 
   const contextValue = useMemo(() => ({
+    initialSidebar,
     toggleSidebar,
     onNotificationSeen,
     setNotificationStatus,
@@ -119,7 +124,7 @@ const SidebarProvider: React.FC<Props> = ({
     hideNotificationbar,
     isNotificationbarAvailable,
     isDiscussionbarAvailable,
-  }), [courseId, currentSidebar, notificationStatus, onNotificationSeen, shouldDisplayFullScreen,
+  }), [courseId, currentSidebar, initialSidebar, notificationStatus, onNotificationSeen, shouldDisplayFullScreen,
     shouldDisplaySidebarOpen, toggleSidebar, unitId, upgradeNotificationCurrentState, hideDiscussionbar,
     hideNotificationbar, isNotificationbarAvailable, isDiscussionbarAvailable]);
 

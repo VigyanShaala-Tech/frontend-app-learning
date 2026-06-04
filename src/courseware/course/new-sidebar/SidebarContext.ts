@@ -15,6 +15,7 @@ export type UpgradeNotificationState = (
 );
 
 export interface SidebarContextData {
+  initialSidebar?: SidebarId | string | null;
   toggleSidebar: (sidebarId?: SidebarId | null, widgetId?: WidgetId | null) => void;
   onNotificationSeen: () => void;
   setNotificationStatus: React.Dispatch<'active' | 'inactive'>;

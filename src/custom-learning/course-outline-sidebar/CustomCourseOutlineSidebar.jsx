@@ -9,6 +9,7 @@ import { useCourseOutlineSidebar } from '@src/courseware/course/sidebar/sidebars
 import { ID } from '@src/courseware/course/sidebar/sidebars/course-outline/constants';
 import defaultMessages from '@src/courseware/course/sidebar/sidebars/course-outline/messages';
 import CustomOutlineSectionAccordion from './components/CustomOutlineSectionAccordion';
+import useCourseOutlineSidebarPersistence from './hooks/useCourseOutlineSidebarPersistence';
 import './CustomCourseOutlineSidebar.scss';
 
 const CustomCourseOutlineSidebar = () => {
@@ -26,6 +27,15 @@ const CustomCourseOutlineSidebar = () => {
     sections,
   } = useCourseOutlineSidebar();
 
+  useCourseOutlineSidebarPersistence({
+    courseId,
+    unitId,
+    currentSidebar,
+    isActiveEntranceExam,
+    shouldDisplayFullScreen,
+    handleToggleCollapse,
+  });
+
   const sectionIds = Object.keys(sections);
 
   const sidebarHeading = (
@@ -34,10 +44,14 @@ const CustomCourseOutlineSidebar = () => {
         {intl.formatMessage(defaultMessages.courseOutlineTitle)}
       </span>
       <IconButton
+        type="button"
         alt={intl.formatMessage(defaultMessages.toggleCourseOutlineTrigger)}
         className="custom-outline-sidebar__toggle-btn"
         iconAs={MenuOpenIcon}
-        onClick={handleToggleCollapse}
+        onClick={(event) => {
+          event.preventDefault();
+          handleToggleCollapse();
+        }}
       />
     </div>
   );
@@ -83,7 +97,10 @@ const CustomCourseOutlineSidebar = () => {
         <button
           type="button"
           className="custom-outline-sidebar__backdrop"
-          onClick={handleToggleCollapse}
+          onClick={(event) => {
+            event.preventDefault();
+            handleToggleCollapse();
+          }}
           aria-label={intl.formatMessage(defaultMessages.toggleCourseOutlineTrigger)}
         />
       </div>

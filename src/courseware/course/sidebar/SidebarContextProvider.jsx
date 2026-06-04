@@ -23,7 +23,8 @@ const SidebarProvider = ({
   const shouldDisplayFullScreen = useWindowSize().width < breakpoints.extraLarge.minWidth;
   const shouldDisplaySidebarOpen = useWindowSize().width > breakpoints.extraLarge.minWidth;
   const query = new URLSearchParams(window.location.search);
-  const isInitiallySidebarOpen = shouldDisplaySidebarOpen || query.get('sidebar') === 'true';
+  // Discussion/notifications open only via icon click, or ?sidebar=true in URL.
+  const isInitiallySidebarOpen = query.get('sidebar') === 'true';
 
   let initialSidebar = shouldDisplayFullScreen ? getLocalStorage(`sidebar.${courseId}`) : null;
   if (!shouldDisplayFullScreen && isInitiallySidebarOpen) {
@@ -57,7 +58,7 @@ const SidebarProvider = ({
     const newSidebar = sidebarId === currentSidebar ? null : sidebarId;
     setCurrentSidebar(newSidebar);
     setLocalStorage(`sidebar.${courseId}`, newSidebar);
-  }, [currentSidebar]);
+  }, [currentSidebar, courseId]);
 
   const contextValue = useMemo(() => ({
     initialSidebar,
