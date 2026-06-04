@@ -47,12 +47,22 @@ const LoadedTabPage = ({
 
   return (
     <>
-      <ProductTours
-        activeTab={activeTabSlug}
-        courseId={courseId}
-        isStreakCelebrationOpen={isStreakCelebrationOpen}
-        org={org}
-      />
+      <PluginSlot
+        id="learning_mfe_prevent_course_tour_plugin_slot"
+        pluginProps={{
+          activeTab: activeTabSlug,
+          courseId,
+          isStreakCelebrationOpen,
+          org,
+        }}
+      >
+        <ProductTours
+          activeTab={activeTabSlug}
+          courseId={courseId}
+          isStreakCelebrationOpen={isStreakCelebrationOpen}
+          org={org}
+        />
+      </PluginSlot>
       <Helmet>
         <title>{`${activeTab ? `${activeTab.title} | ` : ''}${title} | ${getConfig().SITE_NAME}`}</title>
       </Helmet>
@@ -103,6 +113,20 @@ const LoadedTabPage = ({
         </PluginSlot>
 
         <div id="main-content" className="container-xl">
+          <PluginSlot
+            id="learning_mfe_course_live_session_banner_plugin_slot"
+            idAliases={[
+              'course_live_session_banner_slot',
+              'org.openedx.frontend.learning.course_live_session_banner.v1',
+            ]}
+            pluginProps={{
+              activeTabSlug,
+              courseId,
+            }}
+            slotOptions={{
+              mergeProps: true,
+            }}
+          />
           {children}
         </div>
       </main>

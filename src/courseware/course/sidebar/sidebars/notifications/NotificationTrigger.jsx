@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import PropTypes from 'prop-types';
 
 import { WIDGETS } from '@src/constants';
@@ -48,9 +49,20 @@ const NotificationTrigger = ({
   });
 
   return (
-    <SidebarTriggerBase onClick={onClick} ariaLabel={intl.formatMessage(messages.openNotificationTrigger)}>
-      <NotificationIcon status={notificationStatus} notificationColor="bg-danger-500" />
-    </SidebarTriggerBase>
+    <PluginSlot
+      id="learning_mfe_course_notifications_trigger_plugin_slot"
+      idAliases={[
+        'course_notifications_trigger_slot',
+        'org.openedx.frontend.learning.course_notifications_trigger.v1',
+      ]}
+      slotOptions={{
+        mergeProps: true,
+      }}
+    >
+      <SidebarTriggerBase onClick={onClick} ariaLabel={intl.formatMessage(messages.openNotificationTrigger)}>
+        <NotificationIcon status={notificationStatus} notificationColor="bg-danger-500" />
+      </SidebarTriggerBase>
+    </PluginSlot>
   );
 };
 

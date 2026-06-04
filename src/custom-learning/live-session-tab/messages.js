@@ -23,6 +23,11 @@ const messages = defineMessages({
   'liveSession.error.updateFailed': { id: 'liveSession.error.updateFailed', defaultMessage: 'Failed to update live session' },
   'liveSession.error.deleteFailed': { id: 'liveSession.error.deleteFailed', defaultMessage: 'Failed to delete live session' },
   'liveSession.success.deleteSuccess': { id: 'liveSession.success.deleteSuccess', defaultMessage: 'Live session deleted successfully!' },
+  'liveSession.pagination.label': {
+    id: 'liveSession.pagination.label',
+    defaultMessage: 'Live sessions pagination',
+    description: 'Aria label for live session list pagination',
+  },
 
   // ScheduleLiveSessionForm
   'scheduleLiveSession.title': { id: 'scheduleLiveSession.title', defaultMessage: 'Schedule ' },

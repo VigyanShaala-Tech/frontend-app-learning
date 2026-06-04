@@ -8,11 +8,7 @@ import { CUSTOM_TAB_SLUGS } from '../utils/customTabUtils';
 
 const CustomUpcomingTabPageBySlug = ({ tabSlug }) => {
   const { formatMessage } = useIntl();
-  const messageKey = tabSlug === CUSTOM_TAB_SLUGS.hangout
-    ? 'hangout'
-    : tabSlug === CUSTOM_TAB_SLUGS.updates
-      ? 'updates'
-      : 'bookmark';
+  const messageKey = 'hangout';
 
   return (
     <CustomUpcomingTabPage title={formatMessage(tabMessages[messageKey])} />
@@ -22,8 +18,6 @@ const CustomUpcomingTabPageBySlug = ({ tabSlug }) => {
 CustomUpcomingTabPageBySlug.propTypes = {
   tabSlug: PropTypes.oneOf([
     CUSTOM_TAB_SLUGS.hangout,
-    CUSTOM_TAB_SLUGS.updates,
-    CUSTOM_TAB_SLUGS.bookmark,
   ]).isRequired,
 };
 

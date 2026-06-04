@@ -7,14 +7,15 @@ import {
   sendTrackingLogEvent,
 } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { useSelector } from 'react-redux';
 import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 
 import PageLoading from '@src/generic/PageLoading';
 import { useModel } from '@src/generic/model-store';
 import { useSequenceBannerTextAlert, useSequenceEntranceExamAlert } from '@src/alerts/sequence-alerts/hooks';
+import CourseOutlineTray from '@src/courseware/course/sidebar/sidebars/course-outline/CourseOutlineTray';
 import SequenceContainerSlot from '@src/plugin-slots/SequenceContainerSlot';
-import { CourseOutlineSidebarSlot } from '@src/plugin-slots/CourseOutlineSidebarSlot';
 import { CourseOutlineSidebarTriggerSlot } from '@src/plugin-slots/CourseOutlineSidebarTriggerSlot';
 import { NotificationsDiscussionsSidebarSlot } from '@src/plugin-slots/NotificationsDiscussionsSidebarSlot';
 import SequenceNavigationSlot from '@src/plugin-slots/SequenceNavigationSlot';
@@ -192,7 +193,18 @@ const Sequence = ({
           isStaff={isStaff}
           unitId={unitId}
         />
-        <CourseOutlineSidebarSlot />
+        <PluginSlot
+          id="learning_mfe_course_outline_sidebar_plugin_slot"
+          idAliases={[
+            'course_outline_sidebar_slot',
+            'org.openedx.frontend.learning.course_outline_sidebar.v1',
+          ]}
+          slotOptions={{
+            mergeProps: true,
+          }}
+        >
+          <CourseOutlineTray />
+        </PluginSlot>
         <div className="sequence w-100">
           <div className="sequence-navigation-container">
             {/**

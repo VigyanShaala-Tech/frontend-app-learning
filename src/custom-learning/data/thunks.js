@@ -13,17 +13,16 @@ import {
   fetchTabSuccess,
 } from '../../course-home/data/slice';
 import {
-  getLeaderboardTabData,
   getLiveSessionData,
 } from './api';
 
-function fetchCustomTab(courseId, tab, getTabData, targetUserId) {
+function fetchCustomTab(courseId, tab, getTabData) {
   return async (dispatch) => {
     dispatch(fetchTabRequest({ courseId }));
     try {
       const promisesToFulfill = [getCourseHomeCourseMetadata(courseId, 'outline')];
       if (getTabData) {
-        promisesToFulfill.push(getTabData(courseId, targetUserId));
+        promisesToFulfill.push(getTabData(courseId));
       }
       const [
         courseHomeCourseMetadataResult,
@@ -56,7 +55,6 @@ function fetchCustomTab(courseId, tab, getTabData, targetUserId) {
       } else {
         dispatch(fetchTabSuccess({
           courseId,
-          targetUserId,
         }));
       }
     } catch (e) {
@@ -66,8 +64,24 @@ function fetchCustomTab(courseId, tab, getTabData, targetUserId) {
   };
 }
 
+function fetchCustomTabMetadataOnly(courseId) {
+  return fetchCustomTab(courseId, null, null);
+}
+
+export function fetchHangoutTab(courseId) {
+  return fetchCustomTabMetadataOnly(courseId);
+}
+
+export function fetchUpdatesTab(courseId) {
+  return fetchCustomTabMetadataOnly(courseId);
+}
+
+export function fetchBookmarkTab(courseId) {
+  return fetchCustomTabMetadataOnly(courseId);
+}
+
 export function fetchLeaderboardTab(courseId) {
-  return fetchCustomTab(courseId, 'leaderboard', getLeaderboardTabData);
+  return fetchCustomTabMetadataOnly(courseId);
 }
 
 export function fetchLiveSessionTab(courseId) {

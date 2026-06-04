@@ -7,4 +7,4 @@ export const CUSTOM_TAB_PATHS = {
   liveSessionJoin: '/course/:courseId/live-session/join/:sessionId',
 };
 
-export const CUSTOM_UPCOMING_TAB_SLUGS = ['hangout', 'updates', 'bookmark'];
+export const CUSTOM_UPCOMING_TAB_SLUGS = [];

@@ -1,0 +1,130 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Videos",
+        "The Open edX Video Player"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@the_open_edx_video_player"
+    },
+    {
+      "id": 2,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Text, Images, and HTML",
+        "IFrames"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@iframes"
+    },
+    {
+      "id": 3,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Text, Images, and HTML",
+        "HTML"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@html"
+    },
+    {
+      "id": 4,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Text, Images, and HTML",
+        "Images"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@images"
+    },
+    {
+      "id": 5,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Text, Images, and HTML",
+        "Text"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@text"
+    },
+    {
+      "id": 6,
+      "path": [
+        "Module 1: Dive into the VigyanShaala Integrated Learning Platform (ILP)",
+        "The Structure of the VigyanShaala Integrated Learning Platform (ILP)",
+        "Studio"
+      ],
+      "date": "2026-05-29",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@studio"
+    },
+    {
+      "id": 7,
+      "path": [
+        "Module 1: Dive into the VigyanShaala Integrated Learning Platform (ILP)",
+        "Getting Started",
+        "Course Outline"
+      ],
+      "date": "2026-05-28",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@course_outline"
+    },
+    {
+      "id": 8,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Videos",
+        "Video Exercises"
+      ],
+      "date": "2026-05-28",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@video_exercises"
+    },
+    {
+      "id": 9,
+      "path": [
+        "Module 2: Crafting Captivating Content",
+        "Discussions",
+        "Discussion Topics"
+      ],
+      "date": "2026-05-27",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@discussion_topics"
+    },
+    {
+      "id": 10,
+      "path": [
+        "Module 3: Assessments",
+        "Problem Sets",
+        "Multiple Choice"
+      ],
+      "date": "2026-05-27",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@multiple_choice"
+    },
+    {
+      "id": 11,
+      "path": [
+        "Module 3: Assessments",
+        "Problem Sets",
+        "Dropdown"
+      ],
+      "date": "2026-05-26",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@dropdown"
+    },
+    {
+      "id": 12,
+      "path": [
+        "Module 3: Assessments",
+        "Exams",
+        "Final Exam"
+      ],
+      "date": "2026-05-26",
+      "link": "/learning/course/course-v1:edX+DemoX+Demo_Course/block-v1:edX+DemoX+Demo_Course+type@vertical+block@final_exam"
+    }
+  ],
+  "pagination": {
+    "count": 12,
+    "num_pages": 3,
+    "next": 2,
+    "previous": null
+  }
+}

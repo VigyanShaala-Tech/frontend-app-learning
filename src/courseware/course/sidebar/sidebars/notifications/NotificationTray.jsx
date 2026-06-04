@@ -1,4 +1,5 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import classNames from 'classnames';
 import { useContext, useEffect, useMemo } from 'react';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
@@ -64,28 +65,39 @@ const NotificationTray = () => {
   }, []);
 
   return (
-    <SidebarBase
-      title={intl.formatMessage(messages.notificationTitle)}
-      ariaLabel={intl.formatMessage(messages.notificationTray)}
-      sidebarId={ID}
-      width="45rem"
-      className={classNames({
-        'h-100': !verifiedMode && !shouldDisplayFullScreen,
-        'ml-4': !shouldDisplayFullScreen,
-      })}
+    <PluginSlot
+      id="learning_mfe_course_notifications_sidebar_plugin_slot"
+      idAliases={[
+        'course_notifications_sidebar_slot',
+        'org.openedx.frontend.learning.course_notifications_sidebar.v1',
+      ]}
+      slotOptions={{
+        mergeProps: true,
+      }}
     >
-      <div>{verifiedMode
-        ? (
-          <NotificationTraySlot
-            courseId={courseId}
-            notificationCurrentState={upgradeNotificationCurrentState}
-            setNotificationCurrentState={setUpgradeNotificationCurrentState}
-          />
-        ) : (
-          <p className="p-3 small">{intl.formatMessage(messages.noNotificationsMessage)}</p>
-        )}
-      </div>
-    </SidebarBase>
+      <SidebarBase
+        title={intl.formatMessage(messages.notificationTitle)}
+        ariaLabel={intl.formatMessage(messages.notificationTray)}
+        sidebarId={ID}
+        width="45rem"
+        className={classNames({
+          'h-100': !verifiedMode && !shouldDisplayFullScreen,
+          'ml-4': !shouldDisplayFullScreen,
+        })}
+      >
+        <div>{verifiedMode
+          ? (
+            <NotificationTraySlot
+              courseId={courseId}
+              notificationCurrentState={upgradeNotificationCurrentState}
+              setNotificationCurrentState={setUpgradeNotificationCurrentState}
+            />
+          ) : (
+            <p className="p-3 small">{intl.formatMessage(messages.noNotificationsMessage)}</p>
+          )}
+        </div>
+      </SidebarBase>
+    </PluginSlot>
   );
 };
 

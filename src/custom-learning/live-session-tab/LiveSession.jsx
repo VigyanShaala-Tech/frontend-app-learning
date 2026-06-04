@@ -5,7 +5,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
   Spinner,
-  Pagination,
   Alert,
 } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import messages from './messages';
+import CustomTabPagination from '../components/custom-tab-pagination';
 import { CUSTOM_TAB_PATHS } from '../constants/customTabRoutes';
 import LiveSessionCard from './components/LiveSessionCard/LiveSessionCard';
 import ScheduleLiveSessionForm from './components/ScheduleLiveSessionForm/ScheduleLiveSessionForm';
@@ -376,17 +376,13 @@ const LiveSession = () => {
               />
             ))}
 
-            {totalPages > 1 && (
-              <div className="d-flex justify-content-center mt-5">
-                <Pagination
-                  paginationLabel="Live sessions pagination"
-                  pageCount={totalPages}
-                  currentPage={currentPage}
-                  onPageSelect={handlePageChange}
-                  variant="primary"
-                />
-              </div>
-            )}
+            <CustomTabPagination
+              className="mt-5"
+              paginationLabel={formatMessage(messages['liveSession.pagination.label'])}
+              pageCount={totalPages}
+              currentPage={currentPage}
+              onPageSelect={handlePageChange}
+            />
           </>
         )}
       </div>
