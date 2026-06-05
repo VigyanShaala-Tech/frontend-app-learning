@@ -7,8 +7,13 @@ import Tabs from '../../generic/tabs/Tabs';
 import { CoursewareSearch, CoursewareSearchToggle } from '../../course-home/courseware-search';
 import { useCoursewareSearchState } from '../../course-home/courseware-search/hooks';
 import messages from './messages';
+import { restrictionStore } from '../restriction-page';
 import { buildCustomTabUrl, CUSTOM_TAB_SLUGS } from '../utils/customTabUtils';
 import './CustomCourseTabsNavigation.scss';
+
+const RESTRICTION_GATED_TAB_SLUGS = new Set([
+  CUSTOM_TAB_SLUGS.live_session,
+]);
 
 const CustomCourseTabsNavigation = ({
   activeTabSlug,
@@ -83,6 +88,19 @@ const CustomCourseTabsNavigation = ({
     ? CUSTOM_TAB_SLUGS.live_session
     : activeTabSlug;
 
+  const handleTabClick = async (event, slug, url) => {
+    if (!RESTRICTION_GATED_TAB_SLUGS.has(slug)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const isRestricted = await restrictionStore.checkAndShow();
+    if (!isRestricted) {
+      window.location.assign(url);
+    }
+  };
+
   return (
     <div
       id="courseTabsNavigation"
@@ -103,6 +121,7 @@ const CustomCourseTabsNavigation = ({
                     { active: slug === resolvedActiveTabSlug },
                   )}
                   href={url}
+                  onClick={(event) => handleTabClick(event, slug, url)}
                 >
                   {title}
                 </a>

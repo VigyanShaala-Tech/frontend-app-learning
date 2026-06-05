@@ -5,37 +5,36 @@ import { useLocation } from 'react-router-dom';
 
 import LoadedTabPage from '../../tab-page/LoadedTabPage';
 import useHideCourseTabsOnMobile from '../mobile-view/useHideCourseTabsOnMobile';
-import {
-  getCustomTabSlug,
-  isCustomUpcomingTabSlug,
-} from '../utils/customTabUtils';
+import { getCustomTabSlug } from '../utils/customTabUtils';
 import messages from './messages';
 import './CustomLoadedTabPage.scss';
 
-const CustomLoadedTabPage = (props) => {
+const CustomLoadedTabPage = ({
+  activeTabSlug,
+  courseId,
+  metadataModel,
+  unitId,
+  tabPageChildren,
+  children,
+}) => {
   const intl = useIntl();
   const location = useLocation();
   useHideCourseTabsOnMobile();
-  const { activeTabSlug, children } = props;
+
+  const tabContent = tabPageChildren ?? children;
   const customTabSlug = getCustomTabSlug(location.pathname, activeTabSlug);
-
-  const loadedTabPageProps = customTabSlug
-    ? { ...props, activeTabSlug: customTabSlug }
-    : props;
-
-  if (customTabSlug && isCustomUpcomingTabSlug(customTabSlug)) {
-    return (
-      <div className="custom-loaded-tab-page" aria-label={intl.formatMessage(messages.loadedTabPageWrapper)}>
-        <LoadedTabPage {...loadedTabPageProps}>
-          {children}
-        </LoadedTabPage>
-      </div>
-    );
-  }
+  const resolvedActiveTabSlug = customTabSlug || activeTabSlug;
 
   return (
     <div className="custom-loaded-tab-page" aria-label={intl.formatMessage(messages.loadedTabPageWrapper)}>
-      <LoadedTabPage {...props} />
+      <LoadedTabPage
+        activeTabSlug={resolvedActiveTabSlug}
+        courseId={courseId}
+        metadataModel={metadataModel}
+        unitId={unitId}
+      >
+        {tabContent}
+      </LoadedTabPage>
     </div>
   );
 };
@@ -45,12 +44,14 @@ CustomLoadedTabPage.propTypes = {
   children: PropTypes.node,
   courseId: PropTypes.string.isRequired,
   metadataModel: PropTypes.string,
+  tabPageChildren: PropTypes.node,
   unitId: PropTypes.string,
 };
 
 CustomLoadedTabPage.defaultProps = {
   children: null,
   metadataModel: 'courseHomeMeta',
+  tabPageChildren: null,
   unitId: null,
 };
 
