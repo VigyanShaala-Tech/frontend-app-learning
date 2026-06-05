@@ -75,9 +75,23 @@ const TabPage = (props) => {
       {['loaded', 'denied'].includes(courseStatus) && (
         <PluginSlot
           id="learning_mfe_loaded_tab_page_plugin_slot"
-          pluginProps={props}
+          pluginProps={{
+            activeTabSlug,
+            courseId,
+            courseStatus,
+            metadataModel,
+            unitId: props.unitId,
+            tabPageChildren: props.children,
+          }}
         >
-          <LoadedTabPage {...props} />
+          <LoadedTabPage
+            activeTabSlug={activeTabSlug}
+            courseId={courseId}
+            metadataModel={metadataModel}
+            unitId={props.unitId}
+          >
+            {props.children}
+          </LoadedTabPage>
         </PluginSlot>
       )}
 
@@ -101,6 +115,7 @@ TabPage.defaultProps = {
 
 TabPage.propTypes = {
   activeTabSlug: PropTypes.string.isRequired,
+  children: PropTypes.node,
   courseId: PropTypes.string,
   courseStatus: PropTypes.string.isRequired,
   metadataModel: PropTypes.string.isRequired,

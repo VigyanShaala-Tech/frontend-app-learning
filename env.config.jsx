@@ -45,6 +45,7 @@ const getPluginSlots = () => ({
     ],
   },
   learning_mfe_courseware_restriction_plugin_slot: {
+    keepDefault: false,
     plugins: [
       {
         op: PLUGIN_OPERATIONS.Insert,
@@ -52,9 +53,9 @@ const getPluginSlots = () => ({
           id: 'learning_mfe_courseware_restriction_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
-          RenderWidget: ({ children, unitId }) => (
+          RenderWidget: ({ coursewareChildren, unitId }) => (
             <CustomCoursewareRestrictionGuard unitId={unitId}>
-              {children}
+              {coursewareChildren}
             </CustomCoursewareRestrictionGuard>
           ),
         },
@@ -107,6 +108,7 @@ const getPluginSlots = () => ({
     ],
   },
   learning_mfe_loaded_tab_page_plugin_slot: {
+    keepDefault: false,
     plugins: [
       {
         op: PLUGIN_OPERATIONS.Insert,
@@ -114,9 +116,7 @@ const getPluginSlots = () => ({
           id: 'learning_mfe_loaded_tab_page_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
-          RenderWidget: (props) => (
-            <CustomLoadedTabPage {...props} />
-          ),
+          RenderWidget: (props) => <CustomLoadedTabPage {...props} />,
         },
       },
     ],

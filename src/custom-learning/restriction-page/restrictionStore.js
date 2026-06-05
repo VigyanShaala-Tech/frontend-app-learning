@@ -27,6 +27,8 @@ export const restrictionStore = {
     const isRestricted = await checkProfileRestriction();
     if (isRestricted) {
       this.show();
+    } else {
+      this.hide();
     }
     return isRestricted;
   },

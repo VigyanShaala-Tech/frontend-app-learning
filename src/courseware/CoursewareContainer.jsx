@@ -341,6 +341,17 @@ class CoursewareContainer extends Component {
       routeUnitId,
     } = this.props;
 
+    const coursewareContent = (
+      <Course
+        courseId={courseId}
+        sequenceId={sequenceId}
+        unitId={routeUnitId}
+        nextSequenceHandler={this.handleNextSequenceClick}
+        previousSequenceHandler={this.handlePreviousSequenceClick}
+        unitNavigationHandler={this.handleUnitNavigationClick}
+      />
+    );
+
     return (
       <TabPage
         activeTabSlug="courseware"
@@ -353,19 +364,10 @@ class CoursewareContainer extends Component {
           id="learning_mfe_courseware_restriction_plugin_slot"
           pluginProps={{
             unitId: routeUnitId,
-          }}
-          slotOptions={{
-            mergeProps: true,
+            coursewareChildren: coursewareContent,
           }}
         >
-          <Course
-            courseId={courseId}
-            sequenceId={sequenceId}
-            unitId={routeUnitId}
-            nextSequenceHandler={this.handleNextSequenceClick}
-            previousSequenceHandler={this.handlePreviousSequenceClick}
-            unitNavigationHandler={this.handleUnitNavigationClick}
-          />
+          {coursewareContent}
         </PluginSlot>
       </TabPage>
     );
