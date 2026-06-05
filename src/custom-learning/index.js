@@ -12,3 +12,8 @@ export { default as CustomProgressTab } from './progress-tab';
 export { default as CustomGlobalStyles } from './styles/CustomGlobalStyles';
 export { default as CustomCourseOutlineSidebar } from './course-outline-sidebar/CustomCourseOutlineSidebar';
 export { default as CustomLiveSessionBanner } from './course-live-session-banner';
+export {
+  CustomRestrictionGate,
+  CustomStartOrResumeCourseButton,
+  CustomCoursewareRestrictionGuard,
+} from './restriction-page';

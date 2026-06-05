@@ -17,6 +17,9 @@ const {
   CustomGlobalStyles,
   CustomCourseOutlineSidebar,
   CustomLiveSessionBanner,
+  CustomRestrictionGate,
+  CustomStartOrResumeCourseButton,
+  CustomCoursewareRestrictionGuard,
   getCustomTabRoutes,
 } = await import('./src/custom-learning');
 {% raw %}
@@ -26,6 +29,50 @@ config = {
 }
 config.customTabRoutes = getCustomTabRoutes;
 config.pluginSlots = {
+  learning_mfe_restriction_page_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_restriction_page_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => <CustomRestrictionGate />,
+        },
+      },
+    ],
+  },
+  learning_mfe_start_resume_course_plugin_slot: {
+    keepDefault: false,
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_start_resume_course_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: (props) => <CustomStartOrResumeCourseButton {...props} />,
+        },
+      },
+    ],
+  },
+  learning_mfe_courseware_restriction_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_courseware_restriction_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: ({ children, unitId }) => (
+            <CustomCoursewareRestrictionGuard unitId={unitId}>
+              {children}
+            </CustomCoursewareRestrictionGuard>
+          ),
+        },
+      },
+    ],
+  },
   learning_mfe_header_plugin_slot: {
     plugins: [
       {

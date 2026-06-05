@@ -12,6 +12,8 @@ import {
   getSequenceForUnitDeprecated,
   saveSequencePosition,
 } from './data';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
+
 import { TabPage } from '../tab-page';
 
 import Course from './course';
@@ -347,14 +349,24 @@ class CoursewareContainer extends Component {
         courseStatus={courseStatus}
         metadataModel="coursewareMeta"
       >
-        <Course
-          courseId={courseId}
-          sequenceId={sequenceId}
-          unitId={routeUnitId}
-          nextSequenceHandler={this.handleNextSequenceClick}
-          previousSequenceHandler={this.handlePreviousSequenceClick}
-          unitNavigationHandler={this.handleUnitNavigationClick}
-        />
+        <PluginSlot
+          id="learning_mfe_courseware_restriction_plugin_slot"
+          pluginProps={{
+            unitId: routeUnitId,
+          }}
+          slotOptions={{
+            mergeProps: true,
+          }}
+        >
+          <Course
+            courseId={courseId}
+            sequenceId={sequenceId}
+            unitId={routeUnitId}
+            nextSequenceHandler={this.handleNextSequenceClick}
+            previousSequenceHandler={this.handlePreviousSequenceClick}
+            unitNavigationHandler={this.handleUnitNavigationClick}
+          />
+        </PluginSlot>
       </TabPage>
     );
   }

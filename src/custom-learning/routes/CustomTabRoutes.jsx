@@ -17,6 +17,7 @@ import HangoutTab from '../hangout-tab/HangoutTab';
 import LeaderboardTab from '../leaderboard-tab/LeaderboardTab';
 import UpdatesTab from '../updates-tab/UpdatesTab';
 import LiveSession from '../live-session-tab/LiveSession';
+import { CustomRestrictionRouteGuard } from '../restriction-page';
 import CustomLiveSessionJoinPage from './CustomLiveSessionJoinPage';
 
 const getCustomTabRoutes = () => (
@@ -86,9 +87,11 @@ const getCustomTabRoutes = () => (
       path={CUSTOM_TAB_PATHS.liveSession}
       element={(
         <DecodePageRoute>
-          <TabContainer tab={CUSTOM_TAB_SLUGS.live_session} fetch={fetchLiveSessionTab} slice="courseHome">
-            <LiveSession />
-          </TabContainer>
+          <CustomRestrictionRouteGuard>
+            <TabContainer tab={CUSTOM_TAB_SLUGS.live_session} fetch={fetchLiveSessionTab} slice="courseHome">
+              <LiveSession />
+            </TabContainer>
+          </CustomRestrictionRouteGuard>
         </DecodePageRoute>
       )}
     />
@@ -97,7 +100,9 @@ const getCustomTabRoutes = () => (
       path={CUSTOM_TAB_PATHS.liveSessionJoin}
       element={(
         <DecodePageRoute>
-          <CustomLiveSessionJoinPage />
+          <CustomRestrictionRouteGuard>
+            <CustomLiveSessionJoinPage />
+          </CustomRestrictionRouteGuard>
         </DecodePageRoute>
       )}
     />
