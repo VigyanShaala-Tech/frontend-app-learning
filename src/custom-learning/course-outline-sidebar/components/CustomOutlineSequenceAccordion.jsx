@@ -71,7 +71,7 @@ const CustomOutlineSequenceAccordion = ({
             />
           </span>
           <span className="custom-outline-sidebar__accordion-title-wrap">
-            <span className="custom-outline-sidebar__accordion-title">{title}</span>
+            <span className="custom-outline-sidebar__accordion-title text-dark-500">{title}</span>
             {specialExamInfo && (
               <span className="custom-outline-sidebar__accordion-subtitle">{specialExamInfo}</span>
             )}

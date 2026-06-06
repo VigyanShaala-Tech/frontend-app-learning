@@ -49,7 +49,7 @@ const BookmarkCard = ({ path, date, link }) => {
       </div>
       <Button
         size="sm"
-        className="custom-bookmark-card__view-btn"
+        className="custom-bookmark-card__view-btn text-white btn btn-primary btn-block"
         onClick={(event) => {
           event.stopPropagation();
           openBookmark();

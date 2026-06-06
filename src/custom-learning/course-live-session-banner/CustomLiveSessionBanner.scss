@@ -58,12 +58,21 @@
 
   &__link {
     flex-shrink: 0;
-    font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
 
-    &:hover {
-      text-decoration: underline;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    .btn-link {
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
     }
   }
 }

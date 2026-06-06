@@ -64,11 +64,13 @@
   }
 
   &__heading-title {
-    color: #111827;
-    font-size: 1rem;
-    font-weight: 600;
+    color: var(--pgn-color-dark-500) !important;
+    font-size: var(--pgn-typography-btn-font-size-base);
+    font-weight: var(--pgn-typography-font-weight-bold);
+    line-height: var(--pgn-typography-btn-line-height-base);
     margin: 0;
     text-align: left;
+    text-decoration: var(--pgn-typography-link-decoration-base);
   }
 
   &__toggle-btn {
@@ -161,9 +163,9 @@
   }
 
   &__accordion-title {
-    color: #111827;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    color: var(--pgn-color-dark-500) !important;
+    font-size: 1rem;
+    line-height: 1.5rem;
     text-align: left;
   }
 
@@ -213,6 +215,10 @@
     flex: 1 1 auto;
     min-width: 0;
     word-break: break-word;
+  }
+
+  #outline-sidebar-outline {
+    margin-top: -1px;
   }
 
   a.row.w-100 {
