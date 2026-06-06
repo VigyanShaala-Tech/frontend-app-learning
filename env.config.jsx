@@ -137,6 +137,7 @@ const getPluginSlots = () => ({
     ],
   },
   learning_mfe_live_session_join_plugin_slot: {
+    keepDefault: false,
     plugins: [
       {
         op: PLUGIN_OPERATIONS.Insert,
@@ -144,8 +145,8 @@ const getPluginSlots = () => ({
           id: 'learning_mfe_live_session_join_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
-          RenderWidget: ({ children }) => (
-            <CustomLiveSessionJoinChrome>{children}</CustomLiveSessionJoinChrome>
+          RenderWidget: ({ joinPageChildren }) => (
+            <CustomLiveSessionJoinChrome>{joinPageChildren}</CustomLiveSessionJoinChrome>
           ),
         },
       },
