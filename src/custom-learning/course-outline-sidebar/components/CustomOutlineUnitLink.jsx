@@ -48,7 +48,7 @@ const CustomOutlineUnitLink = ({
   return (
     <Link
       to={link}
-      className="row w-100 m-0 d-flex align-items-center text-gray-700"
+      className="row w-100 m-0 d-flex align-items-center text-dark-500"
       onClick={handleClick}
     >
       {children}

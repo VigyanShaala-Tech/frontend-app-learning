@@ -39,8 +39,8 @@ const CustomCourseOutlineSidebar = () => {
   const sectionIds = Object.keys(sections);
 
   const sidebarHeading = (
-    <div className="custom-outline-sidebar__heading">
-      <span className="custom-outline-sidebar__heading-title">
+    <div className="custom-outline-sidebar__heading outline-sidebar-heading-wrapper">
+      <span className="custom-outline-sidebar__heading-title outline-sidebar-heading mb-0 text-dark-500">
         {intl.formatMessage(defaultMessages.courseOutlineTitle)}
       </span>
       <IconButton
@@ -59,7 +59,7 @@ const CustomCourseOutlineSidebar = () => {
   const sidebarBody = courseOutlineStatus === LOADING
     ? <PageLoading srMessage={intl.formatMessage(defaultMessages.loading)} />
     : (
-      <div className="custom-outline-sidebar__list">
+      <div id="outline-sidebar-outline" className="custom-outline-sidebar__list list-unstyled">
         {sectionIds.map((sectionId) => (
           <CustomOutlineSectionAccordion
             key={sectionId}

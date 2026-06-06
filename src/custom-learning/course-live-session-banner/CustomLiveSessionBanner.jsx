@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 
 import useLiveSessionBanner from './hooks/useLiveSessionBanner';
 import './CustomLiveSessionBanner.scss';
@@ -25,7 +25,10 @@ const CustomLiveSessionBanner = ({ activeTabSlug, courseId }) => {
           {bannerData.message}
         </p>
         <a className="custom-live-session-banner__link" href={bannerData.link}>
-          {bannerData.linkLabel}
+          <button type="button" className="text-primary btn btn-link p-0">
+            {bannerData.linkLabel}
+            <FontAwesomeIcon icon={faChevronRight} className="ml-2" aria-hidden />
+          </button>
         </a>
       </div>
     </div>

@@ -61,7 +61,7 @@ const CustomOutlineSectionAccordion = ({
               enabled={isEnabledCompletionTracking}
             />
           </span>
-          <span className="custom-outline-sidebar__accordion-title">{title}</span>
+          <span className="custom-outline-sidebar__accordion-title text-dark-500">{title}</span>
           {isEnabledCompletionTracking && (
             <span className="sr-only">
               {formatMessage(complete
