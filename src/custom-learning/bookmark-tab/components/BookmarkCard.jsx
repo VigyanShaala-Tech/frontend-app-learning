@@ -6,6 +6,7 @@ import { Button } from '@openedx/paragon';
 
 import messages from '../messages';
 import BookmarkPath from './BookmarkPath';
+import resolveLearningMfePath from '../../utils/resolveLearningMfePath';
 
 const BookmarkCard = ({ path, date, link }) => {
   const { formatMessage, formatDate } = useIntl();
@@ -19,10 +20,11 @@ const BookmarkCard = ({ path, date, link }) => {
   });
 
   const openBookmark = useCallback(() => {
-    if (!link) {
+    const targetPath = resolveLearningMfePath(link);
+    if (!targetPath) {
       return;
     }
-    navigate(link);
+    navigate(targetPath);
   }, [link, navigate]);
 
   const handleKeyDown = (event) => {
@@ -48,8 +50,9 @@ const BookmarkCard = ({ path, date, link }) => {
         </p>
       </div>
       <Button
+        variant="primary"
         size="sm"
-        className="custom-bookmark-card__view-btn text-white btn btn-primary btn-block"
+        className="custom-bookmark-card__view-btn text-white"
         onClick={(event) => {
           event.stopPropagation();
           openBookmark();

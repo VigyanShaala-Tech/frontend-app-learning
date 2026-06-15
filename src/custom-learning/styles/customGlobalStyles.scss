@@ -12,4 +12,11 @@
       width: 100%;
     }
   }
+
+  .unit-navigation {
+    .previous-button,
+    .next-button {
+      min-width: fit-content;
+    }
+  }
 }
