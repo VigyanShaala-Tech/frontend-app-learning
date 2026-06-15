@@ -149,9 +149,24 @@ config.pluginSlots = {
           id: 'learning_mfe_live_session_join_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
-          RenderWidget: ({ joinPageChildren }) => (
-            <CustomLiveSessionJoinChrome>{joinPageChildren}</CustomLiveSessionJoinChrome>
+          RenderWidget: ({ joinPageChildren, children }) => (
+            <CustomLiveSessionJoinChrome>
+              {joinPageChildren ?? children}
+            </CustomLiveSessionJoinChrome>
           ),
+        },
+      },
+    ],
+  },
+  learning_mfe_progress_tab_plugin_slot: {
+    plugins: [
+      {
+        op: PLUGIN_OPERATIONS.Insert,
+        widget: {
+          id: 'learning_mfe_progress_tab_plugin_slot',
+          type: DIRECT_PLUGIN,
+          priority: 1,
+          RenderWidget: () => <CustomProgressTab />,
         },
       },
     ],
@@ -231,19 +246,6 @@ config.pluginSlots = {
           type: DIRECT_PLUGIN,
           priority: 1,
           RenderWidget: () => <CustomCourseOutlineSidebar />,
-        },
-      },
-    ],
-  },
-  learning_mfe_progress_tab_plugin_slot: {
-    plugins: [
-      {
-        op: PLUGIN_OPERATIONS.Insert,
-        widget: {
-          id: 'learning_mfe_progress_tab_plugin_slot',
-          type: DIRECT_PLUGIN,
-          priority: 1,
-          RenderWidget: () => <CustomProgressTab />,
         },
       },
     ],
