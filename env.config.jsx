@@ -145,8 +145,10 @@ const getPluginSlots = () => ({
           id: 'learning_mfe_live_session_join_plugin_slot',
           type: DIRECT_PLUGIN,
           priority: 1,
-          RenderWidget: ({ joinPageChildren }) => (
-            <CustomLiveSessionJoinChrome>{joinPageChildren}</CustomLiveSessionJoinChrome>
+          RenderWidget: ({ joinPageChildren, children }) => (
+            <CustomLiveSessionJoinChrome>
+              {joinPageChildren ?? children}
+            </CustomLiveSessionJoinChrome>
           ),
         },
       },
