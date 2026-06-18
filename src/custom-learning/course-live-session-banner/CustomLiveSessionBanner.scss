@@ -1,0 +1,95 @@
+.custom-live-session-banner {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+  &__card {
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #c3e6cb;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  &__icon {
+    align-items: center;
+    background: #f1f3f5;
+    border-radius: 50%;
+    color: #495057;
+    display: flex;
+    flex-shrink: 0;
+    height: 3.5rem;
+    justify-content: center;
+    position: relative;
+    width: 3.5rem;
+
+    &.ongoing-icon {
+      background: #28a745;
+      color: #fff;
+
+      &::after {
+        animation: custom-live-session-banner-pulse 1.8s infinite;
+        background: rgba(28, 135, 53, 0.8);
+        border-radius: 50%;
+        content: '';
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      svg {
+        position: relative;
+        z-index: 2;
+      }
+    }
+  }
+
+  &__message {
+    color: #212529;
+    flex: 1 1 12rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    min-width: 0;
+  }
+
+  &__link {
+    flex-shrink: 0;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    .btn-link {
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+@keyframes custom-live-session-banner-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  70% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}

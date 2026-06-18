@@ -1,0 +1,1550 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "rank": 1,
+      "user": "Priya Sharma 1",
+      "college": "IIT Delhi",
+      "points": 13000
+    },
+    {
+      "id": 2,
+      "rank": 2,
+      "user": "Anjali Verma 2",
+      "college": "IIT Bombay",
+      "points": 12965
+    },
+    {
+      "id": 3,
+      "rank": 3,
+      "user": "Neha Kapoor 3",
+      "college": "NIT Trichy",
+      "points": 12930
+    },
+    {
+      "id": 4,
+      "rank": 4,
+      "user": "Riya Iyer 4",
+      "college": "BITS Pilani",
+      "points": 12895
+    },
+    {
+      "id": 5,
+      "rank": 5,
+      "user": "Meera Joshi 5",
+      "college": "DTU Delhi",
+      "points": 12860
+    },
+    {
+      "id": 6,
+      "rank": 6,
+      "user": "Sanya Gupta 6",
+      "college": "IIT Delhi",
+      "points": 12825
+    },
+    {
+      "id": 7,
+      "rank": 7,
+      "user": "Aisha Khan 7",
+      "college": "IIT Bombay",
+      "points": 12790
+    },
+    {
+      "id": 8,
+      "rank": 8,
+      "user": "Pooja Reddy 8",
+      "college": "NIT Trichy",
+      "points": 12755
+    },
+    {
+      "id": 9,
+      "rank": 9,
+      "user": "Kavya Nair 9",
+      "college": "BITS Pilani",
+      "points": 12720
+    },
+    {
+      "id": 10,
+      "rank": 10,
+      "user": "Tanvi Singh 10",
+      "college": "DTU Delhi",
+      "points": 12685
+    },
+    {
+      "id": 11,
+      "rank": 11,
+      "user": "Priya Sharma 11",
+      "college": "IIT Delhi",
+      "points": 12650
+    },
+    {
+      "id": 12,
+      "rank": 12,
+      "user": "Anjali Verma 12",
+      "college": "IIT Bombay",
+      "points": 12615
+    },
+    {
+      "id": 13,
+      "rank": 13,
+      "user": "Neha Kapoor 13",
+      "college": "NIT Trichy",
+      "points": 12580
+    },
+    {
+      "id": 14,
+      "rank": 14,
+      "user": "Riya Iyer 14",
+      "college": "BITS Pilani",
+      "points": 12545
+    },
+    {
+      "id": 15,
+      "rank": 15,
+      "user": "Meera Joshi 15",
+      "college": "DTU Delhi",
+      "points": 12510
+    },
+    {
+      "id": 16,
+      "rank": 16,
+      "user": "Sanya Gupta 16",
+      "college": "IIT Delhi",
+      "points": 12475
+    },
+    {
+      "id": 17,
+      "rank": 17,
+      "user": "Aisha Khan 17",
+      "college": "IIT Bombay",
+      "points": 12440
+    },
+    {
+      "id": 18,
+      "rank": 18,
+      "user": "Pooja Reddy 18",
+      "college": "NIT Trichy",
+      "points": 12405
+    },
+    {
+      "id": 19,
+      "rank": 19,
+      "user": "Kavya Nair 19",
+      "college": "BITS Pilani",
+      "points": 12370
+    },
+    {
+      "id": 20,
+      "rank": 20,
+      "user": "Tanvi Singh 20",
+      "college": "DTU Delhi",
+      "points": 12335
+    },
+    {
+      "id": 21,
+      "rank": 21,
+      "user": "Priya Sharma 21",
+      "college": "IIT Delhi",
+      "points": 12300
+    },
+    {
+      "id": 22,
+      "rank": 22,
+      "user": "Anjali Verma 22",
+      "college": "IIT Bombay",
+      "points": 12265
+    },
+    {
+      "id": 23,
+      "rank": 23,
+      "user": "Neha Kapoor 23",
+      "college": "NIT Trichy",
+      "points": 12230
+    },
+    {
+      "id": 24,
+      "rank": 24,
+      "user": "Riya Iyer 24",
+      "college": "BITS Pilani",
+      "points": 12195
+    },
+    {
+      "id": 25,
+      "rank": 25,
+      "user": "Meera Joshi 25",
+      "college": "DTU Delhi",
+      "points": 12160
+    },
+    {
+      "id": 26,
+      "rank": 26,
+      "user": "Sanya Gupta 26",
+      "college": "IIT Delhi",
+      "points": 12125
+    },
+    {
+      "id": 27,
+      "rank": 27,
+      "user": "Aisha Khan 27",
+      "college": "IIT Bombay",
+      "points": 12090
+    },
+    {
+      "id": 28,
+      "rank": 28,
+      "user": "Pooja Reddy 28",
+      "college": "NIT Trichy",
+      "points": 12055
+    },
+    {
+      "id": 29,
+      "rank": 29,
+      "user": "Kavya Nair 29",
+      "college": "BITS Pilani",
+      "points": 12020
+    },
+    {
+      "id": 30,
+      "rank": 30,
+      "user": "Tanvi Singh 30",
+      "college": "DTU Delhi",
+      "points": 11985
+    },
+    {
+      "id": 31,
+      "rank": 31,
+      "user": "Priya Sharma 31",
+      "college": "IIT Delhi",
+      "points": 11950
+    },
+    {
+      "id": 32,
+      "rank": 32,
+      "user": "Anjali Verma 32",
+      "college": "IIT Bombay",
+      "points": 11915
+    },
+    {
+      "id": 33,
+      "rank": 33,
+      "user": "Neha Kapoor 33",
+      "college": "NIT Trichy",
+      "points": 11880
+    },
+    {
+      "id": 34,
+      "rank": 34,
+      "user": "Riya Iyer 34",
+      "college": "BITS Pilani",
+      "points": 11845
+    },
+    {
+      "id": 35,
+      "rank": 35,
+      "user": "Meera Joshi 35",
+      "college": "DTU Delhi",
+      "points": 11810
+    },
+    {
+      "id": 36,
+      "rank": 36,
+      "user": "Sanya Gupta 36",
+      "college": "IIT Delhi",
+      "points": 11775
+    },
+    {
+      "id": 37,
+      "rank": 37,
+      "user": "Aisha Khan 37",
+      "college": "IIT Bombay",
+      "points": 11740
+    },
+    {
+      "id": 38,
+      "rank": 38,
+      "user": "Pooja Reddy 38",
+      "college": "NIT Trichy",
+      "points": 11705
+    },
+    {
+      "id": 39,
+      "rank": 39,
+      "user": "Kavya Nair 39",
+      "college": "BITS Pilani",
+      "points": 11670
+    },
+    {
+      "id": 40,
+      "rank": 40,
+      "user": "Tanvi Singh 40",
+      "college": "DTU Delhi",
+      "points": 11635
+    },
+    {
+      "id": 41,
+      "rank": 41,
+      "user": "Priya Sharma 41",
+      "college": "IIT Delhi",
+      "points": 11600
+    },
+    {
+      "id": 42,
+      "rank": 42,
+      "user": "Anjali Verma 42",
+      "college": "IIT Bombay",
+      "points": 11565
+    },
+    {
+      "id": 43,
+      "rank": 43,
+      "user": "Neha Kapoor 43",
+      "college": "NIT Trichy",
+      "points": 11530
+    },
+    {
+      "id": 44,
+      "rank": 44,
+      "user": "Riya Iyer 44",
+      "college": "BITS Pilani",
+      "points": 11495
+    },
+    {
+      "id": 45,
+      "rank": 45,
+      "user": "Meera Joshi 45",
+      "college": "DTU Delhi",
+      "points": 11460
+    },
+    {
+      "id": 46,
+      "rank": 46,
+      "user": "Sanya Gupta 46",
+      "college": "IIT Delhi",
+      "points": 11425
+    },
+    {
+      "id": 47,
+      "rank": 47,
+      "user": "Aisha Khan 47",
+      "college": "IIT Bombay",
+      "points": 11390
+    },
+    {
+      "id": 48,
+      "rank": 48,
+      "user": "Pooja Reddy 48",
+      "college": "NIT Trichy",
+      "points": 11355
+    },
+    {
+      "id": 49,
+      "rank": 49,
+      "user": "Kavya Nair 49",
+      "college": "BITS Pilani",
+      "points": 11320
+    },
+    {
+      "id": 50,
+      "rank": 50,
+      "user": "Tanvi Singh 50",
+      "college": "DTU Delhi",
+      "points": 11285
+    },
+    {
+      "id": 51,
+      "rank": 51,
+      "user": "Priya Sharma 51",
+      "college": "IIT Delhi",
+      "points": 11250
+    },
+    {
+      "id": 52,
+      "rank": 52,
+      "user": "Anjali Verma 52",
+      "college": "IIT Bombay",
+      "points": 11215
+    },
+    {
+      "id": 53,
+      "rank": 53,
+      "user": "Neha Kapoor 53",
+      "college": "NIT Trichy",
+      "points": 11180
+    },
+    {
+      "id": 54,
+      "rank": 54,
+      "user": "Riya Iyer 54",
+      "college": "BITS Pilani",
+      "points": 11145
+    },
+    {
+      "id": 55,
+      "rank": 55,
+      "user": "Meera Joshi 55",
+      "college": "DTU Delhi",
+      "points": 11110
+    },
+    {
+      "id": 56,
+      "rank": 56,
+      "user": "Sanya Gupta 56",
+      "college": "IIT Delhi",
+      "points": 11075
+    },
+    {
+      "id": 57,
+      "rank": 57,
+      "user": "Aisha Khan 57",
+      "college": "IIT Bombay",
+      "points": 11040
+    },
+    {
+      "id": 58,
+      "rank": 58,
+      "user": "Pooja Reddy 58",
+      "college": "NIT Trichy",
+      "points": 11005
+    },
+    {
+      "id": 59,
+      "rank": 59,
+      "user": "Kavya Nair 59",
+      "college": "BITS Pilani",
+      "points": 10970
+    },
+    {
+      "id": 60,
+      "rank": 60,
+      "user": "Tanvi Singh 60",
+      "college": "DTU Delhi",
+      "points": 10935
+    },
+    {
+      "id": 61,
+      "rank": 61,
+      "user": "Priya Sharma 61",
+      "college": "IIT Delhi",
+      "points": 10900
+    },
+    {
+      "id": 62,
+      "rank": 62,
+      "user": "Anjali Verma 62",
+      "college": "IIT Bombay",
+      "points": 10865
+    },
+    {
+      "id": 63,
+      "rank": 63,
+      "user": "Neha Kapoor 63",
+      "college": "NIT Trichy",
+      "points": 10830
+    },
+    {
+      "id": 64,
+      "rank": 64,
+      "user": "Riya Iyer 64",
+      "college": "BITS Pilani",
+      "points": 10795
+    },
+    {
+      "id": 65,
+      "rank": 65,
+      "user": "Meera Joshi 65",
+      "college": "DTU Delhi",
+      "points": 10760
+    },
+    {
+      "id": 66,
+      "rank": 66,
+      "user": "Sanya Gupta 66",
+      "college": "IIT Delhi",
+      "points": 10725
+    },
+    {
+      "id": 67,
+      "rank": 67,
+      "user": "Aisha Khan 67",
+      "college": "IIT Bombay",
+      "points": 10690
+    },
+    {
+      "id": 68,
+      "rank": 68,
+      "user": "Pooja Reddy 68",
+      "college": "NIT Trichy",
+      "points": 10655
+    },
+    {
+      "id": 69,
+      "rank": 69,
+      "user": "Kavya Nair 69",
+      "college": "BITS Pilani",
+      "points": 10620
+    },
+    {
+      "id": 70,
+      "rank": 70,
+      "user": "Tanvi Singh 70",
+      "college": "DTU Delhi",
+      "points": 10585
+    },
+    {
+      "id": 71,
+      "rank": 71,
+      "user": "Priya Sharma 71",
+      "college": "IIT Delhi",
+      "points": 10550
+    },
+    {
+      "id": 72,
+      "rank": 72,
+      "user": "Anjali Verma 72",
+      "college": "IIT Bombay",
+      "points": 10515
+    },
+    {
+      "id": 73,
+      "rank": 73,
+      "user": "Neha Kapoor 73",
+      "college": "NIT Trichy",
+      "points": 10480
+    },
+    {
+      "id": 74,
+      "rank": 74,
+      "user": "Riya Iyer 74",
+      "college": "BITS Pilani",
+      "points": 10445
+    },
+    {
+      "id": 75,
+      "rank": 75,
+      "user": "Meera Joshi 75",
+      "college": "DTU Delhi",
+      "points": 10410
+    },
+    {
+      "id": 76,
+      "rank": 76,
+      "user": "Sanya Gupta 76",
+      "college": "IIT Delhi",
+      "points": 10375
+    },
+    {
+      "id": 77,
+      "rank": 77,
+      "user": "Aisha Khan 77",
+      "college": "IIT Bombay",
+      "points": 10340
+    },
+    {
+      "id": 78,
+      "rank": 78,
+      "user": "Pooja Reddy 78",
+      "college": "NIT Trichy",
+      "points": 10305
+    },
+    {
+      "id": 79,
+      "rank": 79,
+      "user": "Kavya Nair 79",
+      "college": "BITS Pilani",
+      "points": 10270
+    },
+    {
+      "id": 80,
+      "rank": 80,
+      "user": "Tanvi Singh 80",
+      "college": "DTU Delhi",
+      "points": 10235
+    },
+    {
+      "id": 81,
+      "rank": 81,
+      "user": "Priya Sharma 81",
+      "college": "IIT Delhi",
+      "points": 10200
+    },
+    {
+      "id": 82,
+      "rank": 82,
+      "user": "Anjali Verma 82",
+      "college": "IIT Bombay",
+      "points": 10165
+    },
+    {
+      "id": 83,
+      "rank": 83,
+      "user": "Neha Kapoor 83",
+      "college": "NIT Trichy",
+      "points": 10130
+    },
+    {
+      "id": 84,
+      "rank": 84,
+      "user": "Riya Iyer 84",
+      "college": "BITS Pilani",
+      "points": 10095
+    },
+    {
+      "id": 85,
+      "rank": 85,
+      "user": "Meera Joshi 85",
+      "college": "DTU Delhi",
+      "points": 10060
+    },
+    {
+      "id": 86,
+      "rank": 86,
+      "user": "Sanya Gupta 86",
+      "college": "IIT Delhi",
+      "points": 10025
+    },
+    {
+      "id": 87,
+      "rank": 87,
+      "user": "Aisha Khan 87",
+      "college": "IIT Bombay",
+      "points": 9990
+    },
+    {
+      "id": 88,
+      "rank": 88,
+      "user": "Pooja Reddy 88",
+      "college": "NIT Trichy",
+      "points": 9955
+    },
+    {
+      "id": 89,
+      "rank": 89,
+      "user": "Kavya Nair 89",
+      "college": "BITS Pilani",
+      "points": 9920
+    },
+    {
+      "id": 90,
+      "rank": 90,
+      "user": "Tanvi Singh 90",
+      "college": "DTU Delhi",
+      "points": 9885
+    },
+    {
+      "id": 91,
+      "rank": 91,
+      "user": "Priya Sharma 91",
+      "college": "IIT Delhi",
+      "points": 9850
+    },
+    {
+      "id": 92,
+      "rank": 92,
+      "user": "Anjali Verma 92",
+      "college": "IIT Bombay",
+      "points": 9815
+    },
+    {
+      "id": 93,
+      "rank": 93,
+      "user": "Neha Kapoor 93",
+      "college": "NIT Trichy",
+      "points": 9780
+    },
+    {
+      "id": 94,
+      "rank": 94,
+      "user": "Riya Iyer 94",
+      "college": "BITS Pilani",
+      "points": 9745
+    },
+    {
+      "id": 95,
+      "rank": 95,
+      "user": "Meera Joshi 95",
+      "college": "DTU Delhi",
+      "points": 9710
+    },
+    {
+      "id": 96,
+      "rank": 96,
+      "user": "Sanya Gupta 96",
+      "college": "IIT Delhi",
+      "points": 9675
+    },
+    {
+      "id": 97,
+      "rank": 97,
+      "user": "Aisha Khan 97",
+      "college": "IIT Bombay",
+      "points": 9640
+    },
+    {
+      "id": 98,
+      "rank": 98,
+      "user": "Pooja Reddy 98",
+      "college": "NIT Trichy",
+      "points": 9605
+    },
+    {
+      "id": 99,
+      "rank": 99,
+      "user": "Kavya Nair 99",
+      "college": "BITS Pilani",
+      "points": 9570
+    },
+    {
+      "id": 100,
+      "rank": 100,
+      "user": "Tanvi Singh 100",
+      "college": "DTU Delhi",
+      "points": 9535
+    },
+    {
+      "id": 101,
+      "rank": 101,
+      "user": "Priya Sharma 101",
+      "college": "IIT Delhi",
+      "points": 9500
+    },
+    {
+      "id": 102,
+      "rank": 102,
+      "user": "Anjali Verma 102",
+      "college": "IIT Bombay",
+      "points": 9465
+    },
+    {
+      "id": 103,
+      "rank": 103,
+      "user": "Neha Kapoor 103",
+      "college": "NIT Trichy",
+      "points": 9430
+    },
+    {
+      "id": 104,
+      "rank": 104,
+      "user": "Riya Iyer 104",
+      "college": "BITS Pilani",
+      "points": 9395
+    },
+    {
+      "id": 105,
+      "rank": 105,
+      "user": "Meera Joshi 105",
+      "college": "DTU Delhi",
+      "points": 9360
+    },
+    {
+      "id": 106,
+      "rank": 106,
+      "user": "Sanya Gupta 106",
+      "college": "IIT Delhi",
+      "points": 9325
+    },
+    {
+      "id": 107,
+      "rank": 107,
+      "user": "Aisha Khan 107",
+      "college": "IIT Bombay",
+      "points": 9290
+    },
+    {
+      "id": 108,
+      "rank": 108,
+      "user": "Pooja Reddy 108",
+      "college": "NIT Trichy",
+      "points": 9255
+    },
+    {
+      "id": 109,
+      "rank": 109,
+      "user": "Kavya Nair 109",
+      "college": "BITS Pilani",
+      "points": 9220
+    },
+    {
+      "id": 110,
+      "rank": 110,
+      "user": "Tanvi Singh 110",
+      "college": "DTU Delhi",
+      "points": 9185
+    },
+    {
+      "id": 111,
+      "rank": 111,
+      "user": "Priya Sharma 111",
+      "college": "IIT Delhi",
+      "points": 9150
+    },
+    {
+      "id": 112,
+      "rank": 112,
+      "user": "Anjali Verma 112",
+      "college": "IIT Bombay",
+      "points": 9115
+    },
+    {
+      "id": 113,
+      "rank": 113,
+      "user": "Neha Kapoor 113",
+      "college": "NIT Trichy",
+      "points": 9080
+    },
+    {
+      "id": 114,
+      "rank": 114,
+      "user": "Riya Iyer 114",
+      "college": "BITS Pilani",
+      "points": 9045
+    },
+    {
+      "id": 115,
+      "rank": 115,
+      "user": "Meera Joshi 115",
+      "college": "DTU Delhi",
+      "points": 9010
+    },
+    {
+      "id": 116,
+      "rank": 116,
+      "user": "Sanya Gupta 116",
+      "college": "IIT Delhi",
+      "points": 8975
+    },
+    {
+      "id": 117,
+      "rank": 117,
+      "user": "Aisha Khan 117",
+      "college": "IIT Bombay",
+      "points": 8940
+    },
+    {
+      "id": 118,
+      "rank": 118,
+      "user": "Pooja Reddy 118",
+      "college": "NIT Trichy",
+      "points": 8905
+    },
+    {
+      "id": 119,
+      "rank": 119,
+      "user": "Kavya Nair 119",
+      "college": "BITS Pilani",
+      "points": 8870
+    },
+    {
+      "id": 120,
+      "rank": 120,
+      "user": "Tanvi Singh 120",
+      "college": "DTU Delhi",
+      "points": 8835
+    },
+    {
+      "id": 121,
+      "rank": 121,
+      "user": "Priya Sharma 121",
+      "college": "IIT Delhi",
+      "points": 8800
+    },
+    {
+      "id": 122,
+      "rank": 122,
+      "user": "Anjali Verma 122",
+      "college": "IIT Bombay",
+      "points": 8765
+    },
+    {
+      "id": 123,
+      "rank": 123,
+      "user": "Neha Kapoor 123",
+      "college": "NIT Trichy",
+      "points": 8730
+    },
+    {
+      "id": 124,
+      "rank": 124,
+      "user": "Riya Iyer 124",
+      "college": "BITS Pilani",
+      "points": 8695
+    },
+    {
+      "id": 125,
+      "rank": 125,
+      "user": "Meera Joshi 125",
+      "college": "DTU Delhi",
+      "points": 8660
+    },
+    {
+      "id": 126,
+      "rank": 126,
+      "user": "Sanya Gupta 126",
+      "college": "IIT Delhi",
+      "points": 8625
+    },
+    {
+      "id": 127,
+      "rank": 127,
+      "user": "Aisha Khan 127",
+      "college": "IIT Bombay",
+      "points": 8590
+    },
+    {
+      "id": 128,
+      "rank": 128,
+      "user": "Pooja Reddy 128",
+      "college": "NIT Trichy",
+      "points": 8555
+    },
+    {
+      "id": 129,
+      "rank": 129,
+      "user": "Kavya Nair 129",
+      "college": "BITS Pilani",
+      "points": 8520
+    },
+    {
+      "id": 130,
+      "rank": 130,
+      "user": "Tanvi Singh 130",
+      "college": "DTU Delhi",
+      "points": 8485
+    },
+    {
+      "id": 131,
+      "rank": 131,
+      "user": "Priya Sharma 131",
+      "college": "IIT Delhi",
+      "points": 8450
+    },
+    {
+      "id": 132,
+      "rank": 132,
+      "user": "Anjali Verma 132",
+      "college": "IIT Bombay",
+      "points": 8415
+    },
+    {
+      "id": 133,
+      "rank": 133,
+      "user": "Neha Kapoor 133",
+      "college": "NIT Trichy",
+      "points": 8380
+    },
+    {
+      "id": 134,
+      "rank": 134,
+      "user": "Riya Iyer 134",
+      "college": "BITS Pilani",
+      "points": 8345
+    },
+    {
+      "id": 135,
+      "rank": 135,
+      "user": "Meera Joshi 135",
+      "college": "DTU Delhi",
+      "points": 8310
+    },
+    {
+      "id": 136,
+      "rank": 136,
+      "user": "Sanya Gupta 136",
+      "college": "IIT Delhi",
+      "points": 8275
+    },
+    {
+      "id": 137,
+      "rank": 137,
+      "user": "Aisha Khan 137",
+      "college": "IIT Bombay",
+      "points": 8240
+    },
+    {
+      "id": 138,
+      "rank": 138,
+      "user": "Pooja Reddy 138",
+      "college": "NIT Trichy",
+      "points": 8205
+    },
+    {
+      "id": 139,
+      "rank": 139,
+      "user": "Kavya Nair 139",
+      "college": "BITS Pilani",
+      "points": 8170
+    },
+    {
+      "id": 140,
+      "rank": 140,
+      "user": "Tanvi Singh 140",
+      "college": "DTU Delhi",
+      "points": 8135
+    },
+    {
+      "id": 141,
+      "rank": 141,
+      "user": "Priya Sharma 141",
+      "college": "IIT Delhi",
+      "points": 8100
+    },
+    {
+      "id": 142,
+      "rank": 142,
+      "user": "Anjali Verma 142",
+      "college": "IIT Bombay",
+      "points": 8065
+    },
+    {
+      "id": 143,
+      "rank": 143,
+      "user": "Neha Kapoor 143",
+      "college": "NIT Trichy",
+      "points": 8030
+    },
+    {
+      "id": 144,
+      "rank": 144,
+      "user": "Riya Iyer 144",
+      "college": "BITS Pilani",
+      "points": 7995
+    },
+    {
+      "id": 145,
+      "rank": 145,
+      "user": "Meera Joshi 145",
+      "college": "DTU Delhi",
+      "points": 7960
+    },
+    {
+      "id": 146,
+      "rank": 146,
+      "user": "Sanya Gupta 146",
+      "college": "IIT Delhi",
+      "points": 7925
+    },
+    {
+      "id": 147,
+      "rank": 147,
+      "user": "Aisha Khan 147",
+      "college": "IIT Bombay",
+      "points": 7890
+    },
+    {
+      "id": 148,
+      "rank": 148,
+      "user": "Pooja Reddy 148",
+      "college": "NIT Trichy",
+      "points": 7855
+    },
+    {
+      "id": 149,
+      "rank": 149,
+      "user": "Kavya Nair 149",
+      "college": "BITS Pilani",
+      "points": 7820
+    },
+    {
+      "id": 150,
+      "rank": 150,
+      "user": "Tanvi Singh 150",
+      "college": "DTU Delhi",
+      "points": 7785
+    },
+    {
+      "id": 151,
+      "rank": 151,
+      "user": "Priya Sharma 151",
+      "college": "IIT Delhi",
+      "points": 7750
+    },
+    {
+      "id": 152,
+      "rank": 152,
+      "user": "Anjali Verma 152",
+      "college": "IIT Bombay",
+      "points": 7715
+    },
+    {
+      "id": 153,
+      "rank": 153,
+      "user": "Neha Kapoor 153",
+      "college": "NIT Trichy",
+      "points": 7680
+    },
+    {
+      "id": 154,
+      "rank": 154,
+      "user": "Riya Iyer 154",
+      "college": "BITS Pilani",
+      "points": 7645
+    },
+    {
+      "id": 155,
+      "rank": 155,
+      "user": "Meera Joshi 155",
+      "college": "DTU Delhi",
+      "points": 7610
+    },
+    {
+      "id": 156,
+      "rank": 156,
+      "user": "Sanya Gupta 156",
+      "college": "IIT Delhi",
+      "points": 7575
+    },
+    {
+      "id": 157,
+      "rank": 157,
+      "user": "Aisha Khan 157",
+      "college": "IIT Bombay",
+      "points": 7540
+    },
+    {
+      "id": 158,
+      "rank": 158,
+      "user": "Pooja Reddy 158",
+      "college": "NIT Trichy",
+      "points": 7505
+    },
+    {
+      "id": 159,
+      "rank": 159,
+      "user": "Kavya Nair 159",
+      "college": "BITS Pilani",
+      "points": 7470
+    },
+    {
+      "id": 160,
+      "rank": 160,
+      "user": "Tanvi Singh 160",
+      "college": "DTU Delhi",
+      "points": 7435
+    },
+    {
+      "id": 161,
+      "rank": 161,
+      "user": "Priya Sharma 161",
+      "college": "IIT Delhi",
+      "points": 7400
+    },
+    {
+      "id": 162,
+      "rank": 162,
+      "user": "Anjali Verma 162",
+      "college": "IIT Bombay",
+      "points": 7365
+    },
+    {
+      "id": 163,
+      "rank": 163,
+      "user": "Neha Kapoor 163",
+      "college": "NIT Trichy",
+      "points": 7330
+    },
+    {
+      "id": 164,
+      "rank": 164,
+      "user": "Riya Iyer 164",
+      "college": "BITS Pilani",
+      "points": 7295
+    },
+    {
+      "id": 165,
+      "rank": 165,
+      "user": "Meera Joshi 165",
+      "college": "DTU Delhi",
+      "points": 7260
+    },
+    {
+      "id": 166,
+      "rank": 166,
+      "user": "Sanya Gupta 166",
+      "college": "IIT Delhi",
+      "points": 7225
+    },
+    {
+      "id": 167,
+      "rank": 167,
+      "user": "Aisha Khan 167",
+      "college": "IIT Bombay",
+      "points": 7190
+    },
+    {
+      "id": 168,
+      "rank": 168,
+      "user": "Pooja Reddy 168",
+      "college": "NIT Trichy",
+      "points": 7155
+    },
+    {
+      "id": 169,
+      "rank": 169,
+      "user": "Kavya Nair 169",
+      "college": "BITS Pilani",
+      "points": 7120
+    },
+    {
+      "id": 170,
+      "rank": 170,
+      "user": "Tanvi Singh 170",
+      "college": "DTU Delhi",
+      "points": 7085
+    },
+    {
+      "id": 171,
+      "rank": 171,
+      "user": "Priya Sharma 171",
+      "college": "IIT Delhi",
+      "points": 7050
+    },
+    {
+      "id": 172,
+      "rank": 172,
+      "user": "Anjali Verma 172",
+      "college": "IIT Bombay",
+      "points": 7015
+    },
+    {
+      "id": 173,
+      "rank": 173,
+      "user": "Neha Kapoor 173",
+      "college": "NIT Trichy",
+      "points": 6980
+    },
+    {
+      "id": 174,
+      "rank": 174,
+      "user": "Riya Iyer 174",
+      "college": "BITS Pilani",
+      "points": 6945
+    },
+    {
+      "id": 175,
+      "rank": 175,
+      "user": "Meera Joshi 175",
+      "college": "DTU Delhi",
+      "points": 6910
+    },
+    {
+      "id": 176,
+      "rank": 176,
+      "user": "Sanya Gupta 176",
+      "college": "IIT Delhi",
+      "points": 6875
+    },
+    {
+      "id": 177,
+      "rank": 177,
+      "user": "Aisha Khan 177",
+      "college": "IIT Bombay",
+      "points": 6840
+    },
+    {
+      "id": 178,
+      "rank": 178,
+      "user": "Pooja Reddy 178",
+      "college": "NIT Trichy",
+      "points": 6805
+    },
+    {
+      "id": 179,
+      "rank": 179,
+      "user": "Kavya Nair 179",
+      "college": "BITS Pilani",
+      "points": 6770
+    },
+    {
+      "id": 180,
+      "rank": 180,
+      "user": "Tanvi Singh 180",
+      "college": "DTU Delhi",
+      "points": 6735
+    },
+    {
+      "id": 181,
+      "rank": 181,
+      "user": "Priya Sharma 181",
+      "college": "IIT Delhi",
+      "points": 6700
+    },
+    {
+      "id": 182,
+      "rank": 182,
+      "user": "Anjali Verma 182",
+      "college": "IIT Bombay",
+      "points": 6665
+    },
+    {
+      "id": 183,
+      "rank": 183,
+      "user": "Neha Kapoor 183",
+      "college": "NIT Trichy",
+      "points": 6630
+    },
+    {
+      "id": 184,
+      "rank": 184,
+      "user": "Riya Iyer 184",
+      "college": "BITS Pilani",
+      "points": 6595
+    },
+    {
+      "id": 185,
+      "rank": 185,
+      "user": "Meera Joshi 185",
+      "college": "DTU Delhi",
+      "points": 6560
+    },
+    {
+      "id": 186,
+      "rank": 186,
+      "user": "Sanya Gupta 186",
+      "college": "IIT Delhi",
+      "points": 6525
+    },
+    {
+      "id": 187,
+      "rank": 187,
+      "user": "Aisha Khan 187",
+      "college": "IIT Bombay",
+      "points": 6490
+    },
+    {
+      "id": 188,
+      "rank": 188,
+      "user": "Pooja Reddy 188",
+      "college": "NIT Trichy",
+      "points": 6455
+    },
+    {
+      "id": 189,
+      "rank": 189,
+      "user": "Kavya Nair 189",
+      "college": "BITS Pilani",
+      "points": 6420
+    },
+    {
+      "id": 190,
+      "rank": 190,
+      "user": "Tanvi Singh 190",
+      "college": "DTU Delhi",
+      "points": 6385
+    },
+    {
+      "id": 191,
+      "rank": 191,
+      "user": "Priya Sharma 191",
+      "college": "IIT Delhi",
+      "points": 6350
+    },
+    {
+      "id": 192,
+      "rank": 192,
+      "user": "Anjali Verma 192",
+      "college": "IIT Bombay",
+      "points": 6315
+    },
+    {
+      "id": 193,
+      "rank": 193,
+      "user": "Neha Kapoor 193",
+      "college": "NIT Trichy",
+      "points": 6280
+    },
+    {
+      "id": 194,
+      "rank": 194,
+      "user": "Riya Iyer 194",
+      "college": "BITS Pilani",
+      "points": 6245
+    },
+    {
+      "id": 195,
+      "rank": 195,
+      "user": "Meera Joshi 195",
+      "college": "DTU Delhi",
+      "points": 6210
+    },
+    {
+      "id": 196,
+      "rank": 196,
+      "user": "Sanya Gupta 196",
+      "college": "IIT Delhi",
+      "points": 6175
+    },
+    {
+      "id": 197,
+      "rank": 197,
+      "user": "Aisha Khan 197",
+      "college": "IIT Bombay",
+      "points": 6140
+    },
+    {
+      "id": 198,
+      "rank": 198,
+      "user": "Pooja Reddy 198",
+      "college": "NIT Trichy",
+      "points": 6105
+    },
+    {
+      "id": 199,
+      "rank": 199,
+      "user": "Kavya Nair 199",
+      "college": "BITS Pilani",
+      "points": 6070
+    },
+    {
+      "id": 200,
+      "rank": 200,
+      "user": "Tanvi Singh 200",
+      "college": "DTU Delhi",
+      "points": 6035
+    },
+    {
+      "id": 201,
+      "rank": 201,
+      "user": "Priya Sharma 201",
+      "college": "IIT Delhi",
+      "points": 6000
+    },
+    {
+      "id": 202,
+      "rank": 202,
+      "user": "Anjali Verma 202",
+      "college": "IIT Bombay",
+      "points": 5965
+    },
+    {
+      "id": 203,
+      "rank": 203,
+      "user": "Neha Kapoor 203",
+      "college": "NIT Trichy",
+      "points": 5930
+    },
+    {
+      "id": 204,
+      "rank": 204,
+      "user": "Riya Iyer 204",
+      "college": "BITS Pilani",
+      "points": 5895
+    },
+    {
+      "id": 205,
+      "rank": 205,
+      "user": "Meera Joshi 205",
+      "college": "DTU Delhi",
+      "points": 5860
+    },
+    {
+      "id": 206,
+      "rank": 206,
+      "user": "Sanya Gupta 206",
+      "college": "IIT Delhi",
+      "points": 5825
+    },
+    {
+      "id": 207,
+      "rank": 207,
+      "user": "Aisha Khan 207",
+      "college": "IIT Bombay",
+      "points": 5790
+    },
+    {
+      "id": 208,
+      "rank": 208,
+      "user": "Pooja Reddy 208",
+      "college": "NIT Trichy",
+      "points": 5755
+    },
+    {
+      "id": 209,
+      "rank": 209,
+      "user": "Kavya Nair 209",
+      "college": "BITS Pilani",
+      "points": 5720
+    },
+    {
+      "id": 210,
+      "rank": 210,
+      "user": "Tanvi Singh 210",
+      "college": "DTU Delhi",
+      "points": 5685
+    },
+    {
+      "id": 211,
+      "rank": 211,
+      "user": "Priya Sharma 211",
+      "college": "IIT Delhi",
+      "points": 5650
+    },
+    {
+      "id": 212,
+      "rank": 212,
+      "user": "Anjali Verma 212",
+      "college": "IIT Bombay",
+      "points": 5615
+    },
+    {
+      "id": 213,
+      "rank": 213,
+      "user": "Neha Kapoor 213",
+      "college": "NIT Trichy",
+      "points": 5580
+    },
+    {
+      "id": 214,
+      "rank": 214,
+      "user": "Riya Iyer 214",
+      "college": "BITS Pilani",
+      "points": 5545
+    },
+    {
+      "id": 215,
+      "rank": 215,
+      "user": "Meera Joshi 215",
+      "college": "DTU Delhi",
+      "points": 5510
+    },
+    {
+      "id": 216,
+      "rank": 216,
+      "user": "Sanya Gupta 216",
+      "college": "IIT Delhi",
+      "points": 5475
+    },
+    {
+      "id": 217,
+      "rank": 217,
+      "user": "Aisha Khan 217",
+      "college": "IIT Bombay",
+      "points": 5440
+    },
+    {
+      "id": 218,
+      "rank": 218,
+      "user": "Pooja Reddy 218",
+      "college": "NIT Trichy",
+      "points": 5405
+    },
+    {
+      "id": 219,
+      "rank": 219,
+      "user": "Kavya Nair 219",
+      "college": "BITS Pilani",
+      "points": 5370
+    },
+    {
+      "id": 220,
+      "rank": 220,
+      "user": "Tanvi Singh 220",
+      "college": "DTU Delhi",
+      "points": 5335
+    }
+  ],
+  "pagination": {
+    "next": 2,
+    "previous": null,
+    "count": 220,
+    "num_pages": 22
+  }
+}

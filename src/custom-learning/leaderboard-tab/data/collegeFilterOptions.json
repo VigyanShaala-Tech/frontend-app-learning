@@ -1,0 +1,19 @@
+{
+  "results": [
+    { "id": 1, "value": "all", "label": "All Colleges" },
+    { "id": 2, "value": "IIT Delhi", "label": "IIT Delhi" },
+    { "id": 3, "value": "IIT Bombay", "label": "IIT Bombay" },
+    { "id": 4, "value": "NIT Trichy", "label": "NIT Trichy" },
+    { "id": 5, "value": "BITS Pilani", "label": "BITS Pilani" },
+    { "id": 6, "value": "DTU Delhi", "label": "DTU Delhi" },
+    { "id": 7, "value": "IIT Madras", "label": "IIT Madras" },
+    { "id": 8, "value": "IIT Kanpur", "label": "IIT Kanpur" },
+    { "id": 9, "value": "IIT Kharagpur", "label": "IIT Kharagpur" },
+    { "id": 10, "value": "IIT Roorkee", "label": "IIT Roorkee" },
+    { "id": 11, "value": "NIT Warangal", "label": "NIT Warangal" },
+    { "id": 12, "value": "NIT Surathkal", "label": "NIT Surathkal" },
+    { "id": 13, "value": "IIIT Hyderabad", "label": "IIIT Hyderabad" },
+    { "id": 14, "value": "JNU Delhi", "label": "JNU Delhi" },
+    { "id": 15, "value": "Delhi University", "label": "Delhi University" }
+  ]
+}

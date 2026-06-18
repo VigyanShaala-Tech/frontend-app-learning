@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useToggle } from '@openedx/paragon';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 
 import { CourseTabsNavigation } from '../course-tabs';
 import { useModel } from '../generic/model-store';
@@ -32,33 +33,7 @@ const LoadedTabPage = ({
     hasCourseAuthorAccess,
   } = useModel('courseHomeMeta', courseId);
 
-  let safeTabs = tabs || [];
-
-  const hasLeaderboard = safeTabs.some(tab => tab.slug === 'leaderboard');
-
-  if (!hasLeaderboard) {
-    safeTabs = [
-      ...safeTabs,
-      {
-        slug: 'leaderboard',
-        title: 'Leaderboard',
-        url: `/learning/course/${encodeURIComponent(courseId)}/leaderboard`,
-      },
-    ];
-  }
-
-  const hasLiveSession = safeTabs.some(tab => tab.slug === 'live_session');
-
-  if (!hasLiveSession) {
-    safeTabs = [
-      ...safeTabs,
-      {
-        slug: 'livesession',
-        title: 'Live-Session',
-        url: `/learning/course/${encodeURIComponent(courseId)}/live-session`,
-      },
-    ];
-  }
+  const safeTabs = tabs || [];
 
   const activeTab = safeTabs.find(tab => tab.slug === activeTabSlug);
 
@@ -72,12 +47,22 @@ const LoadedTabPage = ({
 
   return (
     <>
-      <ProductTours
-        activeTab={activeTabSlug}
-        courseId={courseId}
-        isStreakCelebrationOpen={isStreakCelebrationOpen}
-        org={org}
-      />
+      <PluginSlot
+        id="learning_mfe_prevent_course_tour_plugin_slot"
+        pluginProps={{
+          activeTab: activeTabSlug,
+          courseId,
+          isStreakCelebrationOpen,
+          org,
+        }}
+      >
+        <ProductTours
+          activeTab={activeTabSlug}
+          courseId={courseId}
+          isStreakCelebrationOpen={isStreakCelebrationOpen}
+          org={org}
+        />
+      </PluginSlot>
       <Helmet>
         <title>{`${activeTab ? `${activeTab.title} | ` : ''}${title} | ${getConfig().SITE_NAME}`}</title>
       </Helmet>
@@ -108,13 +93,40 @@ const LoadedTabPage = ({
           }}
         />
 
-        <CourseTabsNavigation
-          tabs={safeTabs}
-          className="mb-3"
-          activeTabSlug={activeTabSlug}
-        />
+        <PluginSlot
+          id="learning_mfe_course_tabs_plugin_slot"
+          pluginProps={{
+            activeTabSlug,
+            className: 'mb-3',
+            courseId,
+            tabs: safeTabs,
+          }}
+          slotOptions={{
+            mergeProps: true,
+          }}
+        >
+          <CourseTabsNavigation
+            tabs={safeTabs}
+            className="mb-3"
+            activeTabSlug={activeTabSlug}
+          />
+        </PluginSlot>
 
         <div id="main-content" className="container-xl">
+          <PluginSlot
+            id="learning_mfe_course_live_session_banner_plugin_slot"
+            idAliases={[
+              'course_live_session_banner_slot',
+              'org.openedx.frontend.learning.course_live_session_banner.v1',
+            ]}
+            pluginProps={{
+              activeTabSlug,
+              courseId,
+            }}
+            slotOptions={{
+              mergeProps: true,
+            }}
+          />
           {children}
         </div>
       </main>

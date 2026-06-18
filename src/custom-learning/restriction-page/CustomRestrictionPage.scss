@@ -1,0 +1,39 @@
+.custom-restriction-page {
+  &__overlay {
+    align-items: center;
+    animation: custom-restriction-page-fade 0.35s ease;
+    backdrop-filter: blur(8px);
+    background: rgba(20, 20, 8, 0.753);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    position: fixed;
+    z-index: 9999;
+  }
+
+  &__card {
+    max-width: 90%;
+    width: 680px;
+  }
+
+  &__title {
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+
+  &__text {
+    font-size: 15px;
+  }
+}
+
+@keyframes custom-restriction-page-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

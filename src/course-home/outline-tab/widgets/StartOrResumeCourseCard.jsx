@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Card } from '@openedx/paragon';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { useSelector } from 'react-redux';
@@ -46,14 +47,29 @@ const StartOrResumeCourseCard = () => {
       <Card.Header
         title={hasVisitedCourse ? intl.formatMessage(messages.resumeBlurb) : intl.formatMessage(messages.startBlurb)}
         actions={(
-          <Button
-            variant="brand"
-            block
-            href={resumeCourseUrl}
-            onClick={() => logResumeCourseClick()}
+          <PluginSlot
+            id="learning_mfe_start_resume_course_plugin_slot"
+            pluginProps={{
+              hasVisitedCourse,
+              label: hasVisitedCourse
+                ? intl.formatMessage(messages.resume)
+                : intl.formatMessage(messages.start),
+              onLogClick: logResumeCourseClick,
+              resumeCourseUrl,
+            }}
+            slotOptions={{
+              mergeProps: true,
+            }}
           >
-            {hasVisitedCourse ? intl.formatMessage(messages.resume) : intl.formatMessage(messages.start)}
-          </Button>
+            <Button
+              variant="brand"
+              block
+              href={resumeCourseUrl}
+              onClick={() => logResumeCourseClick()}
+            >
+              {hasVisitedCourse ? intl.formatMessage(messages.resume) : intl.formatMessage(messages.start)}
+            </Button>
+          </PluginSlot>
         )}
       />
       {/* Footer is needed for internal vertical spacing to work out. If you can remove, be my guest */}
