@@ -431,7 +431,11 @@
   width: 56px !important;
   height: 56px !important;
 }
-
+.custom-outline-sidebar__unit{
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
 @media (--pgn-size-breakpoint-max-width-xs) {
   .course-outline-tab .pgn__card {
     .pgn__card-header {
