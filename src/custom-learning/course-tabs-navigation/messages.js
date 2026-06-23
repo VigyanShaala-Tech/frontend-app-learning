@@ -8,8 +8,8 @@ const messages = defineMessages({
   },
   hangout: {
     id: 'learn.navigation.course.tabs.hangout',
-    defaultMessage: 'Hangout',
-    description: 'Custom course tab label for Hangout',
+    defaultMessage: 'Handouts',
+    description: 'Custom course tab label for Handouts',
   },
   updates: {
     id: 'learn.navigation.course.tabs.updates',
@@ -18,8 +18,8 @@ const messages = defineMessages({
   },
   bookmark: {
     id: 'learn.navigation.course.tabs.bookmark',
-    defaultMessage: 'Bookmark',
-    description: 'Custom course tab label for Bookmark',
+    defaultMessage: 'Bookmarks',
+    description: 'Custom course tab label for Bookmarks',
   },
   leaderboard: {
     id: 'learn.navigation.course.tabs.leaderboardCustom',
