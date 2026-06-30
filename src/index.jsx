@@ -202,4 +202,5 @@ initialize({
     },
   },
   messages,
+  hydrateAuthenticatedUser: true,
 });
