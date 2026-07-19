@@ -27,6 +27,7 @@ const ZoomMeeting = () => {
   const clientRef = useRef(null);
   const didInitRef = useRef(false);
   const retryTimeoutRef = useRef(null);
+  const connectionChangeHandlerRef = useRef(null);
 
   // Poll every 2s while the host hasn't started the meeting yet (see the
   // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
@@ -61,6 +62,9 @@ const ZoomMeeting = () => {
     clientRef.current = ZoomMtgEmbedded.createClient();
     return () => {
       if (clientRef.current) {
+        if (connectionChangeHandlerRef.current) {
+          clientRef.current.off('connection-change', connectionChangeHandlerRef.current);
+        }
         try {
           clientRef.current.leaveMeeting();
         } catch (e) {
@@ -144,6 +148,20 @@ const ZoomMeeting = () => {
         // below (which calls joinMeeting() again every 2s) only re-attempts
         // join(), not init(), on each retry.
         didInitRef.current = true;
+
+        // Detect the meeting ending (host ends it for everyone, or the
+        // connection otherwise closes) and send the user back to this
+        // course's live-session list instead of leaving them stranded on
+        // the now-empty meeting page. This is the SDK-documented way to
+        // detect meeting end for an embedded client -- registered once here
+        // (guarded by didInitRef above) rather than on every retry.
+        const handleConnectionChange = (payload) => {
+          if (payload?.state === 'Closed') {
+            navigate(`/course/${courseId}/live-session`, { replace: true });
+          }
+        };
+        connectionChangeHandlerRef.current = handleConnectionChange;
+        clientRef.current.on('connection-change', handleConnectionChange);
       }
 
       await clientRef.current.join({
@@ -159,7 +177,7 @@ const ZoomMeeting = () => {
         ...(auth.role === 1 && auth.zak ? { zak: auth.zak } : {}),
         leaveUrl:
           leaveUrl ||
-          `${getConfig().BASE_URL}/courses/${courseId}/live-session`,
+          `${getConfig().BASE_URL}/course/${courseId}/live-session`,
       });
 
       setMeetingNotStarted(false);
@@ -268,7 +286,7 @@ const ZoomMeeting = () => {
           <h4 className="mb-2">{formatMessage(messages['zoomMeeting.waitingForHost'])}</h4>
           <p className="text-muted mb-4">{formatMessage(messages['zoomMeeting.waitingMessage'])}</p>
           <div className="d-flex gap-2">
-            <Button variant="primary" className="text-white" onClick={handleRetryNow}>
+            <Button variant="primary" className="text-white mr-2" onClick={handleRetryNow}>
               {formatMessage(messages['zoomMeeting.button.retry'])}
             </Button>
             <Button variant="outline-primary" onClick={() => navigate(-1)}>
