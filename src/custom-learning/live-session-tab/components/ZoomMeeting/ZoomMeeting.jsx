@@ -21,9 +21,21 @@ const ZoomMeeting = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const [meetingNotStarted, setMeetingNotStarted] = useState(false);
 
   const meetingSDKElement = useRef(null);
   const clientRef = useRef(null);
+  const didInitRef = useRef(false);
+  const retryTimeoutRef = useRef(null);
+
+  // Poll every 2s while the host hasn't started the meeting yet (see the
+  // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
+  // leftover timer never fires after the user has navigated away.
+  useEffect(() => () => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     const path = location.pathname;
@@ -120,13 +132,19 @@ const ZoomMeeting = () => {
     const { meeting, auth, user, leaveUrl } = meetingData;
 
     try {
-      meetingSDKElement.current.style.display = 'block';
+      if (!didInitRef.current) {
+        meetingSDKElement.current.style.display = 'block';
 
-      await clientRef.current.init({
-        debug: true,
-        zoomAppRoot: meetingSDKElement.current,
-        language: 'en-US',
-      });
+        await clientRef.current.init({
+          debug: true,
+          zoomAppRoot: meetingSDKElement.current,
+          language: 'en-US',
+        });
+        // init() is a one-time SDK setup call -- guard it so the retry loop
+        // below (which calls joinMeeting() again every 2s) only re-attempts
+        // join(), not init(), on each retry.
+        didInitRef.current = true;
+      }
 
       await clientRef.current.join({
         sdkKey: auth.sdkKey,
@@ -144,12 +162,33 @@ const ZoomMeeting = () => {
           `${getConfig().BASE_URL}/courses/${courseId}/live-session`,
       });
 
+      setMeetingNotStarted(false);
       setIsReady(true);
     } catch (err) {
       console.error('Zoom join error:', err);
+
+      const reason = typeof err?.reason === 'string' ? err.reason.toLowerCase() : '';
+      const isMeetingNotStarted = err?.errorCode === 3008 || reason.includes('not started');
+
+      if (isMeetingNotStarted) {
+        // Host hasn't started the meeting yet -- show a friendly waiting
+        // message instead of the raw SDK error payload, and keep polling
+        // every 2s until the host starts it (or the user leaves the page).
+        setError(null);
+        setMeetingNotStarted(true);
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+        }
+        retryTimeoutRef.current = setTimeout(() => {
+          joinMeeting();
+        }, 2000);
+        return;
+      }
+
+      setMeetingNotStarted(false);
       setError(
         err?.message ||
-          JSON.stringify(err) ||
+          err?.reason ||
           formatMessage(messages['zoomMeeting.error.joinFailed'])
       );
     }
@@ -164,6 +203,16 @@ const ZoomMeeting = () => {
       return () => clearTimeout(timer);
     }
   }, [meetingData, joinMeeting]);
+
+  // Let the user force an immediate re-check instead of waiting out the
+  // current 2s interval.
+  const handleRetryNow = () => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+    joinMeeting();
+  };
 
   // Leave meeting
   const handleLeave = () => {
@@ -213,7 +262,27 @@ const ZoomMeeting = () => {
           {formatMessage(messages['zoomMeeting.leave'])}
         </Button>
       </div> */}
-      <div ref={meetingSDKElement} className="zoom-meeting-container"></div>
+      {meetingNotStarted && (
+        <div className="zoom-meeting-waiting d-flex flex-column justify-content-center align-items-center text-center min-vh-100 px-3">
+          <Spinner animation="border" variant="primary" className="mb-4" />
+          <h4 className="mb-2">{formatMessage(messages['zoomMeeting.waitingForHost'])}</h4>
+          <p className="text-muted mb-4">{formatMessage(messages['zoomMeeting.waitingMessage'])}</p>
+          <div className="d-flex gap-2">
+            <Button variant="primary" className="text-white" onClick={handleRetryNow}>
+              {formatMessage(messages['zoomMeeting.button.retry'])}
+            </Button>
+            <Button variant="outline-primary" onClick={() => navigate(-1)}>
+              {formatMessage(messages['zoomMeeting.button.goBack'])}
+            </Button>
+          </div>
+        </div>
+      )}
+      {/* Kept mounted (only visually hidden) while waiting -- the Zoom SDK
+          root element and its ref must stay attached across retries. */}
+      <div
+        ref={meetingSDKElement}
+        className={`zoom-meeting-container${meetingNotStarted ? ' d-none' : ''}`}
+      />
     </div>
   );
 };
