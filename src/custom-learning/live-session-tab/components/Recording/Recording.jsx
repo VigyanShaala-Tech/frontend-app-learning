@@ -22,12 +22,28 @@ function resolveRecordingErrorPayload(data, formatMessage) {
   return formatMessage(messages['recording.error.fallback']);
 }
 
+/** Last path segment of the recording URL (e.g. "a9bd210a-....mp4"), or a generic fallback. */
+function getFilenameFromUrl(url, fileType) {
+  try {
+    const { pathname } = new URL(url);
+    const segment = pathname.split('/').filter(Boolean).pop();
+    if (segment) {
+      return decodeURIComponent(segment);
+    }
+  } catch {
+    /* fall through to default below */
+  }
+  const extension = (fileType || 'mp4').toLowerCase();
+  return `recording.${extension}`;
+}
+
 const Recording = ({ onBack, meetingId }) => {
   const { formatMessage } = useIntl();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recording, setRecording] = useState(null);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   const fetchRecordings = useCallback(async () => {
     if (!meetingId) {
@@ -70,12 +86,42 @@ const Recording = ({ onBack, meetingId }) => {
     fetchRecordings();
   }, [fetchRecordings]);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const url = recording?.download_url;
-    if (!url) {
+    if (!url || downloadLoading) {
       return;
     }
-    window.open(url, '_blank', 'noopener,noreferrer');
+
+    setDownloadLoading(true);
+    try {
+      // S3 doesn't set Content-Disposition: attachment on these objects, so a plain
+      // link/window.open just plays the video inline instead of downloading it. Fetch
+      // it as a blob and trigger the save via a blob: URL, which browsers always treat
+      // as a real download regardless of the resource's own headers.
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = getFilenameFromUrl(url, recording.file_type);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      // Most likely the S3 bucket doesn't allow cross-origin fetch() reads from this
+      // domain (CORS) -- fall back to the previous behavior (open in a new tab) rather
+      // than leaving the user with no way to get the file at all.
+      console.error('Failed to force-download recording, opening it in a new tab instead:', err);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } finally {
+      setDownloadLoading(false);
+    }
   };
 
   if (loading) {
@@ -109,11 +155,20 @@ const Recording = ({ onBack, meetingId }) => {
           <Button
             variant="primary"
             onClick={handleDownload}
-            disabled={!recording?.download_url}
+            disabled={!recording?.download_url || downloadLoading}
             className="mt-2 mt-md-0 recording-download text-white"
           >
-            <FontAwesomeIcon icon={faDownload} className="mr-2" />
-            {formatMessage(messages['recording.download'])}
+            {downloadLoading ? (
+              <>
+                <Spinner animation="border" size="sm" className="mr-2" />
+                {formatMessage(messages['recording.downloading'])}
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                {formatMessage(messages['recording.download'])}
+              </>
+            )}
           </Button>
         </div>
 
