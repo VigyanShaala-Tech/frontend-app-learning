@@ -222,16 +222,6 @@ const ZoomMeeting = () => {
     }
   }, [meetingData, joinMeeting]);
 
-  // Let the user force an immediate re-check instead of waiting out the
-  // current 2s interval.
-  const handleRetryNow = () => {
-    if (retryTimeoutRef.current) {
-      clearTimeout(retryTimeoutRef.current);
-      retryTimeoutRef.current = null;
-    }
-    joinMeeting();
-  };
-
   // Leave meeting
   const handleLeave = () => {
     if (clientRef.current) {
@@ -284,15 +274,7 @@ const ZoomMeeting = () => {
         <div className="zoom-meeting-waiting d-flex flex-column justify-content-center align-items-center text-center min-vh-100 px-3">
           <Spinner animation="border" variant="primary" className="mb-4" />
           <h4 className="mb-2">{formatMessage(messages['zoomMeeting.waitingForHost'])}</h4>
-          <p className="text-muted mb-4">{formatMessage(messages['zoomMeeting.waitingMessage'])}</p>
-          <div className="d-flex gap-2">
-            <Button variant="primary" className="text-white mr-2" onClick={handleRetryNow}>
-              {formatMessage(messages['zoomMeeting.button.retry'])}
-            </Button>
-            <Button variant="outline-primary" onClick={() => navigate(-1)}>
-              {formatMessage(messages['zoomMeeting.button.goBack'])}
-            </Button>
-          </div>
+          <p className="text-muted mb-0">{formatMessage(messages['zoomMeeting.waitingMessage'])}</p>
         </div>
       )}
       {/* Kept mounted (only visually hidden) while waiting -- the Zoom SDK
