@@ -31,6 +31,12 @@
     height: 100% !important;
     width: 100% !important;
   }
+
+  // Zoom IQ "Meeting Summary" banner (SDK injects hashed class e.g. css-mva75o)
+  [role='dialog'][aria-label='Meeting Summary with Zoom IQ on.'] {
+    position: fixed;
+    top: 12vh !important;
+  }
 }
 
 .zoom-MuiPopper-root.css-0{

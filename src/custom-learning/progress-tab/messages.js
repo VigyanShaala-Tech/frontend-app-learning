@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Overall performance',
     description: 'Title for overall performance section',
   },
+  overallPerformanceTooltipLabel: {
+    id: 'learn.custom.progress.overall.tooltipLabel',
+    defaultMessage: 'Progress',
+    description: 'Tooltip label for overall performance radial chart',
+  },
   loadError: {
     id: 'learn.custom.progress.loadError',
     defaultMessage: 'Unable to load progress data. Please try again later.',
