@@ -21,9 +21,22 @@ const ZoomMeeting = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const [meetingNotStarted, setMeetingNotStarted] = useState(false);
 
   const meetingSDKElement = useRef(null);
   const clientRef = useRef(null);
+  const didInitRef = useRef(false);
+  const retryTimeoutRef = useRef(null);
+  const connectionChangeHandlerRef = useRef(null);
+
+  // Poll every 2s while the host hasn't started the meeting yet (see the
+  // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
+  // leftover timer never fires after the user has navigated away.
+  useEffect(() => () => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     const path = location.pathname;
@@ -49,6 +62,9 @@ const ZoomMeeting = () => {
     clientRef.current = ZoomMtgEmbedded.createClient();
     return () => {
       if (clientRef.current) {
+        if (connectionChangeHandlerRef.current) {
+          clientRef.current.off('connection-change', connectionChangeHandlerRef.current);
+        }
         try {
           clientRef.current.leaveMeeting();
         } catch (e) {
@@ -120,13 +136,33 @@ const ZoomMeeting = () => {
     const { meeting, auth, user, leaveUrl } = meetingData;
 
     try {
-      meetingSDKElement.current.style.display = 'block';
+      if (!didInitRef.current) {
+        meetingSDKElement.current.style.display = 'block';
 
-      await clientRef.current.init({
-        debug: true,
-        zoomAppRoot: meetingSDKElement.current,
-        language: 'en-US',
-      });
+        await clientRef.current.init({
+          debug: true,
+          zoomAppRoot: meetingSDKElement.current,
+          language: 'en-US',
+        });
+        // init() is a one-time SDK setup call -- guard it so the retry loop
+        // below (which calls joinMeeting() again every 2s) only re-attempts
+        // join(), not init(), on each retry.
+        didInitRef.current = true;
+
+        // Detect the meeting ending (host ends it for everyone, or the
+        // connection otherwise closes) and send the user back to this
+        // course's live-session list instead of leaving them stranded on
+        // the now-empty meeting page. This is the SDK-documented way to
+        // detect meeting end for an embedded client -- registered once here
+        // (guarded by didInitRef above) rather than on every retry.
+        const handleConnectionChange = (payload) => {
+          if (payload?.state === 'Closed') {
+            navigate(`/course/${courseId}/live-session`, { replace: true });
+          }
+        };
+        connectionChangeHandlerRef.current = handleConnectionChange;
+        clientRef.current.on('connection-change', handleConnectionChange);
+      }
 
       await clientRef.current.join({
         sdkKey: auth.sdkKey,
@@ -141,15 +177,36 @@ const ZoomMeeting = () => {
         ...(auth.role === 1 && auth.zak ? { zak: auth.zak } : {}),
         leaveUrl:
           leaveUrl ||
-          `${getConfig().BASE_URL}/courses/${courseId}/live-session`,
+          `${getConfig().BASE_URL}/course/${courseId}/live-session`,
       });
 
+      setMeetingNotStarted(false);
       setIsReady(true);
     } catch (err) {
       console.error('Zoom join error:', err);
+
+      const reason = typeof err?.reason === 'string' ? err.reason.toLowerCase() : '';
+      const isMeetingNotStarted = err?.errorCode === 3008 || reason.includes('not started');
+
+      if (isMeetingNotStarted) {
+        // Host hasn't started the meeting yet -- show a friendly waiting
+        // message instead of the raw SDK error payload, and keep polling
+        // every 2s until the host starts it (or the user leaves the page).
+        setError(null);
+        setMeetingNotStarted(true);
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+        }
+        retryTimeoutRef.current = setTimeout(() => {
+          joinMeeting();
+        }, 2000);
+        return;
+      }
+
+      setMeetingNotStarted(false);
       setError(
         err?.message ||
-          JSON.stringify(err) ||
+          err?.reason ||
           formatMessage(messages['zoomMeeting.error.joinFailed'])
       );
     }
@@ -213,7 +270,19 @@ const ZoomMeeting = () => {
           {formatMessage(messages['zoomMeeting.leave'])}
         </Button>
       </div> */}
-      <div ref={meetingSDKElement} className="zoom-meeting-container"></div>
+      {meetingNotStarted && (
+        <div className="zoom-meeting-waiting d-flex flex-column justify-content-center align-items-center text-center min-vh-100 px-3">
+          <Spinner animation="border" variant="primary" className="mb-4" />
+          <h4 className="mb-2">{formatMessage(messages['zoomMeeting.waitingForHost'])}</h4>
+          <p className="text-muted mb-0">{formatMessage(messages['zoomMeeting.waitingMessage'])}</p>
+        </div>
+      )}
+      {/* Kept mounted (only visually hidden) while waiting -- the Zoom SDK
+          root element and its ref must stay attached across retries. */}
+      <div
+        ref={meetingSDKElement}
+        className={`zoom-meeting-container${meetingNotStarted ? ' d-none' : ''}`}
+      />
     </div>
   );
 };

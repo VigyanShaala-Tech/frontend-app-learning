@@ -14,6 +14,7 @@ const messages = defineMessages({
   'liveSession.noSessionsPrevious': { id: 'liveSession.noSessionsPrevious', defaultMessage: 'No previous live sessions.' },
   'liveSession.ongoing': { id: 'liveSession.ongoing', defaultMessage: 'Ongoing' },
   'liveSession.button.join': { id: 'liveSession.button.join', defaultMessage: 'Join' },
+  'liveSession.button.meetingEnded': { id: 'liveSession.button.meetingEnded', defaultMessage: 'Meeting Ended' },
   'liveSession.button.edit': { id: 'liveSession.button.edit', defaultMessage: 'Edit' },
   'liveSession.button.delete': { id: 'liveSession.button.delete', defaultMessage: 'Delete' },
   'liveSession.button.viewRecording': { id: 'liveSession.button.viewRecording', defaultMessage: 'Recording' },

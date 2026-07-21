@@ -28,7 +28,7 @@ const PageNotFound = () => {
         <h1 className="h3">
           {formatMessage(messages.pageNotFoundHeader)}
         </h1>
-        <p>
+        <p className="page-not-found-body">
           {formatMessage(
             messages.pageNotFoundBody,
             {
