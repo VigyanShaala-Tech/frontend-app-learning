@@ -71,7 +71,10 @@ const OverallPerformanceSection = ({
                     border: '1px solid #E5E7EB',
                     fontSize: 12,
                   }}
-                  formatter={(value) => `${value}%`}
+                  formatter={(value) => [
+                    `${value}%`,
+                    formatMessage(messages.overallPerformanceTooltipLabel),
+                  ]}
                 />
               </RadialBarChart>
             </ResponsiveContainer>

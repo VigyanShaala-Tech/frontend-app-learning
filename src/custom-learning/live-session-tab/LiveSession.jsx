@@ -6,6 +6,7 @@ import {
   Button,
   Spinner,
   Alert,
+  Nav,
 } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -329,18 +330,20 @@ const LiveSession = () => {
         </div>
 
         <div className="mb-4">
-          <ul className="nav nav-tabs bg-light rounded">
+          <Nav variant="pills" className="nav-button-group live-session-tabs">
             {['today', 'upcoming', 'past'].map((tab) => (
-              <li key={tab} className="nav-item bg-light">
-                <button
-                  className={`rounded nav-link ${activeTab === tab ? 'active' : ''}`}
+              <Nav.Item key={tab}>
+                <Nav.Link
+                  as="button"
+                  type="button"
+                  active={activeTab === tab}
                   onClick={() => handleTabChange(tab)}
                 >
                   {formatMessage(messages[`liveSession.tab.${tab === 'past' ? 'previous' : tab}`])}
-                </button>
-              </li>
+                </Nav.Link>
+              </Nav.Item>
             ))}
-          </ul>
+          </Nav>
         </div>
 
         {loading ? (
