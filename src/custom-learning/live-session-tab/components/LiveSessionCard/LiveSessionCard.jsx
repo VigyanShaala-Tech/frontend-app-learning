@@ -109,18 +109,11 @@ const LiveSessionCard = ({
           </div>
 
           <div className="live-session-card__actions">
-            {(tabType === 'today' || tabType === 'upcoming') && (
+            {((tabType === 'today' && !hasEnded) || tabType === 'upcoming') && (
               <div className="action-group">
-                <Button
-                  variant="primary"
-                  className="text-white"
-                  onClick={() => onJoin?.(session)}
-                  disabled={hasEnded}
-                >
+                <Button variant="primary" className="text-white" onClick={() => onJoin?.(session)}>
                   <FontAwesomeIcon icon={faVideo} className="mr-2" />
-                  {hasEnded
-                    ? formatMessage(messages['liveSession.button.meetingEnded'])
-                    : formatMessage(messages['liveSession.button.join'])}
+                  {formatMessage(messages['liveSession.button.join'])}
                 </Button>
 
                 {canEditDelete && onEdit && (
@@ -132,7 +125,7 @@ const LiveSessionCard = ({
               </div>
             )}
 
-            {tabType === 'past' && (
+            {(tabType === 'past' || (tabType === 'today' && hasEnded)) && (
               <div className="action-group">
                 <Button variant="outline-primary" onClick={() => onViewRecording?.(session)}>
                   <FontAwesomeIcon icon={faPlay} className="mr-2" />
@@ -142,6 +135,14 @@ const LiveSessionCard = ({
                   <FontAwesomeIcon icon={faUsers} className="mr-2" />
                   {formatMessage(messages['liveSession.button.viewAttendance'])}
                 </Button>
+                {/* onEdit is only passed for the 'today'/'upcoming' tabs (see LiveSession.jsx),
+                    so a genuine past-tab session never shows Edit here -- only an ended today session does. */}
+                {canEditDelete && onEdit && (
+                  <Button variant="outline-primary" onClick={() => onEdit(session)}>
+                    <FontAwesomeIcon icon={faPencilAlt} className="mr-2" />
+                    {formatMessage(messages['liveSession.button.edit'])}
+                  </Button>
+                )}
               </div>
             )}
 
