@@ -37,14 +37,22 @@
     position: fixed;
     top: 12vh !important;
   }
+
+  // Screen share control bar (SDK hashed class e.g. css-1lt6p2g uses top: 2vh)
+  [aria-label='Screen share control bar'] {
+    top: 12vh !important;
+  }
+}
+.zoom-MuiPopper-root.css-0[role='dialog'] {
+  display: flex !important;
+  position: absolute !important;
+  top: 110px !important;
+  transform: unset !important;
+  z-index: 9999 !important;
 }
 
-.zoom-MuiPopper-root.css-0{
-  position: absolute !important;
-  transform: unset !important;
-  top: 110px !important;
-  display: flex !important;
-  z-index: 9999;
+.zoom-MuiPopper-root.css-0:not([role='dialog']) {
+  z-index: 10050 !important;
 }
 div#suspension-view-tabpanel-gallery-limited\ multiple {
   min-height: 75vh !important;
