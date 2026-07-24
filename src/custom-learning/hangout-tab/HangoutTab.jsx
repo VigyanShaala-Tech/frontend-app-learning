@@ -11,7 +11,7 @@ const HangoutTab = () => {
   const { content, loading, error } = useHangoutContent();
 
   return (
-    <div className="custom-hangout-tab container-xl py-4">
+    <div className="custom-hangout-tab py-4">
       <h1 className="custom-hangout-tab__title">
         {formatMessage(messages.title)}
       </h1>

@@ -49,7 +49,7 @@ const LeaderboardTab = () => {
   const end = Math.min(currentPage * pageSize, pagination.count);
 
   return (
-    <div className="custom-leaderboard-tab container-xl py-4">
+    <div className="custom-leaderboard-tab py-4">
       <h1 className="custom-leaderboard-tab__title">
         {formatMessage(messages.title)}
       </h1>
