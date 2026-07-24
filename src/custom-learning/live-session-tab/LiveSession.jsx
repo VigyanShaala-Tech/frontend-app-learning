@@ -318,7 +318,7 @@ const LiveSession = () => {
 
   return (
     <div className="live-sessions-page py-5">
-      <div className="container">
+      <div>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0 liveSession-title">{reduxdata?.plural_label || formatMessage(messages['liveSession.title'])}</h1>
           {reduxdata.can_schedule_meeting && 

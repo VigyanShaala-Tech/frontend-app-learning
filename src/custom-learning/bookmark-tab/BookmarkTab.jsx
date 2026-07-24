@@ -30,7 +30,7 @@ const BookmarkTab = () => {
   const end = Math.min(currentPage * pageSize, pagination.count);
 
   return (
-    <div className="custom-bookmark-tab container-xl py-4">
+    <div className="custom-bookmark-tab py-4">
       <h1 className="custom-bookmark-tab__title">
         {formatMessage(messages.title)}
       </h1>
