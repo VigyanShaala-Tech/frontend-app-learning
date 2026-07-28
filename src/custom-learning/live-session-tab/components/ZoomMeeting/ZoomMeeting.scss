@@ -1,24 +1,22 @@
+// The join page renders with no site Header/FooterSlot (see
+// CustomLiveSessionJoinChrome) specifically so this can own the full
+// viewport -- the Zoom Embedded Client positions its own floating panels
+// (chat, participants, share-screen bar, meeting-summary dialog) against the
+// viewport, not against this container's box, so any competing fixed chrome
+// above it causes exactly the collisions this file used to patch per-panel
+// with hardcoded vh/px offsets against Zoom's internal (hashed, SDK-version-
+// specific) classes. With no header to dodge, those offsets are gone; use
+// customize.* in ZoomMeeting.jsx's client.init() call if a panel genuinely
+// needs repositioning going forward -- that's the SDK's supported API for
+// this, not CSS overrides on its internal markup.
 .zoom-meeting-page {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.zoom-header {
-  padding: 1rem 1.5rem;
-  background: #1f1f1f;
-  color: white;
-  border-bottom: 1px solid #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
-
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
 }
 
 .zoom-meeting-container {
@@ -31,31 +29,10 @@
     height: 100% !important;
     width: 100% !important;
   }
-
-  // Zoom IQ "Meeting Summary" banner (SDK injects hashed class e.g. css-mva75o)
-  [role='dialog'][aria-label='Meeting Summary with Zoom IQ on.'] {
-    position: fixed;
-    top: 12vh !important;
-  }
-
-  // Screen share control bar (SDK hashed class e.g. css-1lt6p2g uses top: 2vh)
-  [aria-label='Screen share control bar'] {
-    top: 12vh !important;
-  }
-}
-.zoom-MuiPopper-root.css-0[role='dialog'] {
-  display: flex !important;
-  position: absolute !important;
-  top: 110px !important;
-  transform: unset !important;
-  z-index: 9999 !important;
 }
 
-.zoom-MuiPopper-root.css-0:not([role='dialog']) {
-  z-index: 10050 !important;
-}
 div#suspension-view-tabpanel-gallery-limited\ multiple {
-  min-height: 75vh !important;
+  min-height: 100%;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;

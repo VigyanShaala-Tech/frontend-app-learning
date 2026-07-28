@@ -139,10 +139,27 @@ const ZoomMeeting = () => {
       if (!didInitRef.current) {
         meetingSDKElement.current.style.display = 'block';
 
+        // Cap gallery tiles on narrower viewports (tablet/mobile) so each
+        // tile stays a legible size instead of shrinking as more
+        // participants join -- the SDK's own documented knob for this
+        // (maximumVideosInGalleryView, up to 25), rather than a CSS fix.
+        let maximumVideosInGalleryView = 12;
+        if (window.innerWidth < 576) {
+          maximumVideosInGalleryView = 4;
+        } else if (window.innerWidth < 992) {
+          maximumVideosInGalleryView = 6;
+        }
+
         await clientRef.current.init({
           debug: true,
           zoomAppRoot: meetingSDKElement.current,
           language: 'en-US',
+          maximumVideosInGalleryView,
+          customize: {
+            video: {
+              isResizable: true,
+            },
+          },
         });
         // init() is a one-time SDK setup call -- guard it so the retry loop
         // below (which calls joinMeeting() again every 2s) only re-attempts
