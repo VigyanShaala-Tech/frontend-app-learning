@@ -153,6 +153,92 @@ const ZoomMeeting = () => {
     };
   }, []);
 
+  // Zoom tooltips mount on body with position:absolute, so page scroll can
+  // push them over the sticky site header. Clamp them below --zoom-popper-top.
+  useEffect(() => {
+    const SELECTOR = '.zoom-MuiPopper-root.zoom-MuiTooltip-popper, .zoom-MuiPopper-root[role="tooltip"]';
+    let rafId = 0;
+    let applying = false;
+
+    const clampTooltips = () => {
+      rafId = 0;
+      const floor = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--zoom-popper-top'),
+      ) || 0;
+
+      applying = true;
+      try {
+        document.querySelectorAll(SELECTOR).forEach((el) => {
+          el.style.marginTop = '0px';
+          const rect = el.getBoundingClientRect();
+
+          if (rect.bottom <= floor) {
+            el.style.visibility = 'hidden';
+            return;
+          }
+
+          el.style.visibility = '';
+          if (rect.top < floor) {
+            el.style.marginTop = `${floor - rect.top}px`;
+          }
+        });
+      } finally {
+        applying = false;
+      }
+    };
+
+    const schedule = () => {
+      if (applying || rafId) {
+        return;
+      }
+      rafId = window.requestAnimationFrame(clampTooltips);
+    };
+
+    const tooltipStyleObserver = new MutationObserver(() => {
+      if (!applying) {
+        schedule();
+      }
+    });
+    const watchTooltip = (node) => {
+      if (!(node instanceof Element) || !node.matches(SELECTOR)) {
+        return;
+      }
+      tooltipStyleObserver.observe(node, {
+        attributes: true,
+        attributeFilter: ['style'],
+      });
+      schedule();
+    };
+
+    document.querySelectorAll(SELECTOR).forEach(watchTooltip);
+
+    const bodyObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach(watchTooltip);
+      });
+      schedule();
+    });
+    bodyObserver.observe(document.body, { childList: true });
+
+    window.addEventListener('scroll', schedule, true);
+    window.addEventListener('resize', schedule);
+    schedule();
+
+    return () => {
+      window.removeEventListener('scroll', schedule, true);
+      window.removeEventListener('resize', schedule);
+      bodyObserver.disconnect();
+      tooltipStyleObserver.disconnect();
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      document.querySelectorAll(SELECTOR).forEach((el) => {
+        el.style.removeProperty('margin-top');
+        el.style.removeProperty('visibility');
+      });
+    };
+  }, []);
+
   // Poll every 2s while the host hasn't started the meeting yet (see the
   // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
   // leftover timer never fires after the user has navigated away.

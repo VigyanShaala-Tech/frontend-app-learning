@@ -16,6 +16,19 @@
   background: #1f1f1f;
 }
 
+// Waiting-for-host state (parent → child)
+.zoom-meeting-waiting {
+  color: #fff;
+
+  h4 {
+    color: #fff !important;
+  }
+
+  .text-muted {
+    color: rgba(255, 255, 255, 0.72) !important;
+  }
+}
+
 .zoom-header {
   padding: 1rem 1.5rem;
   background: #1f1f1f;
@@ -105,6 +118,7 @@
     flex-direction: column !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
+    box-shadow: none !important;
   }
 
   // Bottom meeting control bar — keep Zoom's horizontal row layout.
@@ -261,6 +275,30 @@
   }
 }
 
+// Zoom tooltips mount on <body> (absolute) and can paint over the site header
+// while scrolling. Stay under dialogs; JS clamps them below --zoom-popper-top.
+.zoom-MuiPopper-root.zoom-MuiTooltip-popper,
+.zoom-MuiPopper-root[role='tooltip'] {
+  z-index: 10030 !important;
+  max-width: min(320px, calc(100vw - 16px)) !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root.zoom-MuiTooltip-popper .zoom-MuiTooltip-tooltip,
+.zoom-MuiPopper-root[role='tooltip'] .zoom-MuiTooltip-tooltip {
+  max-width: min(320px, calc(100vw - 16px)) !important;
+  box-sizing: border-box !important;
+}
+
+// Keep the Open edX header above Zoom tooltips on scroll (mobile + desktop).
+body:has(.zoom-meeting-page) {
+  header.site-header-mobile,
+  header.site-header-desktop,
+  header {
+    z-index: 10045 !important;
+  }
+}
+
 // Floating chat toast — Zoom defaults to top: 2vh (under site header).
 // Keep it inside the meeting area, below the measured header.
 [role='dialog'][aria-label='Floating Chat Message'] {
@@ -280,6 +318,184 @@
   align-items: center !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+}
+
+// "Meeting Summary has been enabled" dialog only (has h1 — Chat/Settings do not).
+// Scoped so Chat / Participants / Settings are unchanged.
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1) {
+  position: fixed !important;
+  top: var(--zoom-popper-top) !important;
+  right: 12px !important;
+  left: auto !important;
+  bottom: auto !important;
+  inset: var(--zoom-popper-top) 12px auto auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  width: min(480px, calc(100vw - 24px)) !important;
+  max-width: min(480px, calc(100vw - 24px)) !important;
+  max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  z-index: 10055 !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1) > div,
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1) > div > .zoom-MuiPaper-root {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+// Parent content wrapper (Zoom's css-16zq7lu equivalent) — display flex fixes overflow.
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1)
+  > div
+  > .zoom-MuiPaper-root
+  > .zoom-MuiBox-root:has(> [aria-label='header']) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1)
+  > div
+  > .zoom-MuiPaper-root
+  > .zoom-MuiBox-root:has(> [aria-label='header'])
+  > .zoom-MuiPaper-root {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has(h1.zoom-MuiTypography-h1) h1.zoom-MuiTypography-h1 {
+  color: #fff !important;
+}
+
+// Zoom "Fail to join the meeting" modal — SDK sets min-width: 480px (overflows phones).
+#error-dialog-title {
+  color: #fff !important;
+}
+
+// Waiting Room Controls toast — keep on-screen; wrap on mobile.
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) {
+  position: fixed !important;
+  top: var(--zoom-popper-top) !important;
+  right: 12px !important;
+  left: auto !important;
+  bottom: auto !important;
+  inset: var(--zoom-popper-top) 12px auto auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: min(520px, calc(100vw - 24px)) !important;
+  max-height: none !important;
+  overflow: visible !important;
+  z-index: 10055 !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) > div,
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] > .zoom-MuiBox-root {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] p {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (max-width: 767px) {
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) {
+    left: 8px !important;
+    right: 8px !important;
+    inset: var(--zoom-popper-top) 8px auto 8px !important;
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] > .zoom-MuiBox-root {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] p {
+    width: 100% !important;
+    white-space: normal !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='Waiting Room Controls']) [aria-label='Waiting Room Controls'] button {
+    flex: 0 0 auto !important;
+  }
+}
+
+// Participants panel — Admit/Remove gap (mobile + desktop + tablet).
+.zoom-MuiPopper-root[role='dialog']:has([aria-label='participants list footer'])
+  .zoom-MuiBox-root:has(> .zoom-MuiButton-contained):has(> .zoom-MuiButton-outlined) {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+}
+
+@media (max-width: 767px) {
+  // Participants paper: 16px left/right only; keep existing top/bottom.
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='participants list footer'])
+    > div
+    > .react-draggable
+    > .zoom-MuiPaper-root,
+  .zoom-MuiPopper-root[role='dialog']:has([aria-label='participants list footer']) .zoom-MuiPaper-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .zoom-MuiDialog-container {
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .zoom-MuiDialog-paper[aria-labelledby='error-dialog-title'],
+  .zoom-MuiDialog-paper[aria-describedby='error-dialog-descption'] {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    min-width: 0 !important;
+    margin: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .zoom-MuiDialog-paper[aria-labelledby='error-dialog-title'] .zoom-MuiDialogActions-root {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+  }
 }
 
 // Host muted / other Zoom snackbar toasts — default top sits under site header.
@@ -423,6 +639,7 @@
   .zoom-MuiPopper-root[role='dialog'] .zoom-MuiPaper-root {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
   }
 
