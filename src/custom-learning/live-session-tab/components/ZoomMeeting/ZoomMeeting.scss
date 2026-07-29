@@ -1,22 +1,34 @@
-// The join page renders with no site Header/FooterSlot (see
-// CustomLiveSessionJoinChrome) specifically so this can own the full
-// viewport -- the Zoom Embedded Client positions its own floating panels
-// (chat, participants, share-screen bar, meeting-summary dialog) against the
-// viewport, not against this container's box, so any competing fixed chrome
-// above it causes exactly the collisions this file used to patch per-panel
-// with hardcoded vh/px offsets against Zoom's internal (hashed, SDK-version-
-// specific) classes. With no header to dodge, those offsets are gone; use
-// customize.* in ZoomMeeting.jsx's client.init() call if a panel genuinely
-// needs repositioning going forward -- that's the SDK's supported API for
-// this, not CSS overrides on its internal markup.
+// Two chrome modes, driven by CustomLiveSessionJoinChrome + the
+// zoom-meeting-page--mobile / --with-chrome modifier set in ZoomMeeting.jsx:
+//
+// --mobile: the in-app webview (?mobile=true). No site header/footer, so the
+//   meeting owns the entire viewport and the Zoom Embedded Client's floating
+//   panels (chat, participants, share-screen bar, meeting-summary dialog) --
+//   which position themselves against the viewport, not this container -- are
+//   never contested.
+//
+// --with-chrome: a normal desktop/tablet browser visit. Header + FooterSlot
+//   are rendered, so this participates in the app's own sticky-footer flex
+//   layout (#main-content { flex-grow: 1 }, see src/index.scss) instead of
+//   covering the whole screen, and the handful of Zoom panels that would
+//   otherwise sit under our fixed header get nudged down.
 .zoom-meeting-page {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  &--mobile {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  &--with-chrome {
+    flex: 1;
+    min-height: 70vh;
+    min-height: 70dvh;
+  }
 }
 
 .zoom-meeting-container {
@@ -31,8 +43,28 @@
   }
 }
 
+.zoom-meeting-page--with-chrome .zoom-meeting-container {
+  // Zoom IQ "Meeting Summary" banner (SDK injects hashed class e.g. css-mva75o)
+  [role='dialog'][aria-label='Meeting Summary with Zoom IQ on.'] {
+    position: fixed;
+    top: 12vh !important;
+  }
+
+  // Screen share control bar (SDK hashed class e.g. css-1lt6p2g uses top: 2vh)
+  [aria-label='Screen share control bar'] {
+    top: 12vh !important;
+  }
+}
+
+// Gallery + shared-screen ("suspension view") tab panel. Needs a real
+// minimum height, not a percentage -- it's several levels deep inside
+// SDK-managed markup that doesn't consistently give every ancestor an
+// explicit height, so `min-height: 100%` can resolve to ~0 and collapse the
+// panel (which is what made the shared screen look broken/tiny on mobile).
+// vh/dvh sidestep the ancestor chain entirely.
 div#suspension-view-tabpanel-gallery-limited\ multiple {
-  min-height: 100%;
+  min-height: 75vh;
+  min-height: 75dvh;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;

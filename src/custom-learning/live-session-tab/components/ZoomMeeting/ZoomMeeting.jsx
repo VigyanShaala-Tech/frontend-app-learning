@@ -6,6 +6,7 @@ import { Button, Spinner, Alert } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
+import useIsMobileView from '../../../mobile-view/useIsMobileView';
 import messages from '../../messages';
 import './ZoomMeeting.scss';
 
@@ -13,6 +14,7 @@ const ZoomMeeting = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { formatMessage } = useIntl();
+  const isMobile = useIsMobileView();
 
   const [courseId, setCourseId] = useState(null);
   const [sessionId, setSessionId] = useState(null);
@@ -277,7 +279,7 @@ const ZoomMeeting = () => {
 
   // Main UI
   return (
-    <div className="zoom-meeting-page">
+    <div className={`zoom-meeting-page ${isMobile ? 'zoom-meeting-page--mobile' : 'zoom-meeting-page--with-chrome'}`}>
       {/* <div className="zoom-header">
         <h2>
           {meetingData?.meeting?.topic ||
