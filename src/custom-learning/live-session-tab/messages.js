@@ -229,6 +229,10 @@ const messages = defineMessages({
     id: 'zoomMeeting.error.httpsRequired',
     defaultMessage: 'Camera & microphone access requires HTTPS or localhost.',
   },
+  'zoomMeeting.error.insecureLocalHost': {
+    id: 'zoomMeeting.error.insecureLocalHost',
+    defaultMessage: 'Zoom cannot start on this local HTTP domain because the browser blocks media APIs. Use http://localhost:2000 with the same path, or in Chrome open chrome://flags/#unsafely-treat-insecure-origin-as-secure, add http://apps.local.openedx.io:2000, set Enabled, relaunch Chrome, and try again.',
+  },
   'zoomMeeting.error.noAccess': {
     id: 'zoomMeeting.error.noAccess',
     defaultMessage: 'You are not allowed to join this meeting.',

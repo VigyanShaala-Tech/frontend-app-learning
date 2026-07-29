@@ -9,6 +9,68 @@ import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
 import messages from '../../messages';
 import './ZoomMeeting.scss';
 
+const isLocalDevHostName = (hostname) => {
+  const host = (hostname || '').toLowerCase();
+  return (
+    process.env.NODE_ENV === 'development'
+    || host === 'localhost'
+    || host === '127.0.0.1'
+    || host === '[::1]'
+    || host === '::1'
+    || host.endsWith('.localhost')
+    || host.endsWith('.local')
+    || host.includes('.local.')
+    || host.endsWith('.local.openedx.io')
+    || host === 'local.openedx.io'
+  );
+};
+
+const isBrowserTrustedLocalHostName = (hostname) => {
+  const host = (hostname || '').toLowerCase();
+  return (
+    host === 'localhost'
+    || host === '127.0.0.1'
+    || host === '[::1]'
+    || host === '::1'
+    || host.endsWith('.localhost')
+  );
+};
+
+// Zoom patchJsMedia does `'getDisplayMedia' in navigator.mediaDevices`.
+// On insecure HTTP custom local hosts, mediaDevices is undefined and crashes.
+const ensureMediaDevicesShim = () => {
+  if (navigator.mediaDevices) {
+    return;
+  }
+
+  const rejectSecure = () => Promise.reject(
+    new DOMException('Media devices require a secure context', 'NotAllowedError'),
+  );
+  const mediaDevicesShim = {
+    getUserMedia: rejectSecure,
+    getDisplayMedia: rejectSecure,
+    enumerateDevices: () => Promise.resolve([]),
+    addEventListener() {},
+    removeEventListener() {},
+    dispatchEvent() { return false; },
+  };
+
+  try {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      writable: true,
+      value: mediaDevicesShim,
+    });
+  } catch (shimErr) {
+    try {
+      // eslint-disable-next-line no-param-reassign
+      navigator.mediaDevices = mediaDevicesShim;
+    } catch (assignErr) {
+      console.warn('Unable to shim navigator.mediaDevices:', assignErr);
+    }
+  }
+};
+
 const ZoomMeeting = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -105,19 +167,52 @@ const ZoomMeeting = () => {
   const joinMeeting = useCallback(async () => {
     if (!meetingData || !meetingSDKElement.current || !clientRef.current) return;
 
-    const isLocalhost = window.location.hostname === 'localhost';
-    const isSecure = window.location.protocol === 'https:';
+    const hostname = window.location.hostname.toLowerCase();
+    const isLocalDevHost = isLocalDevHostName(hostname);
+    const isTrustedLocalHost = isBrowserTrustedLocalHostName(hostname);
+    const isSecureContext = window.isSecureContext === true
+      || window.location.protocol === 'https:'
+      || isTrustedLocalHost;
 
-    if (!isLocalhost && !isSecure) {
+    // Production: require HTTPS/secure context.
+    if (!isLocalDevHost && !isSecureContext) {
       setError(
         formatMessage(messages['zoomMeeting.error.httpsRequired'])
       );
       return;
     }
 
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-    } catch (e) {
+    // http://apps.local.openedx.io is NOT a browser secure context, so Zoom
+    // media APIs fail. Guide the developer to localhost or Chrome flag.
+    if (isLocalDevHost && !isSecureContext) {
+      setError(
+        formatMessage(messages['zoomMeeting.error.insecureLocalHost'])
+      );
+      return;
+    }
+
+    ensureMediaDevicesShim();
+
+    // Prefer camera+mic. On local, do not hard-block join if permission denied.
+    if (navigator?.mediaDevices?.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        stream.getTracks().forEach((track) => track.stop());
+      } catch (mediaErr) {
+        try {
+          const audioOnly = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          audioOnly.getTracks().forEach((track) => track.stop());
+        } catch (audioErr) {
+          if (!isLocalDevHost) {
+            setError(
+              formatMessage(messages['zoomMeeting.error.mediaPermission'])
+            );
+            return;
+          }
+          console.warn('Local Zoom join continuing without media permission:', audioErr);
+        }
+      }
+    } else if (!isLocalDevHost) {
       setError(
         formatMessage(messages['zoomMeeting.error.mediaPermission'])
       );
@@ -139,10 +234,15 @@ const ZoomMeeting = () => {
       if (!didInitRef.current) {
         meetingSDKElement.current.style.display = 'block';
 
+        const canPatchJsMedia = Boolean(navigator.mediaDevices) && isSecureContext;
+
         await clientRef.current.init({
-          debug: true,
+          debug: isLocalDevHost,
           zoomAppRoot: meetingSDKElement.current,
           language: 'en-US',
+          // Avoid Zoom crash: 'getDisplayMedia' in undefined
+          patchJsMedia: canPatchJsMedia,
+          leaveOnPageUnload: true,
         });
         // init() is a one-time SDK setup call -- guard it so the retry loop
         // below (which calls joinMeeting() again every 2s) only re-attempts
