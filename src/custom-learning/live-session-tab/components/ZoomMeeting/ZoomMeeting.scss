@@ -1,7 +1,19 @@
+// Header metrics are set from ZoomMeeting.jsx on :root:
+//   --zoom-header-height  (measured site header)
+//   --zoom-popper-top      (header height + small gap)
+:root {
+  --zoom-header-height: 0px;
+  --zoom-popper-top: 0px;
+}
+
 .zoom-meeting-page {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  display: block;
   width: 100%;
+  height: calc(100dvh - var(--zoom-header-height));
+  min-height: calc(100dvh - var(--zoom-header-height));
+  overflow: hidden;
+  background: #1f1f1f;
 }
 
 .zoom-header {
@@ -23,40 +35,591 @@
 
 .zoom-meeting-container {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box !important;
 
   & > div {
+    flex: 1 1 auto !important;
     height: 100% !important;
     width: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  // Force only outer Zoom wrappers to full size (parent -> child 100%).
+  // Avoid forcing deep internal nodes; that breaks toolbar/content layout.
+  [aria-label='Zoom app container'],
+  [aria-label='Zoom app container'] > .react-draggable,
+  [aria-label='Zoom app container'] > .react-draggable > .zoom-MuiBox-root,
+  [aria-label='Zoom app container'] .react-resizable,
+  [aria-label='Zoom app container'] .react-resizable > [aria-label='Zoom Web SDK Widget'] {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-height: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  [aria-label='Zoom app container'] > .react-draggable {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  [aria-label='Zoom app container'] > .react-draggable > .zoom-MuiBox-root,
+  [aria-label='Zoom app container'] .react-resizable {
+    min-height: 0 !important;
+  }
+
+  // Let Zoom manage its internal toolbar/tabpanel layout.
+  [aria-label='Zoom Web SDK Widget'] {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+  }
+
+  // Session content paper only (toolbar + gallery/share) — not the bottom control bar.
+  [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has([id^='suspension-view-tabpanel']),
+  [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(.zoommtg-drag-video) {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  // Bottom meeting control bar — keep Zoom's horizontal row layout.
+  [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Audio']),
+  [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Leave']),
+  [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[aria-label='Chat']) {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  // Remove resize affordance from the main widget.
+  .react-resizable-handle {
+    display: none !important;
+    pointer-events: none !important;
+  }
+
+  // Gallery / screen-share tabpanels fill the session paper.
+  [id^='suspension-view-tabpanel'] {
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  // Zoom injects width/height attrs (e.g. 250x615) on share+filmstrip wrappers.
+  [id^='suspension-view-tabpanel'] > div[width],
+  [id^='suspension-view-tabpanel'] > div[width][height],
+  [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+  }
+
+  // Screen-share pane grows; keep participant strip on the side (desktop/tablet).
+  [id^='suspension-view-tabpanel'] > div[width] > .zoom-MuiBox-root:first-child {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+  }
+
+  [id^='suspension-view-tabpanel'] .react-draggable:has(canvas[aria-label='Screen share']),
+  [id^='suspension-view-tabpanel'] canvas[aria-label='Screen share'] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-width: 0 !important;
+    object-fit: contain !important;
+    box-sizing: border-box !important;
+  }
+
+  [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
+  [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'] {
+    flex: 0 0 250px !important;
+    width: 250px !important;
+    max-width: 250px !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  // Mobile: stack share above participant strip so it fits the viewport.
+  @media (max-width: 767px) {
+    [id^='suspension-view-tabpanel'] > div[width],
+    [id^='suspension-view-tabpanel'] > div[width][height],
+    [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
+      flex-direction: column !important;
+    }
+
+    [id^='suspension-view-tabpanel'] > div[width] > .zoom-MuiBox-root:first-child {
+      flex: 1 1 auto !important;
+      width: 100% !important;
+      min-height: 0 !important;
+    }
+
+    [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
+    [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'] {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: 28% !important;
+    }
+  }
+
+  // "You are viewing X's screen" banner — Zoom uses translateY(-36px) which
+  // overlaps the site header / meeting chrome. Keep a clear gap on top.
+  .zoom-MuiBox-root:has(> .zoom-MuiBox-root > p[title]):has(button[aria-haspopup='menu']) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    transform: none !important;
+    z-index: 25 !important;
+    box-sizing: border-box !important;
+  }
+
+  .zoom-MuiBox-root:has(> .zoom-MuiBox-root > p[title]):has(button[aria-haspopup='menu']) > .zoom-MuiBox-root {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+    pointer-events: auto !important;
+    box-sizing: border-box !important;
   }
 
   // Zoom IQ "Meeting Summary" banner (SDK injects hashed class e.g. css-mva75o)
   [role='dialog'][aria-label='Meeting Summary with Zoom IQ on.'] {
-    position: fixed;
-    top: 12vh !important;
+    position: absolute !important;
+    top: 8px !important;
+    z-index: 30 !important;
   }
 
   // Screen share control bar (SDK hashed class e.g. css-1lt6p2g uses top: 2vh)
   [aria-label='Screen share control bar'] {
-    top: 12vh !important;
+    position: absolute !important;
+    top: 8px !important;
+    z-index: 30 !important;
+  }
+
+  // Zoom loading card ("Joining Meeting...") should stay centered.
+  .zoom-MuiPaper-root:has(> .zoom-MuiBox-root > .zoom-MuiBox-root > img[src^='data:image/']) {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    z-index: 35 !important;
   }
 }
-.zoom-MuiPopper-root.css-0[role='dialog'] {
-  display: flex !important;
-  position: absolute !important;
-  top: 110px !important;
-  transform: unset !important;
-  z-index: 9999 !important;
+
+// Floating chat toast — Zoom defaults to top: 2vh (under site header).
+// Keep it inside the meeting area, below the measured header.
+[role='dialog'][aria-label='Floating Chat Message'] {
+  position: fixed !important;
+  top: var(--zoom-popper-top) !important;
+  right: 8px !important;
+  left: auto !important;
+  bottom: auto !important;
+  inset: var(--zoom-popper-top) 8px auto auto !important;
+  z-index: 10040 !important;
+  max-width: min(360px, calc(100vw - 16px)) !important;
+  box-sizing: border-box !important;
 }
 
-.zoom-MuiPopper-root.css-0:not([role='dialog']) {
-  z-index: 10050 !important;
-}
-div#suspension-view-tabpanel-gallery-limited\ multiple {
-  min-height: 75vh !important;
+[role='dialog'][aria-label='Floating Chat Message'] > .zoom-MuiBox-root {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+// Host muted / other Zoom snackbar toasts — default top sits under site header.
+// Zoom Component View uses Notistack (+ MUI Snackbar fallbacks).
+.notistack-SnackbarContainer {
+  top: var(--zoom-popper-top) !important;
+  z-index: 10040 !important;
+}
+
+.notistack-SnackbarContainer[style*='top'] {
+  top: var(--zoom-popper-top) !important;
+}
+
+.notistack-Snackbar,
+.notistack-snackbar {
+  max-width: min(420px, calc(100vw - 16px)) !important;
+  box-sizing: border-box !important;
+}
+
+.zoom-MuiSnackbar-root {
+  top: var(--zoom-popper-top) !important;
+  z-index: 10040 !important;
+}
+
+.zoom-MuiSnackbar-anchorOriginTopCenter,
+.zoom-MuiSnackbar-anchorOriginTopLeft,
+.zoom-MuiSnackbar-anchorOriginTopRight {
+  top: var(--zoom-popper-top) !important;
+}
+
+.zoom-MuiSnackbar-anchorOriginTopCenter {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+.zoom-MuiSnackbar-anchorOriginTopRight {
+  right: 8px !important;
+  left: auto !important;
+}
+
+.zoom-MuiSnackbar-anchorOriginTopLeft {
+  left: 8px !important;
+  right: auto !important;
+}
+
+// Nested toast content (parent → child)
+.zoom-MuiSnackbar-root > .zoom-MuiPaper-root,
+.zoom-MuiSnackbar-root .zoom-MuiAlert-root,
+.notistack-MuiContent {
+  max-width: min(420px, calc(100vw - 16px)) !important;
+  box-sizing: border-box !important;
+}
+
+// Zoom poppers mount outside .zoom-meeting-container in current SDK DOM.
+// Keep dialog poppers visible and inside the meeting viewport bounds.
+.zoom-MuiPopper-root[role='dialog'] {
+  z-index: 10050 !important;
+  max-width: min(420px, calc(100vw - 16px)) !important;
+  max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+  overflow: auto !important;
+}
+
+// Settings → Audio/Video device selects (speaker / mic / camera)
+.zoom-MuiPopper-root[role='dialog'][aria-label='Settings'] .zoom-MuiFormControl-root:has([role='combobox']) {
+  width: 210px !important;
+  max-width: 210px !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+// Settings → Output / Input level bars
+.zoom-MuiPopper-root[role='dialog'][aria-label='Settings'] .zoom-MuiLinearProgress-root {
+  width: 210px !important;
+  max-width: 210px !important;
+  box-sizing: border-box !important;
+}
+
+// Settings language/device dropdown lists should stay inside the dialog.
+.zoom-MuiPopper-root[role='dialog'][aria-label='Settings'] [role='menu'] {
+  max-height: 210px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+// Header+footer mode: pin poppers below measured header (desktop/tablet).
+@media (min-width: 768px) {
+  body:has(header) .zoom-MuiPopper-root[role='dialog'] {
+    top: var(--zoom-popper-top) !important;
+    right: 12px !important;
+    left: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+  }
+}
+
+// Mobile: force Chat/Participants/Settings to full viewport width with padding.
+// Also kill Zoom's translate3d(-100vw, ...) which causes horizontal scroll.
+@media (max-width: 767px) {
+  .zoom-MuiPopper-root[role='dialog'],
+  body:has(header) .zoom-MuiPopper-root[role='dialog'],
+  body:not(:has(header)) .zoom-MuiPopper-root[role='dialog'] {
+    position: fixed !important;
+    right: 8px !important;
+    left: 8px !important;
+    bottom: auto !important;
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body:has(header) .zoom-MuiPopper-root[role='dialog'] {
+    inset: var(--zoom-popper-top) 8px auto 8px !important;
+    top: var(--zoom-popper-top) !important;
+    max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+  }
+
+  body:not(:has(header)) .zoom-MuiPopper-root[role='dialog'] {
+    inset: 8px 8px auto 8px !important;
+    top: 8px !important;
+    max-height: calc(100dvh - 16px) !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog'] > div,
+  .zoom-MuiPopper-root[role='dialog'] .react-draggable {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog'] .zoom-MuiPaper-root {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  // Zoom injects fixed inner widths (e.g. 350px) that overflow 375px screens.
+  .zoom-MuiPopper-root[role='dialog'] .ReactVirtualized__Grid,
+  .zoom-MuiPopper-root[role='dialog'] .ReactVirtualized__List {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  // Create Breakout Rooms form — parent → child flex + gap
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 8px 12px 16px !important;
+  }
+
+  // "Create [N] breakout rooms" row
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] > .zoom-MuiBox-root {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  // Number input + stepper cluster
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] > .zoom-MuiBox-root > .zoom-MuiBox-root {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+
+  // Increment / decrement stack
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] > .zoom-MuiBox-root > .zoom-MuiBox-root > .zoom-MuiBox-root {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] > fieldset {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] [role='radiogroup'] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] [role='radiogroup'] .zoom-MuiFormControlLabel-root {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  // Footer: "N participants per room" + Create
+  .zoom-MuiPopper-root[role='dialog'] form[aria-label='Create Breakout Rooms'] > section {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+}
+
+// Nested Zoom menus (e.g. language list) — keep above app chrome.
+.zoom-MuiPopper-root:not([role='dialog']):has([role='menu']) {
+  z-index: 10060 !important;
+}
+
+// Side-placed language / submenu poppers land at top:0 (or top-right) and cover
+// the site header on both mobile and desktop. Pin below measured header.
+.zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+.zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+.zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+  position: fixed !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 10070 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+body:has(header) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+body:has(header) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+body:has(header) .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+  top: var(--zoom-popper-top) !important;
+  max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+}
+
+body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+  top: 12px !important;
+  max-height: calc(100dvh - 100px) !important;
+}
+
+.zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']) .zoom-MuiPaper-root,
+.zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']) .zoom-MuiPaper-root,
+.zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) .zoom-MuiPaper-root,
+.zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) [role='menu'] {
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+// Desktop: keep language list as a right-side panel under the header
+@media (min-width: 768px) {
+  .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+  .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+  .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+    right: 16px !important;
+    left: auto !important;
+    width: min(320px, calc(100vw - 32px)) !important;
+    max-width: min(320px, calc(100vw - 32px)) !important;
+    inset: var(--zoom-popper-top) 16px auto auto !important;
+  }
+
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+    inset: 12px 16px auto auto !important;
+    top: 12px !important;
+  }
+}
+
+// Mobile: full-width language / side menus below header
+@media (max-width: 767px) {
+  .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+  .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+  .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  body:has(header) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+  body:has(header) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+  body:has(header) .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+    inset: var(--zoom-popper-top) 12px auto 12px !important;
+    top: var(--zoom-popper-top) !important;
+    max-height: calc(100dvh - var(--zoom-popper-top) - 16px) !important;
+  }
+
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='left']:has([role='menu']),
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog'])[data-popper-placement^='right']:has([role='menu']),
+  body:not(:has(header)) .zoom-MuiPopper-root:not([role='dialog']):has(#menu-list-icon-arrow-right) {
+    inset: 8px 12px auto 12px !important;
+    top: 8px !important;
+    max-height: calc(100dvh - 96px) !important;
+  }
+}
+
+// No-header/no-footer mode (desktop/tablet only — mobile handled above).
+@media (min-width: 768px) {
+  body:not(:has(header)) .zoom-MuiPopper-root[role='dialog'] {
+    top: 14px !important;
+    right: 12px !important;
+    left: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+}
+
+// Screen-share / limited gallery tabpanel — fill meeting area (desktop + tablet).
+div#suspension-view-tabpanel-gallery-limited\ multiple {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  box-sizing: border-box !important;
 }

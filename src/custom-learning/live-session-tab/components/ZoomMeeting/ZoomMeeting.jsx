@@ -91,6 +91,68 @@ const ZoomMeeting = () => {
   const retryTimeoutRef = useRef(null);
   const connectionChangeHandlerRef = useRef(null);
 
+  // Measure the visible Open edX site header and expose it as CSS vars.
+  // Poppers mount outside .zoom-meeting-page, so vars live on :root.
+  useEffect(() => {
+    const POPPER_GAP_PX = 8;
+
+    const getVisibleSiteHeader = () => {
+      const candidates = [
+        document.querySelector('header.site-header-mobile'),
+        document.querySelector('header.site-header-desktop'),
+        ...Array.from(document.querySelectorAll('header')),
+      ].filter(Boolean);
+
+      return candidates.find((el) => {
+        const style = window.getComputedStyle(el);
+        return (
+          style.display !== 'none'
+          && style.visibility !== 'hidden'
+          && el.getBoundingClientRect().height > 0
+        );
+      }) || null;
+    };
+
+    const applyHeaderMetrics = () => {
+      const header = getVisibleSiteHeader();
+      const height = header
+        ? Math.round(header.getBoundingClientRect().height)
+        : 0;
+      const root = document.documentElement;
+      root.style.setProperty('--zoom-header-height', `${height}px`);
+      root.style.setProperty('--zoom-popper-top', `${height + POPPER_GAP_PX}px`);
+    };
+
+    applyHeaderMetrics();
+
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(applyHeaderMetrics)
+      : null;
+
+    // Observe both desktop and mobile headers; only the visible one has height.
+    [
+      document.querySelector('header.site-header-mobile'),
+      document.querySelector('header.site-header-desktop'),
+      document.querySelector('header'),
+    ].filter(Boolean).forEach((el) => {
+      if (resizeObserver) {
+        resizeObserver.observe(el);
+      }
+    });
+
+    window.addEventListener('resize', applyHeaderMetrics);
+
+    return () => {
+      window.removeEventListener('resize', applyHeaderMetrics);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      const root = document.documentElement;
+      root.style.removeProperty('--zoom-header-height');
+      root.style.removeProperty('--zoom-popper-top');
+    };
+  }, []);
+
   // Poll every 2s while the host hasn't started the meeting yet (see the
   // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
   // leftover timer never fires after the user has navigated away.
