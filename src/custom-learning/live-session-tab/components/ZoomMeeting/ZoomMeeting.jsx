@@ -239,6 +239,166 @@ const ZoomMeeting = () => {
     };
   }, []);
 
+  // Zoom keeps a blank Screen share canvas mounted when idle. Only treat share
+  // as active when incoming content is painted (viewer path), not when the host
+  // is locally sharing with an empty preview canvas.
+  useEffect(() => {
+    const root = meetingSDKElement.current;
+    if (!root) {
+      return undefined;
+    }
+
+    let rafId = 0;
+
+    const getShareCanvas = () => root.querySelector('canvas[aria-label="Screen share"]');
+
+    const getShareShell = () => {
+      const canvas = getShareCanvas();
+      if (!canvas) {
+        return null;
+      }
+      const drag = canvas.closest('.react-draggable');
+      return drag ? drag.parentElement : canvas.parentElement;
+    };
+
+    const getShareSplitter = (shareShell) => {
+      if (!shareShell) {
+        return null;
+      }
+      const next = shareShell.nextElementSibling;
+      if (!(next instanceof HTMLElement)) {
+        return null;
+      }
+      // Zoom's column-resize gutter between share pane and filmstrip (~5px).
+      if (window.getComputedStyle(next).cursor === 'col-resize') {
+        return next;
+      }
+      if (
+        next.children.length <= 1
+        && !next.querySelector('video-player-container')
+        && next.getBoundingClientRect().width <= 8
+      ) {
+        return next;
+      }
+      return null;
+    };
+
+    // Only show the share pane when Zoom is actually painting incoming share
+    // content (viewer path). Local sharers get an empty canvas — do NOT treat
+    // Stop Share / control bar as "active share" or admin gets a blank half-screen.
+    const hasIncomingShareContent = () => {
+      const canvas = getShareCanvas();
+      if (canvas) {
+        const w = Number(canvas.getAttribute('width') || 0);
+        const h = Number(canvas.getAttribute('height') || 0);
+        if (w > 16 && h > 16) {
+          return true;
+        }
+      }
+
+      const text = (root.textContent || '').replace(/\s+/g, ' ').toLowerCase();
+      if (/you are viewing[\s\S]{0,120}?screen/.test(text)) {
+        return true;
+      }
+
+      return false;
+    };
+
+    const clearInline = (el) => {
+      if (!el) {
+        return;
+      }
+      el.style.removeProperty('display');
+      el.style.removeProperty('flex');
+      el.style.removeProperty('width');
+      el.style.removeProperty('height');
+      el.style.removeProperty('max-height');
+      el.style.removeProperty('min-height');
+      el.style.removeProperty('overflow');
+      el.style.removeProperty('visibility');
+      el.style.removeProperty('pointer-events');
+    };
+
+    const syncShareClass = () => {
+      rafId = 0;
+      const active = hasIncomingShareContent();
+      root.classList.toggle('zoom-screen-share-active', active);
+
+      const shareShell = getShareShell();
+      if (!shareShell) {
+        return;
+      }
+      const splitter = getShareSplitter(shareShell);
+
+      if (active) {
+        shareShell.setAttribute('data-zoom-share', 'on');
+        clearInline(shareShell);
+        // Ensure the shell is shown even if Zoom left display:none on a hashed class.
+        shareShell.style.setProperty('display', 'flex', 'important');
+        shareShell.style.setProperty('visibility', 'visible', 'important');
+        shareShell.style.setProperty('pointer-events', 'auto', 'important');
+        if (splitter) {
+          clearInline(splitter);
+          // Column gutter is useless in stacked mobile layout.
+          if (window.matchMedia('(max-width: 767px)').matches) {
+            splitter.style.setProperty('display', 'none', 'important');
+          }
+        }
+      } else {
+        shareShell.removeAttribute('data-zoom-share');
+        shareShell.style.setProperty('display', 'none', 'important');
+        shareShell.style.setProperty('flex', '0 0 0px', 'important');
+        shareShell.style.setProperty('width', '0', 'important');
+        shareShell.style.setProperty('height', '0', 'important');
+        shareShell.style.setProperty('max-height', '0', 'important');
+        shareShell.style.setProperty('min-height', '0', 'important');
+        shareShell.style.setProperty('overflow', 'hidden', 'important');
+        shareShell.style.setProperty('visibility', 'hidden', 'important');
+        shareShell.style.setProperty('pointer-events', 'none', 'important');
+        if (splitter) {
+          splitter.style.setProperty('display', 'none', 'important');
+        }
+      }
+    };
+
+    const schedule = () => {
+      if (rafId) {
+        return;
+      }
+      rafId = window.requestAnimationFrame(syncShareClass);
+    };
+
+    const observer = new MutationObserver(schedule);
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['style', 'class', 'title', 'aria-label', 'hidden', 'width', 'height'],
+    });
+
+    schedule();
+    const intervalId = window.setInterval(schedule, 400);
+
+    return () => {
+      observer.disconnect();
+      window.clearInterval(intervalId);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      root.classList.remove('zoom-screen-share-active');
+      const shareShell = getShareShell();
+      if (shareShell) {
+        shareShell.removeAttribute('data-zoom-share');
+        clearInline(shareShell);
+        const splitter = getShareSplitter(shareShell);
+        if (splitter) {
+          clearInline(splitter);
+        }
+      }
+    };
+  }, [meetingData, meetingNotStarted]);
+
   // Poll every 2s while the host hasn't started the meeting yet (see the
   // errorCode 3008 branch in joinMeeting below). Clear on unmount so a
   // leftover timer never fires after the user has navigated away.

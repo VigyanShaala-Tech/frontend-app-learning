@@ -139,6 +139,46 @@
     box-sizing: border-box !important;
   }
 
+  // Mobile: center toolbar when it fits; left-align + horizontal scroll when it overflows.
+  @media (max-width: 767px) {
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Audio']),
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Leave']),
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[aria-label='Chat']) {
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-content: flex-start !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
+
+    // Pseudo spacers: equal auto margins center content; collapse to 0 when overflowing.
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Audio'])::before,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Audio'])::after,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Leave'])::before,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Leave'])::after,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[aria-label='Chat'])::before,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[aria-label='Chat'])::after {
+      content: '' !important;
+      display: block !important;
+      margin-inline: auto !important;
+      flex: 0 0 0 !important;
+      width: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+      pointer-events: none !important;
+    }
+
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Audio']) > *,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[title='Leave']) > *,
+    [aria-label='Zoom Web SDK Widget'] > .zoom-MuiPaper-root:has(button[aria-label='Chat']) > * {
+      flex: 0 0 auto !important;
+    }
+  }
+
   // Remove resize affordance from the main widget.
   .react-resizable-handle {
     display: none !important;
@@ -155,75 +195,214 @@
     box-sizing: border-box !important;
   }
 
-  // Zoom injects width/height attrs (e.g. 250x615) on share+filmstrip wrappers.
-  [id^='suspension-view-tabpanel'] > div[width],
-  [id^='suspension-view-tabpanel'] > div[width][height],
-  [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
+  // ------------------------------------------------------------------
+  // Screen-share shell: always hidden unless JS stamps data-zoom-share="on".
+  // (Zoom leaves a blank canvas mounted; do not key layout off canvas alone.)
+  // ------------------------------------------------------------------
+  [id^='suspension-view-tabpanel'] .zoom-MuiBox-root:has(> .react-draggable > canvas[aria-label='Screen share']):not([data-zoom-share='on']),
+  [id^='suspension-view-tabpanel'] .zoom-MuiBox-root:has(> canvas[aria-label='Screen share']):not([data-zoom-share='on']) {
+    display: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    max-width: 0 !important;
+    max-height: 0 !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
-    justify-content: flex-start !important;
-    box-sizing: border-box !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
   }
 
-  // Screen-share pane grows; keep participant strip on the side (desktop/tablet).
-  [id^='suspension-view-tabpanel'] > div[width] > .zoom-MuiBox-root:first-child {
-    flex: 1 1 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
-    height: 100% !important;
-    max-width: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    box-sizing: border-box !important;
-  }
-
-  [id^='suspension-view-tabpanel'] .react-draggable:has(canvas[aria-label='Screen share']),
-  [id^='suspension-view-tabpanel'] canvas[aria-label='Screen share'] {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    max-height: 100% !important;
-    min-width: 0 !important;
-    object-fit: contain !important;
-    box-sizing: border-box !important;
-  }
-
-  [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
-  [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'] {
-    flex: 0 0 250px !important;
-    width: 250px !important;
-    max-width: 250px !important;
-    height: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  // Mobile: stack share above participant strip so it fits the viewport.
-  @media (max-width: 767px) {
+  // No active share: participant tiles fill the meeting area.
+  &:not(.zoom-screen-share-active),
+  &:not(:has([data-zoom-share='on'])) {
     [id^='suspension-view-tabpanel'] > div[width],
     [id^='suspension-view-tabpanel'] > div[width][height],
     [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
       flex-direction: column !important;
+      align-items: center !important;
+      justify-content: safe center !important;
+      box-sizing: border-box !important;
     }
 
-    [id^='suspension-view-tabpanel'] > div[width] > .zoom-MuiBox-root:first-child {
+    [id^='suspension-view-tabpanel'] > div[width] > div[style*='position: relative'],
+    [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
+    [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'] {
       flex: 1 1 auto !important;
       width: 100% !important;
+      max-width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
       min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: safe center !important;
+      gap: 8px !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box !important;
+      padding: 8px !important;
+    }
+
+    [id^='suspension-view-tabpanel'] video-player-container {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: min(360px, 100%) !important;
+      height: auto !important;
+      min-height: 140px !important;
+      flex: 0 0 auto !important;
+      display: block !important;
+      margin-inline: auto !important;
+      max-width: 100% !important;
+    }
+
+    [id^='suspension-view-tabpanel'] video-player-container > div,
+    [id^='suspension-view-tabpanel'] video-player-container .zoom-MuiListItem-root {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 140px !important;
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Active share (data-zoom-share="on"): share pane + filmstrip.
+  // ------------------------------------------------------------------
+  &.zoom-screen-share-active:has([data-zoom-share='on']),
+  &:has([data-zoom-share='on']) {
+    [id^='suspension-view-tabpanel'] > div[width],
+    [id^='suspension-view-tabpanel'] > div[width][height],
+    [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      box-sizing: border-box !important;
+    }
+
+    [id^='suspension-view-tabpanel'] .zoom-MuiBox-root[data-zoom-share='on'] {
+      display: flex !important;
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      overflow: hidden !important;
+      flex-direction: column !important;
+      box-sizing: border-box !important;
+    }
+
+    [id^='suspension-view-tabpanel'] .zoom-MuiBox-root[data-zoom-share='on'] > .react-draggable {
+      flex: 1 1 auto !important;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    [id^='suspension-view-tabpanel'] .zoom-MuiBox-root[data-zoom-share='on'] .react-draggable,
+    [id^='suspension-view-tabpanel'] .zoom-MuiBox-root[data-zoom-share='on'] canvas[aria-label='Screen share'] {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      min-width: 0 !important;
+      object-fit: contain !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      visibility: visible !important;
     }
 
     [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
     [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'] {
-      flex: 0 0 auto !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      height: auto !important;
-      max-height: 28% !important;
+      flex: 0 0 250px !important;
+      width: 250px !important;
+      max-width: 250px !important;
+      height: 100% !important;
+      box-sizing: border-box !important;
+    }
+  }
+
+  // Mobile active share: top half share, bottom half participants (scroll-y).
+  @media (max-width: 767px) {
+    &.zoom-screen-share-active:has([data-zoom-share='on']),
+    &:has([data-zoom-share='on']) {
+      [id^='suspension-view-tabpanel'] > div[width],
+      [id^='suspension-view-tabpanel'] > div[width][height],
+      [id^='suspension-view-tabpanel'] > div[style*='width:'][style*='height:'] {
+        flex-direction: column !important;
+      }
+
+      [id^='suspension-view-tabpanel'] .zoom-MuiBox-root[data-zoom-share='on'] {
+        flex: 1 1 50% !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        max-height: 50% !important;
+      }
+
+      [id^='suspension-view-tabpanel'] > div[width] > div[style*='width: 250px'],
+      [id^='suspension-view-tabpanel'] > div[width] > div[style*='width:250px'],
+      [id^='suspension-view-tabpanel'] > div[width] > div[style*='position: relative'] {
+        flex: 1 1 50% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 50% !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: safe center !important;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        box-sizing: border-box !important;
+        padding: 4px 0 !important;
+      }
+
+      [id^='suspension-view-tabpanel'] video-player-container {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: min(236px, 92%) !important;
+        height: 120px !important;
+        flex: 0 0 auto !important;
+        display: block !important;
+        margin-inline: auto !important;
+      }
+
+      [id^='suspension-view-tabpanel'] video-player-container > div,
+      [id^='suspension-view-tabpanel'] video-player-container .zoom-MuiListItem-root {
+        width: 100% !important;
+        height: 100% !important;
+      }
     }
   }
 
