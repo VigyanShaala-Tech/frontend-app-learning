@@ -104,6 +104,10 @@ const ZoomMeeting = () => {
   // Join meeting
   const joinMeeting = useCallback(async () => {
     if (!meetingData || !meetingSDKElement.current || !clientRef.current) return;
+    // Hosts/alternative hosts are redirected to native Zoom instead (see the
+    // isHost render branch below) -- this is a defensive no-op guard in case
+    // this callback is ever reached for one anyway.
+    if (meetingData.user?.isHost) return;
 
     const isLocalhost = window.location.hostname === 'localhost';
     const isSecure = window.location.protocol === 'https:';
@@ -212,14 +216,17 @@ const ZoomMeeting = () => {
     }
   }, [meetingData, courseId, isReady, formatMessage]);
 
-  // Trigger join after fetching data
+  // Trigger join after fetching data -- skipped for hosts/alternative hosts,
+  // who are redirected to native Zoom instead (see the isHost render branch
+  // below) rather than joining through the embedded SDK.
   useEffect(() => {
-    if (meetingData && meetingSDKElement.current) {
+    if (meetingData && !meetingData.user?.isHost && meetingSDKElement.current) {
       const timer = setTimeout(() => {
         joinMeeting();
       }, 400);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [meetingData, joinMeeting]);
 
   // Leave meeting
@@ -258,7 +265,62 @@ const ZoomMeeting = () => {
     );
   }
 
-  // Main UI
+  // Host / alternative host UI -- the embedded Web SDK below only ever grants a
+  // role-labeled participant view, never real host controls (mute others, admit
+  // from waiting room, breakout rooms), so hosts start the meeting in native Zoom
+  // instead. startUrl carries its own short-lived host credential (minted fresh by
+  // JoinMeetingViewnew on every load), so opening it does not prompt for a Zoom
+  // login. Opened via a direct button click (not auto-opened on mount) since
+  // window.open() calls not triggered by a user gesture are routinely blocked by
+  // popup blockers. Zoom's own start_url landing page offers both "open the
+  // desktop app" and "join from browser" -- no custom picker needed here.
+  if (meetingData?.user?.isHost) {
+    const handleOpenZoom = () => {
+      window.open(meetingData.startUrl, '_blank', 'noopener,noreferrer');
+    };
+
+    return (
+      <div className="zoom-meeting-page">
+        <div className="zoom-meeting-waiting d-flex flex-column justify-content-center align-items-center text-center min-vh-100 px-3">
+          {meetingData.startUrl ? (
+            <>
+              <h4 className="mb-2">{formatMessage(messages['zoomMeeting.host.title'])}</h4>
+              <p className="text-muted mb-4">{formatMessage(messages['zoomMeeting.host.message'])}</p>
+              <Button variant="primary" className="text-white" onClick={handleOpenZoom}>
+                {formatMessage(messages['zoomMeeting.host.openButton'])}
+              </Button>
+              <Button
+                variant="link"
+                className="mt-3"
+                onClick={() => navigate(`/course/${courseId}/live-session`)}
+              >
+                {formatMessage(messages['zoomMeeting.button.goBack'])}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Alert variant="danger" className="mb-4">
+                {formatMessage(messages['zoomMeeting.host.startUrlUnavailable'])}
+              </Alert>
+              <div>
+                <Button variant="primary" className="text-white mr-2" onClick={fetchJoinData}>
+                  {formatMessage(messages['zoomMeeting.button.retry'])}
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => navigate(`/course/${courseId}/live-session`)}
+                >
+                  {formatMessage(messages['zoomMeeting.button.goBack'])}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Main UI (attendee -- embedded SDK)
   return (
     <div className="zoom-meeting-page">
       {/* <div className="zoom-header">
