@@ -33,8 +33,8 @@ export async function getCourseProgressData(courseId) {
   return data?.result ?? null;
 }
 
-export async function getUniversityOptions() {
-  const url = `${getLmsBaseUrl()}/api/v1/options/universities/`;
+export async function getUniversityOptions(courseId) {
+  const url = `${getLmsBaseUrl()}/api/v1/course/${encodeCourseId(courseId)}/universities/`;
   const data = await getJson(url);
   return data?.results ?? [];
 }
