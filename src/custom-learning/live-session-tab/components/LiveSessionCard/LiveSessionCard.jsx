@@ -40,6 +40,10 @@ const LiveSessionCard = ({
   const { formatMessage } = useIntl();
   const isOngoing = session.isOngoing && tabType === 'today';
   const canEditDelete = session.is_owner === true;
+  // Creator or alternative host (see zoom_integration._is_meeting_host) -- distinct
+  // from is_owner (creator only), which gates Edit/Delete above. Attendance is
+  // host-only; attendees on the invite list must not see it.
+  const isHost = session.is_host === true;
   const isDeletingThisSession = isDeleting && deletingSessionId === session.id;
 
   // "Join" -> "Meeting Ended" once the scheduled window (startTime + duration)
@@ -131,10 +135,12 @@ const LiveSessionCard = ({
                   <FontAwesomeIcon icon={faPlay} className="mr-2" />
                   {formatMessage(messages['liveSession.button.viewRecording'])}
                 </Button>
-                <Button variant="outline-primary" onClick={() => handleViewAttendance(session)}>
-                  <FontAwesomeIcon icon={faUsers} className="mr-2" />
-                  {formatMessage(messages['liveSession.button.viewAttendance'])}
-                </Button>
+                {isHost && (
+                  <Button variant="outline-primary" onClick={() => handleViewAttendance(session)}>
+                    <FontAwesomeIcon icon={faUsers} className="mr-2" />
+                    {formatMessage(messages['liveSession.button.viewAttendance'])}
+                  </Button>
+                )}
                 {/* onEdit is only passed for the 'today'/'upcoming' tabs (see LiveSession.jsx),
                     so a genuine past-tab session never shows Edit here -- only an ended today session does. */}
                 {canEditDelete && onEdit && (

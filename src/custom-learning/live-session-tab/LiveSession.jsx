@@ -256,6 +256,19 @@ const LiveSession = () => {
   };
 
   const handleViewRecording = (session) => {
+    // Attendees of a meeting scheduled from a course unit (block_id set) are sent
+    // to that unit instead -- once a recording is available, a Video block is
+    // auto-published there (see zoom_integration.tasks.publish_recording_video_block),
+    // so everyone watches the same canonical copy in-course rather than via the
+    // in-MFE player below. Hosts/creators keep viewing it here regardless, since
+    // they're the ones who'd use this page to confirm/manage the recording.
+    // Meetings scheduled directly (no unit_url) are unaffected -- unchanged for
+    // both roles, since there's no unit to redirect an attendee to.
+    if (!session.is_host && session.unit_url) {
+      window.location.href = session.unit_url;
+      return;
+    }
+
     setSelectedMeetingForRecording(session?.id ?? null);
     setRecordingMode(true);
   };
