@@ -249,7 +249,10 @@ const LiveSession = () => {
 
   const handleJoin = (session) => {
     const basePath = CUSTOM_TAB_PATHS.liveSession.replace(':courseId', courseId);
-    navigate(`${basePath}/join/${session.id}`);
+    // join_url (from this list API) is only used for attendees, who get
+    // redirected straight to it -- see ZoomMeeting.jsx. Hosts ignore it
+    // entirely and keep using the existing startUrl-based native Zoom flow.
+    navigate(`${basePath}/join/${session.id}`, { state: { joinUrl: session.join_url } });
   };
 
   const handleViewRecording = (session) => {

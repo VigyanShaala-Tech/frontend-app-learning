@@ -220,6 +220,24 @@ const messages = defineMessages({
     defaultMessage: 'Go Back',
   },
 
+  // Host / alternative host start-in-Zoom messages
+  'zoomMeeting.host.title': {
+    id: 'zoomMeeting.host.title',
+    defaultMessage: 'You are the host of this session',
+  },
+  'zoomMeeting.host.message': {
+    id: 'zoomMeeting.host.message',
+    defaultMessage: 'Start this session in Zoom to get full host controls, such as managing the waiting room, muting participants, and breakout rooms. You can open it in your browser or the Zoom app.',
+  },
+  'zoomMeeting.host.openButton': {
+    id: 'zoomMeeting.host.openButton',
+    defaultMessage: 'Open Zoom to Start Meeting',
+  },
+  'zoomMeeting.host.startUrlUnavailable': {
+    id: 'zoomMeeting.host.startUrlUnavailable',
+    defaultMessage: "We couldn't prepare your host start link. Please try again.",
+  },
+
   // Error Messages
   'zoomMeeting.error.mediaPermission': {
     id: 'zoomMeeting.error.mediaPermission',
