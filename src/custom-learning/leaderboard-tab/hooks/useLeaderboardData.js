@@ -36,12 +36,16 @@ const useLeaderboardData = ({ college = 'all', topN = 'all', page = 1 } = {}) =>
     let cancelled = false;
 
     const loadFilterOptions = async () => {
+      if (!courseId) {
+        return;
+      }
+
       setFiltersLoading(true);
       setFiltersError(null);
 
       try {
         const [universities, rankings] = await Promise.all([
-          getUniversityOptions(),
+          getUniversityOptions(courseId),
           getRankingOptions(),
         ]);
 
@@ -67,7 +71,7 @@ const useLeaderboardData = ({ college = 'all', topN = 'all', page = 1 } = {}) =>
     return () => {
       cancelled = true;
     };
-  }, [formatMessage]);
+  }, [courseId, formatMessage]);
 
   useEffect(() => {
     let cancelled = false;

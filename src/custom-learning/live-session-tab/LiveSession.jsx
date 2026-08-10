@@ -6,6 +6,7 @@ import {
   Button,
   Spinner,
   Alert,
+  Nav,
 } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -248,10 +249,26 @@ const LiveSession = () => {
 
   const handleJoin = (session) => {
     const basePath = CUSTOM_TAB_PATHS.liveSession.replace(':courseId', courseId);
-    navigate(`${basePath}/join/${session.id}`);
+    // join_url (from this list API) is only used for attendees, who get
+    // redirected straight to it -- see ZoomMeeting.jsx. Hosts ignore it
+    // entirely and keep using the existing startUrl-based native Zoom flow.
+    navigate(`${basePath}/join/${session.id}`, { state: { joinUrl: session.join_url } });
   };
 
   const handleViewRecording = (session) => {
+    // Attendees of a meeting scheduled from a course unit (block_id set) are sent
+    // to that unit instead -- once a recording is available, a Video block is
+    // auto-published there (see zoom_integration.tasks.publish_recording_video_block),
+    // so everyone watches the same canonical copy in-course rather than via the
+    // in-MFE player below. Hosts/creators keep viewing it here regardless, since
+    // they're the ones who'd use this page to confirm/manage the recording.
+    // Meetings scheduled directly (no unit_url) are unaffected -- unchanged for
+    // both roles, since there's no unit to redirect an attendee to.
+    if (!session.is_host && session.unit_url) {
+      window.location.href = session.unit_url;
+      return;
+    }
+
     setSelectedMeetingForRecording(session?.id ?? null);
     setRecordingMode(true);
   };
@@ -317,7 +334,7 @@ const LiveSession = () => {
 
   return (
     <div className="live-sessions-page py-5">
-      <div className="container">
+      <div>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0 liveSession-title">{reduxdata?.plural_label || formatMessage(messages['liveSession.title'])}</h1>
           {reduxdata.can_schedule_meeting && 
@@ -329,18 +346,20 @@ const LiveSession = () => {
         </div>
 
         <div className="mb-4">
-          <ul className="nav nav-tabs bg-light rounded">
+          <Nav variant="pills" className="nav-button-group live-session-tabs">
             {['today', 'upcoming', 'past'].map((tab) => (
-              <li key={tab} className="nav-item bg-light">
-                <button
-                  className={`rounded nav-link ${activeTab === tab ? 'active' : ''}`}
+              <Nav.Item key={tab}>
+                <Nav.Link
+                  as="button"
+                  type="button"
+                  active={activeTab === tab}
                   onClick={() => handleTabChange(tab)}
                 >
                   {formatMessage(messages[`liveSession.tab.${tab === 'past' ? 'previous' : tab}`])}
-                </button>
-              </li>
+                </Nav.Link>
+              </Nav.Item>
             ))}
-          </ul>
+          </Nav>
         </div>
 
         {loading ? (

@@ -436,6 +436,10 @@
   font-size: 1rem;
   line-height: 1.5rem;
 }
+
+.page-not-found-body a{
+  color: var(--pgn-color-primary-500);
+}
 @media (--pgn-size-breakpoint-max-width-xs) {
   .course-outline-tab .pgn__card {
     .pgn__card-header {

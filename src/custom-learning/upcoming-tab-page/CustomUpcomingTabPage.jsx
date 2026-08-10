@@ -9,7 +9,7 @@ const CustomUpcomingTabPage = ({ title }) => {
   const { formatMessage } = useIntl();
 
   return (
-    <div className="container-xl py-5 custom-upcoming-tab-page">
+    <div className="py-5 custom-upcoming-tab-page">
       <h2 className="custom-upcoming-tab-page__title">{title}</h2>
       <p className="text-muted custom-upcoming-tab-page__description">
         {formatMessage(messages.pageUpcoming)}

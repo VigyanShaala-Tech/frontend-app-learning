@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Badge } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,7 +15,16 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../../messages';
+import { getMeetingEndTime, isMeetingEnded } from '../../utils/meetingTime';
 import './LiveSessionCard.scss';
+
+// setTimeout delays beyond ~24.8 days overflow its 32-bit arg and fire immediately,
+// which would wrongly grey out the button right away for a far-future session. The
+// synchronous isMeetingEnded() check on every render is the real safety net either
+// way, so the live timer below is just skipped past this cap -- the "today" tab's
+// data will always be re-fetched well before then. Mirrors zoom_xblock.js's identical
+// guard for the same setTimeout limitation.
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 const LiveSessionCard = ({
   session,
@@ -31,7 +40,42 @@ const LiveSessionCard = ({
   const { formatMessage } = useIntl();
   const isOngoing = session.isOngoing && tabType === 'today';
   const canEditDelete = session.is_owner === true;
+  // Creator or alternative host (see zoom_integration._is_meeting_host) -- distinct
+  // from is_owner (creator only), which gates Edit/Delete above. Attendance is
+  // host-only; attendees on the invite list must not see it.
+  const isHost = session.is_host === true;
   const isDeletingThisSession = isDeleting && deletingSessionId === session.id;
+
+  // "Join" -> "Meeting Ended" once the scheduled window (startTime + duration)
+  // has passed -- only relevant for the "today" tab (upcoming sessions haven't
+  // started, past sessions don't show a Join button at all). See meetingTime.js.
+  const [hasEnded, setHasEnded] = useState(() => tabType === 'today' && isMeetingEnded(session));
+
+  useEffect(() => {
+    if (tabType !== 'today') {
+      setHasEnded(false);
+      return undefined;
+    }
+    if (isMeetingEnded(session)) {
+      setHasEnded(true);
+      return undefined;
+    }
+    setHasEnded(false);
+
+    // Session hasn't ended yet -- flip the button live if the tab stays open
+    // past the end time, instead of requiring a reload. +1s guards against
+    // clock skew firing the timer a tick before the end time is reached.
+    const endTime = getMeetingEndTime(session);
+    if (!endTime) {
+      return undefined;
+    }
+    const msUntilEnd = endTime.getTime() - Date.now() + 1000;
+    if (msUntilEnd <= 0 || msUntilEnd > ONE_DAY_MS) {
+      return undefined;
+    }
+    const timer = setTimeout(() => setHasEnded(true), msUntilEnd);
+    return () => clearTimeout(timer);
+  }, [session, tabType]);
 
   return (
     <div className={`live-session-card border mb-4 ${isOngoing ? 'ongoing' : ''}`}>
@@ -69,7 +113,7 @@ const LiveSessionCard = ({
           </div>
 
           <div className="live-session-card__actions">
-            {(tabType === 'today' || tabType === 'upcoming') && (
+            {((tabType === 'today' && !hasEnded) || tabType === 'upcoming') && (
               <div className="action-group">
                 <Button variant="primary" className="text-white" onClick={() => onJoin?.(session)}>
                   <FontAwesomeIcon icon={faVideo} className="mr-2" />
@@ -85,16 +129,26 @@ const LiveSessionCard = ({
               </div>
             )}
 
-            {tabType === 'past' && (
+            {(tabType === 'past' || (tabType === 'today' && hasEnded)) && (
               <div className="action-group">
                 <Button variant="outline-primary" onClick={() => onViewRecording?.(session)}>
                   <FontAwesomeIcon icon={faPlay} className="mr-2" />
                   {formatMessage(messages['liveSession.button.viewRecording'])}
                 </Button>
-                <Button variant="outline-primary" onClick={() => handleViewAttendance(session)}>
-                  <FontAwesomeIcon icon={faUsers} className="mr-2" />
-                  {formatMessage(messages['liveSession.button.viewAttendance'])}
-                </Button>
+                {isHost && (
+                  <Button variant="outline-primary" onClick={() => handleViewAttendance(session)}>
+                    <FontAwesomeIcon icon={faUsers} className="mr-2" />
+                    {formatMessage(messages['liveSession.button.viewAttendance'])}
+                  </Button>
+                )}
+                {/* onEdit is only passed for the 'today'/'upcoming' tabs (see LiveSession.jsx),
+                    so a genuine past-tab session never shows Edit here -- only an ended today session does. */}
+                {canEditDelete && onEdit && (
+                  <Button variant="outline-primary" onClick={() => onEdit(session)}>
+                    <FontAwesomeIcon icon={faPencilAlt} className="mr-2" />
+                    {formatMessage(messages['liveSession.button.edit'])}
+                  </Button>
+                )}
               </div>
             )}
 

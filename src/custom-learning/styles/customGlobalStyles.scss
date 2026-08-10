@@ -19,4 +19,104 @@
       min-width: fit-content;
     }
   }
+
+  .custom-loaded-tab-page {
+    main {
+      // Alert banner — constrain width and fix link color
+      > .mx-5.mt-3 {
+        box-sizing: border-box;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        max-width: 1400px;
+        padding-left: 32px;
+        padding-right: 32px;
+        width: 100%;
+
+        .alert-message-content a,
+        .pgn__hyperlink {
+          color: var(--pgn-color-primary-500) !important;
+        }
+      }
+
+      // Main content container — match dashboard 1400px + 32px padding
+      #main-content.container-xl {
+        max-width: 1400px;
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+
+      // Course tabs navigation wrapper (Course/Progress/Dates/...) also needs padding
+      #courseTabsNavigation {
+        .container-xl {
+          max-width: 1400px;
+          padding-left: 32px;
+          padding-right: 32px;
+        }
+      }
+    }
+
+    // Instructor toolbar (Staff dropdown etc.) is outside #main-content, so it needs its own container override.
+    [data-testid='instructor-toolbar'] {
+      .container-xl {
+        max-width: 1400px;
+        padding-left: 32px;
+        padding-right: 32px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Tablet (≤991px)
+@media (max-width: 991px) {
+  #root .custom-loaded-tab-page main {
+    > .mx-5.mt-3 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    #main-content.container-xl {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    #courseTabsNavigation {
+      .container-xl {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+  }
+
+  #root .custom-loaded-tab-page [data-testid='instructor-toolbar'] .container-xl {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+// Mobile (≤576px)
+@media (max-width: 576px) {
+  #root .custom-loaded-tab-page main {
+    > .mx-5.mt-3 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    #main-content.container-xl {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    #courseTabsNavigation {
+      .container-xl {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+  }
+
+  #root .custom-loaded-tab-page [data-testid='instructor-toolbar'] .container-xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
