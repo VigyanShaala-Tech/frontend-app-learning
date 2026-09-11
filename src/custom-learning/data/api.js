@@ -27,8 +27,17 @@ export async function getLiveSessionData(courseId) {
   }
 }
 
-export async function getCourseProgressData(courseId) {
-  const url = `${getLmsBaseUrl()}/api/v1/courses/${encodeCourseId(courseId)}/progress/`;
+export async function getCourseProgressData(courseId, targetUserId) {
+  let url = `${getLmsBaseUrl()}/api/v1/courses/${encodeCourseId(courseId)}/progress/`;
+
+  // Mirrors the default progress tab's getProgressTabData: if targetUserId is
+  // passed in (staff/instructor viewing another learner's progress, via the
+  // /progress/:targetUserId route), fetch that learner's data instead of the
+  // requesting user's own.
+  if (targetUserId) {
+    url += `${targetUserId}`;
+  }
+
   const data = await getJson(url);
   return data?.result ?? null;
 }

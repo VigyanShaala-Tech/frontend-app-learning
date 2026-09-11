@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { useContextId } from '../../../data/hooks';
@@ -9,6 +10,10 @@ import messages from '../messages';
 const useProgressData = () => {
   const { formatMessage } = useIntl();
   const courseId = useContextId();
+  // Present when staff/instructors view another learner's progress at
+  // /course/:courseId/progress/:targetUserId -- see DECODE_ROUTES.PROGRESS
+  // and TabContainer, which reads this same param for the default progress tab.
+  const { targetUserId } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,7 +30,7 @@ const useProgressData = () => {
       setError(null);
 
       try {
-        const result = await getCourseProgressData(courseId);
+        const result = await getCourseProgressData(courseId, targetUserId);
         if (!cancelled) {
           setData(result);
         }
@@ -46,7 +51,7 @@ const useProgressData = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseId, formatMessage]);
+  }, [courseId, targetUserId, formatMessage]);
 
   return {
     data,
