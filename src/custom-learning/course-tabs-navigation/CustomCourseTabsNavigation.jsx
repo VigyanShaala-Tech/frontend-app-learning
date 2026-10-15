@@ -8,7 +8,7 @@ import { CoursewareSearch, CoursewareSearchToggle } from '../../course-home/cour
 import { useCoursewareSearchState } from '../../course-home/courseware-search/hooks';
 import messages from './messages';
 import { restrictionStore } from '../restriction-page';
-import { buildCustomTabUrl, CUSTOM_TAB_SLUGS } from '../utils/customTabUtils';
+import { buildCustomTabUrl, buildProgressMfeUrl, CUSTOM_TAB_SLUGS } from '../utils/customTabUtils';
 import './CustomCourseTabsNavigation.scss';
 
 const RESTRICTION_GATED_TAB_SLUGS = new Set([
@@ -73,6 +73,10 @@ const CustomCourseTabsNavigation = ({
         slug,
         url: buildCustomTabUrl(courseId, CUSTOM_TAB_SLUGS.leaderboard) || tab.url,
       };
+    }
+
+    if (slug === 'progress') {
+      return { ...tab, slug, url: buildProgressMfeUrl(courseId) };
     }
 
     return { ...tab, slug };
