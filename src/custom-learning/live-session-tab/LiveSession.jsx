@@ -48,6 +48,7 @@ const LiveSession = () => {
 
   // Delete Popup States
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [isRecurringDelete, setIsRecurringDelete] = useState(false);
   const [selectedSessionForAction, setSelectedSessionForAction] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletingSessionId, setDeletingSessionId] = useState(null);
@@ -174,19 +175,14 @@ const LiveSession = () => {
     setIsScheduleMode(true);
   };
 
-  const handleDelete = async (session) => {
-    if (session.is_recurring_meeting) {
-      setSelectedSessionForAction(session);
-      setShowDeletePopup(true);
-      setDeleteSuccess(false);
-      setDeleteMessage('');
-      setIsDeleting(false);
-      setDeletingSessionId(null);
-      return;
-    }
-
+  const handleDelete = (session) => {
     setSelectedSessionForAction(session);
-    await confirmDelete(true, session, false);
+    setIsRecurringDelete(!!session.is_recurring_meeting);
+    setShowDeletePopup(true);
+    setDeleteSuccess(false);
+    setDeleteMessage('');
+    setIsDeleting(false);
+    setDeletingSessionId(null);
   };
 
   const confirmDelete = async (deleteAll, sessionForDelete = selectedSessionForAction, showPopupMessage = true) => {
@@ -241,6 +237,7 @@ const LiveSession = () => {
 
   const closeDeletePopup = () => {
     setShowDeletePopup(false);
+    setIsRecurringDelete(false);
     setDeleteSuccess(false);
     setDeleteMessage('');
     setIsDeleting(false);
@@ -384,7 +381,9 @@ const LiveSession = () => {
               <LiveSessionCard
                 key={session.id}
                 session={session}
+                courseId={courseId}
                 tabType={activeTab}
+                canScheduleMeeting={!!reduxdata?.can_schedule_meeting}
                 onJoin={handleJoin}
                 onEdit={activeTab !== 'past' ? handleEdit : undefined}
                 onDelete={handleDelete}
@@ -446,8 +445,13 @@ const LiveSession = () => {
                 <p className={deleteMessage.includes('success') ? 'text-success' : 'text-danger'}>
                   {deleteMessage}
                 </p>
-              ) : (
+              ) : isRecurringDelete ? (
                 <p>{formatMessage(messages['scheduleLiveSession.popup.deleteMessage'])}</p>
+              ) : (
+                <>
+                  <p className="mb-2">{formatMessage(messages['liveSession.deleteConfirm.title'])}</p>
+                  <p className="mb-0 text-muted">{formatMessage(messages['liveSession.deleteConfirm.warning'])}</p>
+                </>
               )}
             </div>
 
@@ -457,19 +461,34 @@ const LiveSession = () => {
                   <Button variant="danger" disabled>
                     {formatMessage(messages['scheduleLiveSession.popup.deleting'])}
                   </Button>
-                ) : (
+                ) : isRecurringDelete ? (
                   <>
-                    <Button 
-                      variant="outline-primary" 
+                    <Button
+                      variant="outline-primary"
                       onClick={() => handlePopupDelete(false)}
                     >
                       {formatMessage(messages['scheduleLiveSession.popup.deleteCurrent'])}
                     </Button>
-                    <Button 
-                      variant="danger" 
-                      onClick={() => handlePopupDelete(true)} 
+                    <Button
+                      variant="danger"
+                      onClick={() => handlePopupDelete(true)}
                     >
                       {formatMessage(messages['scheduleLiveSession.popup.deleteAll'])}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline-primary"
+                      onClick={closeDeletePopup}
+                    >
+                      {formatMessage(messages['liveSession.deleteConfirm.cancel'])}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => handlePopupDelete(true)}
+                    >
+                      {formatMessage(messages['liveSession.deleteConfirm.confirm'])}
                     </Button>
                   </>
                 )
@@ -481,7 +500,7 @@ const LiveSession = () => {
             </div>
 
             {!isDeleting && (
-              <button className="custom-popup-close" onClick={closeDeletePopup}>
+              <button className="custom-popup-close" onClick={closeDeletePopup} type="button">
                 &times;
               </button>
             )}

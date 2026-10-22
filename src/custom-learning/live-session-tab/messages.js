@@ -16,6 +16,18 @@ const messages = defineMessages({
   'liveSession.button.join': { id: 'liveSession.button.join', defaultMessage: 'Join' },
   'liveSession.button.edit': { id: 'liveSession.button.edit', defaultMessage: 'Edit' },
   'liveSession.button.delete': { id: 'liveSession.button.delete', defaultMessage: 'Delete' },
+  'liveSession.button.copyJoinLink': {
+    id: 'liveSession.button.copyJoinLink',
+    defaultMessage: 'Copy Join Link',
+  },
+  'liveSession.button.copyJoinLink.copied': {
+    id: 'liveSession.button.copyJoinLink.copied',
+    defaultMessage: 'Copied!',
+  },
+  'liveSession.button.copyJoinLink.failed': {
+    id: 'liveSession.button.copyJoinLink.failed',
+    defaultMessage: 'Could not copy link',
+  },
   'liveSession.button.viewRecording': { id: 'liveSession.button.viewRecording', defaultMessage: 'Recording' },
   'liveSession.button.viewAttendance': { id: 'liveSession.button.viewAttendance', defaultMessage: 'Attendance' },
   'liveSession.error.loadFailed': { id: 'liveSession.error.loadFailed', defaultMessage: 'Failed to load live sessions' },
@@ -23,6 +35,22 @@ const messages = defineMessages({
   'liveSession.error.updateFailed': { id: 'liveSession.error.updateFailed', defaultMessage: 'Failed to update live session' },
   'liveSession.error.deleteFailed': { id: 'liveSession.error.deleteFailed', defaultMessage: 'Failed to delete live session' },
   'liveSession.success.deleteSuccess': { id: 'liveSession.success.deleteSuccess', defaultMessage: 'Live session deleted successfully!' },
+  'liveSession.deleteConfirm.title': {
+    id: 'liveSession.deleteConfirm.title',
+    defaultMessage: 'Are you sure you want to delete this recording?',
+  },
+  'liveSession.deleteConfirm.warning': {
+    id: 'liveSession.deleteConfirm.warning',
+    defaultMessage: 'This action cannot be undone.',
+  },
+  'liveSession.deleteConfirm.cancel': {
+    id: 'liveSession.deleteConfirm.cancel',
+    defaultMessage: 'Cancel',
+  },
+  'liveSession.deleteConfirm.confirm': {
+    id: 'liveSession.deleteConfirm.confirm',
+    defaultMessage: 'Delete',
+  },
   'liveSession.pagination.label': {
     id: 'liveSession.pagination.label',
     defaultMessage: 'Live sessions pagination',
