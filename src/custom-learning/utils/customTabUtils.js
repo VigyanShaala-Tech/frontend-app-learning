@@ -1,3 +1,5 @@
+import { getConfig } from '@edx/frontend-platform';
+
 import { CUSTOM_TAB_PATHS, CUSTOM_UPCOMING_TAB_SLUGS } from '../constants/customTabRoutes';
 
 export const CUSTOM_TAB_SLUGS = {
@@ -14,6 +16,17 @@ const PATH_KEY_BY_SLUG = {
   [CUSTOM_TAB_SLUGS.bookmark]: 'bookmark',
   [CUSTOM_TAB_SLUGS.leaderboard]: 'leaderboard',
   [CUSTOM_TAB_SLUGS.live_session]: 'liveSession',
+};
+
+/**
+ * URL of the course page in the progress MFE. The "Progress" course tab points here; the
+ * learning MFE's own /course/:courseId/progress route still works when opened directly.
+ * PROGRESS_MFE_BASE_URL comes from mfe_config; without it, assume the progress MFE is served
+ * from the same host as this MFE (production layout: <apps host>/progress).
+ */
+export const buildProgressMfeUrl = (courseId) => {
+  const baseUrl = (getConfig().PROGRESS_MFE_BASE_URL || `${window.location.origin}/progress`).replace(/\/+$/, '');
+  return `${baseUrl}/${encodeURIComponent(courseId)}`;
 };
 
 const CUSTOM_TAB_MESSAGE_KEYS = {
