@@ -28,26 +28,9 @@ import './LiveSessionCard.scss';
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const COPY_FEEDBACK_MS = 2000;
 
-/**
- * Same absolute URL as the Join button navigates to.
- * Built from `window.location` (scheme/host/port + `/learning` prefix) so local
- * (`http://apps.local.openedx.io:2000/learning/...`) and prod domains both match
- * what the browser is actually serving — not misconfigured BASE_URL.
- */
-const buildShareJoinLink = (courseId, meetingInternalId) => {
-  const { origin, pathname } = window.location;
-  // e.g. "/learning/course/..." → "/learning" ; "/course/..." → ""
-  const mfeRoot = pathname.includes('/course/')
-    ? pathname.split('/course/')[0]
-    : '';
-  return `${origin}${mfeRoot}/course/${courseId}/live-session/join/${meetingInternalId}`;
-};
-
 const LiveSessionCard = ({
   session,
-  courseId,
   tabType,
-  canScheduleMeeting = false,
   onJoin,
   onEdit,
   onDelete,
@@ -63,8 +46,10 @@ const LiveSessionCard = ({
   // from is_owner (creator only), which gates Edit/Delete above. Attendance is
   // host-only; attendees on the invite list must not see it.
   const isHost = session.is_host === true;
-  // Meeting owner OR course instructor/staff (same flag as Schedule button).
-  const canCopyJoinLink = canEditDelete || canScheduleMeeting === true;
+  // Decided by the live-classes API: meeting creator, course instructor/staff or superuser.
+  // share_join_url is the exact link the meeting notifications' Join button carries (LMS
+  // join page + mobile app deeplink params), so it opens the app straight into the session.
+  const canCopyJoinLink = session.can_copy_join_link === true && !!session.share_join_url;
   const isDeletingThisSession = isDeleting && deletingSessionId === session.id;
   const [copyStatus, setCopyStatus] = useState('idle'); // idle | copied | failed
 
@@ -108,11 +93,11 @@ const LiveSessionCard = ({
   }, [copyStatus]);
 
   const handleCopyJoinLink = useCallback(async () => {
-    if (!courseId || !session?.id) {
+    const link = session?.share_join_url;
+    if (!link) {
       setCopyStatus('failed');
       return;
     }
-    const link = buildShareJoinLink(courseId, session.id);
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(link);
@@ -132,11 +117,11 @@ const LiveSessionCard = ({
     } catch (err) {
       setCopyStatus('failed');
     }
-  }, [courseId, session?.id]);
+  }, [session?.share_join_url]);
 
   // Same window as Join: Today (not ended) + Upcoming only.
   const showJoinActions = (tabType === 'today' && !hasEnded) || tabType === 'upcoming';
-  const showCopyJoinLink = canCopyJoinLink && showJoinActions && courseId;
+  const showCopyJoinLink = canCopyJoinLink && showJoinActions;
 
   const copyButtonLabel = () => {
     if (copyStatus === 'copied') {

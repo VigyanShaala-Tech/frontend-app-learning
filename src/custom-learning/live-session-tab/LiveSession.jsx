@@ -381,9 +381,7 @@ const LiveSession = () => {
               <LiveSessionCard
                 key={session.id}
                 session={session}
-                courseId={courseId}
                 tabType={activeTab}
-                canScheduleMeeting={!!reduxdata?.can_schedule_meeting}
                 onJoin={handleJoin}
                 onEdit={activeTab !== 'past' ? handleEdit : undefined}
                 onDelete={handleDelete}
