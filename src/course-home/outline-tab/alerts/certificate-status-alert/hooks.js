@@ -67,7 +67,12 @@ function useCertificateStatusAlert(courseId) {
   // Only show if:
   // - there is a known cert status that we want provide status on.
   // - Or the course has ended and the learner does not have a passing grade.
-  const isVisible = isEnrolled && hasAlertingCertStatus;
+  // Vigyanshaala: the "Congratulations! Your certificate is ready." alert (downloadable and requesting
+  // statuses) is hidden. To show it again: const isVisible = isEnrolled && hasAlertingCertStatus;
+  const isCertificateReadyAlert = (
+    certStatus === CERT_STATUS_TYPE.DOWNLOADABLE || certStatus === CERT_STATUS_TYPE.REQUESTING
+  );
+  const isVisible = isEnrolled && hasAlertingCertStatus && !isCertificateReadyAlert;
   const notPassingCourseEnded = (
     isEnrolled
     && isVerifiedEnrollmentMode
