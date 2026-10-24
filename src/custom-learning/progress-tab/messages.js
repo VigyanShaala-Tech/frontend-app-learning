@@ -36,6 +36,11 @@ const messages = defineMessages({
     defaultMessage: 'Progress',
     description: 'Tooltip label for overall performance radial chart',
   },
+  redirectingToProgress: {
+    id: 'learn.custom.progress.redirecting',
+    defaultMessage: 'Opening your progress page...',
+    description: 'Screen-reader message while the old progress page redirects to the progress MFE',
+  },
   loadError: {
     id: 'learn.custom.progress.loadError',
     defaultMessage: 'Unable to load progress data. Please try again later.',

@@ -19,14 +19,16 @@ const PATH_KEY_BY_SLUG = {
 };
 
 /**
- * URL of the course page in the progress MFE. The "Progress" course tab points here; the
- * learning MFE's own /course/:courseId/progress route still works when opened directly.
+ * URL of the course page in the progress MFE (or of one learner's page, for staff, when
+ * targetUserId is given). The "Progress" course tab points here, and the learning MFE's own
+ * /course/:courseId/progress[/:targetUserId] routes redirect here (ProgressMfeRedirect).
  * PROGRESS_MFE_BASE_URL comes from mfe_config; without it, assume the progress MFE is served
  * from the same host as this MFE (production layout: <apps host>/progress).
  */
-export const buildProgressMfeUrl = (courseId) => {
+export const buildProgressMfeUrl = (courseId, targetUserId) => {
   const baseUrl = (getConfig().PROGRESS_MFE_BASE_URL || `${window.location.origin}/progress`).replace(/\/+$/, '');
-  return `${baseUrl}/${encodeURIComponent(courseId)}`;
+  const url = `${baseUrl}/${encodeURIComponent(courseId)}`;
+  return targetUserId ? `${url}/${encodeURIComponent(targetUserId)}` : url;
 };
 
 const CUSTOM_TAB_MESSAGE_KEYS = {

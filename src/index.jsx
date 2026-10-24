@@ -22,10 +22,10 @@ import CoursewareContainer from './courseware';
 import CoursewareRedirectLandingPage from './courseware/CoursewareRedirectLandingPage';
 import DatesTab from './course-home/dates-tab';
 import GoalUnsubscribe from './course-home/goal-unsubscribe';
-import ProgressTab from './course-home/progress-tab/ProgressTab';
 import { TabContainer } from './tab-page';
 
-import { fetchDatesTab, fetchOutlineTab, fetchProgressTab } from './course-home/data';
+import { fetchDatesTab, fetchOutlineTab } from './course-home/data';
+import ProgressMfeRedirect from './custom-learning/progress-tab/ProgressMfeRedirect';
 import { fetchCourse } from './courseware/data';
 import { store } from './store';
 import NoticesProvider from './generic/notices';
@@ -112,14 +112,8 @@ subscribe(APP_READY, () => {
                       path={route}
                       element={(
                         <DecodePageRoute>
-                          <TabContainer
-                            tab="progress"
-                            fetch={fetchProgressTab}
-                            slice="courseHome"
-                            isProgressTab
-                          >
-                            <ProgressTab />
-                          </TabContainer>
+                          {/* The progress page now lives in the progress MFE */}
+                          <ProgressMfeRedirect />
                         </DecodePageRoute>
                       )}
                     />
