@@ -18,8 +18,8 @@ const messages = defineMessages({
   },
   pointsValue: {
     id: 'learn.custom.leaderboard.pointsValue',
-    defaultMessage: '{points} points',
-    description: 'Formatted points value on current user rank card',
+    defaultMessage: 'a Score of {points}',
+    description: 'Score on the current user rank card, after "Rank #N with"',
   },
   columnRank: {
     id: 'learn.custom.leaderboard.column.rank',
@@ -38,8 +38,8 @@ const messages = defineMessages({
   },
   columnPoints: {
     id: 'learn.custom.leaderboard.column.points',
-    defaultMessage: 'Points',
-    description: 'Leaderboard table points column',
+    defaultMessage: 'Score',
+    description: 'Leaderboard table Score column',
   },
   noResults: {
     id: 'learn.custom.leaderboard.noResults',
