@@ -1,3 +1,5 @@
+import { getConfig } from '@edx/frontend-platform';
+
 import { CUSTOM_TAB_PATHS, CUSTOM_UPCOMING_TAB_SLUGS } from '../constants/customTabRoutes';
 
 export const CUSTOM_TAB_SLUGS = {
@@ -14,6 +16,19 @@ const PATH_KEY_BY_SLUG = {
   [CUSTOM_TAB_SLUGS.bookmark]: 'bookmark',
   [CUSTOM_TAB_SLUGS.leaderboard]: 'leaderboard',
   [CUSTOM_TAB_SLUGS.live_session]: 'liveSession',
+};
+
+/**
+ * URL of the course page in the progress MFE (or of one learner's page, for staff, when
+ * targetUserId is given). The "Progress" course tab points here, and the learning MFE's own
+ * /course/:courseId/progress[/:targetUserId] routes redirect here (ProgressMfeRedirect).
+ * PROGRESS_MFE_BASE_URL comes from mfe_config; without it, assume the progress MFE is served
+ * from the same host as this MFE (production layout: <apps host>/progress).
+ */
+export const buildProgressMfeUrl = (courseId, targetUserId) => {
+  const baseUrl = (getConfig().PROGRESS_MFE_BASE_URL || `${window.location.origin}/progress`).replace(/\/+$/, '');
+  const url = `${baseUrl}/${encodeURIComponent(courseId)}`;
+  return targetUserId ? `${url}/${encodeURIComponent(targetUserId)}` : url;
 };
 
 const CUSTOM_TAB_MESSAGE_KEYS = {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getAuthenticatedUser, redirectToLogin } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import { Button, Spinner, Alert } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -88,6 +88,13 @@ const ZoomMeeting = () => {
   const fetchJoinData = useCallback(async () => {
     if (!sessionId) return;
 
+    // Shared join links are often opened by learners who are not logged in: send them to
+    // login and back to this exact URL (query string included) instead of a join error.
+    if (!getAuthenticatedUser()) {
+      redirectToLogin(window.location.href);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -96,6 +103,11 @@ const ZoomMeeting = () => {
       );
       setMeetingData(response.data);
     } catch (err) {
+      // Session expired since the page loaded
+      if (err?.customAttributes?.httpErrorStatus === 401 || err?.response?.status === 401) {
+        redirectToLogin(window.location.href);
+        return;
+      }
       console.error('Failed to fetch join data:', err);
       setError(
         formatMessage(messages['liveSession.error.joinFailed'])

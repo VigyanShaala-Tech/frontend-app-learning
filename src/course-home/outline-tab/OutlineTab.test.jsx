@@ -953,8 +953,9 @@ describe('Outline Tab', () => {
     });
   });
 
+  // The "Your certificate is ready" alert is hidden in Vigyanshaala (certificate-status-alert/hooks.js)
   describe('Certificate (web) Complete Alert', () => {
-    it('appears', async () => {
+    it('is hidden', async () => {
       const now = new Date();
       const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
       setMetadata({ is_enrolled: true });
@@ -974,12 +975,12 @@ describe('Outline Tab', () => {
         ],
       });
       await fetchAndRender();
-      expect(screen.queryByText('Congratulations! Your certificate is ready.')).toBeInTheDocument();
+      expect(screen.queryByText('Congratulations! Your certificate is ready.')).not.toBeInTheDocument();
     });
   });
 
   describe('Requesting Certificate Alert', () => {
-    it('appears', async () => {
+    it('is hidden', async () => {
       const now = new Date();
       const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
       setMetadata({ is_enrolled: true });
@@ -999,8 +1000,8 @@ describe('Outline Tab', () => {
         ],
       });
       await fetchAndRender();
-      expect(screen.queryByText('Congratulations! Your certificate is ready.')).toBeInTheDocument();
-      expect(screen.queryByText('Request certificate')).toBeInTheDocument();
+      expect(screen.queryByText('Congratulations! Your certificate is ready.')).not.toBeInTheDocument();
+      expect(screen.queryByText('Request certificate')).not.toBeInTheDocument();
     });
   });
 

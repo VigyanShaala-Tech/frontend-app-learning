@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Badge } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,6 +11,7 @@ import {
   faUsers,
   faPencilAlt,
   faTrash,
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
@@ -25,6 +26,7 @@ import './LiveSessionCard.scss';
 // data will always be re-fetched well before then. Mirrors zoom_xblock.js's identical
 // guard for the same setTimeout limitation.
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const COPY_FEEDBACK_MS = 2000;
 
 const LiveSessionCard = ({
   session,
@@ -44,7 +46,12 @@ const LiveSessionCard = ({
   // from is_owner (creator only), which gates Edit/Delete above. Attendance is
   // host-only; attendees on the invite list must not see it.
   const isHost = session.is_host === true;
+  // Decided by the live-classes API: meeting creator, course instructor/staff or superuser.
+  // share_join_url is the exact link the meeting notifications' Join button carries (LMS
+  // join page + mobile app deeplink params), so it opens the app straight into the session.
+  const canCopyJoinLink = session.can_copy_join_link === true && !!session.share_join_url;
   const isDeletingThisSession = isDeleting && deletingSessionId === session.id;
+  const [copyStatus, setCopyStatus] = useState('idle'); // idle | copied | failed
 
   // "Join" -> "Meeting Ended" once the scheduled window (startTime + duration)
   // has passed -- only relevant for the "today" tab (upcoming sessions haven't
@@ -76,6 +83,55 @@ const LiveSessionCard = ({
     const timer = setTimeout(() => setHasEnded(true), msUntilEnd);
     return () => clearTimeout(timer);
   }, [session, tabType]);
+
+  useEffect(() => {
+    if (copyStatus === 'idle') {
+      return undefined;
+    }
+    const timer = setTimeout(() => setCopyStatus('idle'), COPY_FEEDBACK_MS);
+    return () => clearTimeout(timer);
+  }, [copyStatus]);
+
+  const handleCopyJoinLink = useCallback(async () => {
+    const link = session?.share_join_url;
+    if (!link) {
+      setCopyStatus('failed');
+      return;
+    }
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(link);
+      } else {
+        // Fallback for older browsers / insecure contexts
+        const textarea = document.createElement('textarea');
+        textarea.value = link;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopyStatus('copied');
+    } catch (err) {
+      setCopyStatus('failed');
+    }
+  }, [session?.share_join_url]);
+
+  // Same window as Join: Today (not ended) + Upcoming only.
+  const showJoinActions = (tabType === 'today' && !hasEnded) || tabType === 'upcoming';
+  const showCopyJoinLink = canCopyJoinLink && showJoinActions;
+
+  const copyButtonLabel = () => {
+    if (copyStatus === 'copied') {
+      return formatMessage(messages['liveSession.button.copyJoinLink.copied']);
+    }
+    if (copyStatus === 'failed') {
+      return formatMessage(messages['liveSession.button.copyJoinLink.failed']);
+    }
+    return formatMessage(messages['liveSession.button.copyJoinLink']);
+  };
 
   return (
     <div className={`live-session-card border mb-4 ${isOngoing ? 'ongoing' : ''}`}>
@@ -113,12 +169,23 @@ const LiveSessionCard = ({
           </div>
 
           <div className="live-session-card__actions">
-            {((tabType === 'today' && !hasEnded) || tabType === 'upcoming') && (
+            {showJoinActions && (
               <div className="action-group">
                 <Button variant="primary" className="text-white" onClick={() => onJoin?.(session)}>
                   <FontAwesomeIcon icon={faVideo} className="mr-2" />
                   {formatMessage(messages['liveSession.button.join'])}
                 </Button>
+
+                {showCopyJoinLink && (
+                  <Button
+                    variant="outline-primary"
+                    onClick={handleCopyJoinLink}
+                    disabled={copyStatus === 'copied'}
+                  >
+                    <FontAwesomeIcon icon={faLink} className="mr-2" />
+                    {copyButtonLabel()}
+                  </Button>
+                )}
 
                 {canEditDelete && onEdit && (
                   <Button variant="outline-primary" onClick={() => onEdit(session)}>
